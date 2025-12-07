@@ -508,14 +508,6 @@ export default component$(() => {
             @c4dt
           </a>
           <a
-            href="https://github.com/Carvio"
-            target="_blank"
-            rel="noopener"
-            class="px-4 py-2 rounded-lg bg-ink-100 text-ink-700 font-mono text-sm hover:bg-ink-200 transition-colors"
-          >
-            @Carvio
-          </a>
-          <a
             href="https://climatebase.org"
             target="_blank"
             rel="noopener"
