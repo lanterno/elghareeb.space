@@ -12,7 +12,7 @@ export default extendConfig(baseConfig, () => {
     },
     plugins: [
       staticAdapter({
-        origin: "https://elghareeb.ch",
+        origin: "https://elghareeb.space",
       }),
     ],
   };
