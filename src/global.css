@@ -1,14 +1,85 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
+/* Custom theme configuration */
+@theme {
+  /* Fonts */
+  --font-sans: "Sora", system-ui, sans-serif;
+  --font-display: "Instrument Serif", Georgia, serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+
+  /* Custom colors - Cream palette */
+  --color-cream-50: #fefdfb;
+  --color-cream-100: #fdf9f3;
+  --color-cream-200: #faf2e6;
+  --color-cream-300: #f5e8d3;
+  --color-cream-400: #e8d4b3;
+
+  /* Custom colors - Ink palette */
+  --color-ink-50: #f7f7f6;
+  --color-ink-100: #e3e3e1;
+  --color-ink-200: #c7c7c4;
+  --color-ink-300: #a4a4a0;
+  --color-ink-400: #81817c;
+  --color-ink-500: #666662;
+  --color-ink-600: #51514e;
+  --color-ink-700: #434340;
+  --color-ink-800: #383835;
+  --color-ink-900: #2c2c2a;
+  --color-ink-950: #1a1a18;
+
+  /* Custom colors - Accent */
+  --color-accent-emerald: #10b981;
+  --color-accent-amber: #f59e0b;
+  --color-accent-rose: #f43f5e;
+  --color-accent-sky: #0ea5e9;
+
+  /* Custom animations */
+  --animate-fade-in: fadeIn 0.6s ease-out forwards;
+  --animate-fade-up: fadeUp 0.7s ease-out forwards;
+  --animate-slide-in: slideIn 0.5s ease-out forwards;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-shimmer: shimmer 2s linear infinite;
+  --animate-pulse-soft: pulseSoft 3s ease-in-out infinite;
+
+  @keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  @keyframes fadeUp {
+    0% { opacity: 0; transform: translateY(30px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes slideIn {
+    0% { opacity: 0; transform: translateX(-20px); }
+    100% { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  @keyframes pulseSoft {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+}
+
+/* Base styles */
 @layer base {
   html {
     scroll-behavior: smooth;
   }
 
   ::selection {
-    background-color: #10b981;
+    background-color: var(--color-accent-emerald);
     color: white;
   }
 
@@ -19,19 +90,20 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: #fdf9f3;
+    background: var(--color-cream-100);
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #c7c7c4;
+    background: var(--color-ink-200);
     border-radius: 4px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #a4a4a0;
+    background: var(--color-ink-300);
   }
 }
 
+/* Component styles */
 @layer components {
   .gradient-text {
     @apply bg-gradient-to-r from-accent-emerald via-accent-sky to-accent-emerald bg-clip-text text-transparent;
@@ -43,13 +115,13 @@
   }
 
   .pattern-dots {
-    background-image: radial-gradient(circle, #c7c7c4 1px, transparent 1px);
+    background-image: radial-gradient(circle, var(--color-ink-200) 1px, transparent 1px);
     background-size: 24px 24px;
   }
 
   .pattern-grid {
-    background-image: linear-gradient(#e3e3e1 1px, transparent 1px),
-      linear-gradient(to right, #e3e3e1 1px, transparent 1px);
+    background-image: linear-gradient(var(--color-ink-100) 1px, transparent 1px),
+      linear-gradient(to right, var(--color-ink-100) 1px, transparent 1px);
     background-size: 40px 40px;
   }
 
@@ -68,33 +140,31 @@
   }
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-
-  .animation-delay-100 {
-    animation-delay: 100ms;
-  }
-
-  .animation-delay-200 {
-    animation-delay: 200ms;
-  }
-
-  .animation-delay-300 {
-    animation-delay: 300ms;
-  }
-
-  .animation-delay-400 {
-    animation-delay: 400ms;
-  }
-
-  .animation-delay-500 {
-    animation-delay: 500ms;
-  }
-
-  .animation-delay-600 {
-    animation-delay: 600ms;
-  }
+/* Utility styles */
+@utility text-balance {
+  text-wrap: balance;
 }
 
+@utility animation-delay-100 {
+  animation-delay: 100ms;
+}
+
+@utility animation-delay-200 {
+  animation-delay: 200ms;
+}
+
+@utility animation-delay-300 {
+  animation-delay: 300ms;
+}
+
+@utility animation-delay-400 {
+  animation-delay: 400ms;
+}
+
+@utility animation-delay-500 {
+  animation-delay: 500ms;
+}
+
+@utility animation-delay-600 {
+  animation-delay: 600ms;
+}
