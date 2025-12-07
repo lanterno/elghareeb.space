@@ -1,116 +1,35 @@
-# elghareeb.space
+# Ahmed Elghareeb
 
-Personal portfolio website for Ahmed Elghareeb, built with [Qwik](https://qwik.dev) and [Qwik City](https://qwik.dev/docs/qwikcity/).
+**Senior Software Engineer** · **ClimateBase Fellow** · **Digital Identity Specialist**
 
-## Quick Start
+Building Switzerland's digital identity infrastructure at [EPFL's Center for Digital Trust (C4DT)](https://c4dt.epfl.ch).
 
-```bash
-# Install dependencies (requires Bun >= 1.1.0)
-bun install
+## About
 
-# Start development server
-bun run dev
+I'm a software engineer based in Lausanne, Switzerland, working at the intersection of **cryptography**, **digital identity**, and **climate technology**.
 
-# Type check
-bun run typecheck
+At C4DT, I experiment with cutting-edge standards for digital wallets, verifiable credentials, and privacy-preserving technologies. Beyond code, I'm passionate about sustainable IT — currently leading a Sustainable IT working group at EPFL and contributing to ClimateRoboticsNetworks.
 
-# Lint code
-bun run lint
+## Current Focus
 
-# Lint and auto-fix
-bun run lint:fix
+- 🪪 **E-ID Infrastructure** — Digital wallets, verifiable credentials, zero-knowledge proofs
+- 🌿 **Sustainable IT** — Research Software Engineering, climate-conscious development
+- 📜 **Archetype Project** — Open-source palaeographic annotation platform
 
-# Format code
-bun run fmt
+## Connect
 
-# Build for production (static)
-bun run build
+- **Website**: [elghareeb.space](https://elghareeb.space)
+- **GitHub**: [@lanterno](https://github.com/lanterno)
+- **LinkedIn**: [ahmedelghareeb](https://linkedin.com/in/ahmedelghareeb)
 
-# Build for Bun server
-bun run build.bun
+---
 
-# Preview production build
-bun run preview
+## About This Repository
 
-# Clean build artifacts
-bun run clean
+This is the source code for my personal portfolio website.
 
-# Check for outdated packages
-bun run update
-```
-
-## Tech Stack
-
-- **Runtime**: [Bun](https://bun.sh) >= 1.1.0
-- **Framework**: [Qwik](https://qwik.dev) ^1.13.0 - Resumable framework for instant loading
-- **Routing**: [Qwik City](https://qwik.dev/docs/qwikcity/) - File-based routing
-- **Build Tool**: [Vite](https://vitejs.dev) ^6.0.0
-- **Styling**: [Tailwind CSS](https://tailwindcss.com) ^4.1.0 - Utility-first CSS with native CSS features
-- **Type Safety**: [TypeScript](https://www.typescriptlang.org) 5.7+ with strict configuration
-- **Validation**: [Valibot](https://valibot.dev) - Type-safe runtime validation
-- **Linting**: [ESLint](https://eslint.org) ^9.17.0 with typescript-eslint flat config
-- **PWA**: [vite-plugin-pwa](https://vite-pwa-org.netlify.app/) - Service worker and offline support
-- **Fonts**: Sora, Instrument Serif, JetBrains Mono
-
-## Project Structure
-
-```
-src/
-├── components/        # Reusable components
-│   ├── icons/        # SVG icon components
-│   └── router-head/  # Document head component
-├── data/             # Portfolio data with Valibot schemas
-│   └── portfolio.ts  # Experiences, projects, skills data
-├── routes/           # File-based routing
-│   ├── index.tsx     # Homepage
-│   └── layout.tsx    # Root layout
-├── env.ts            # Type-safe environment handling
-├── global.css        # Global styles with Tailwind @theme
-└── root.tsx          # App entry point
-adapters/
-├── static/           # Static site generation adapter
-└── bun/              # Bun server adapter
-public/
-├── hero.jpg          # Profile image
-├── favicon.svg       # Favicon
-├── manifest.json     # PWA manifest
-└── robots.txt        # Search engine directives
-```
-
-## Features
-
-- **Performance First**: Qwik's resumability for instant loading
-- **Type Safety**: Strict TypeScript with branded types and Valibot validation
-- **Modern Build**: Vite 6 with optimized chunking and caching
-- **PWA Ready**: Service worker with offline caching for fonts and assets
-- **SEO Optimized**: Meta tags, Open Graph, Twitter Cards, structured data
-- **Responsive Design**: Modern aesthetics with smooth animations
-- **Developer Experience**: ESLint flat config, import sorting, auto-formatting
-
-## TypeScript Features
-
-This project uses advanced TypeScript patterns:
-
-- **Branded Types**: Type-safe URLs, date ranges, and color classes
-- **Valibot Schemas**: Runtime validation with compile-time type inference
-- **`satisfies` Operator**: Type-safe data validation without losing literal types
-- **Strict Configuration**: All strict flags enabled including `exactOptionalPropertyTypes`
-
-## Deployment
-
-### Static Site (GitHub Pages, Netlify, etc.)
-
-```bash
-bun run build
-# Deploy contents of dist/
-```
-
-### Bun Server
-
-```bash
-bun run build.bun
-# Run the generated server
-```
+- 📖 **[Development Guide](docs/DEVELOPMENT.md)** — How to run, build, and deploy
+- 🏗️ **[Architecture & Design](docs/ARCHITECTURE.md)** — Technology choices and philosophy
 
 ## License
 
