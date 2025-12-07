@@ -12,6 +12,7 @@ import {
   education,
   experiences,
   getAnimationDelayClass,
+  getTextColorClass,
   projects,
   skills,
 } from "~/data/portfolio";
@@ -244,7 +245,7 @@ export default component$(() => {
               key={skill.category}
               class={`opacity-0 animate-fade-up ${getAnimationDelayClass(i)} p-5 rounded-xl border border-ink-100 bg-cream-100/50`}
             >
-              <h3 class={`text-sm font-mono font-semibold mb-3 text-${skill.color}`}>
+              <h3 class={`text-sm font-mono font-semibold mb-3 ${getTextColorClass(skill.color)}`}>
                 {skill.category}
               </h3>
               <div class="flex flex-wrap gap-2">

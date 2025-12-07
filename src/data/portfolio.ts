@@ -43,6 +43,8 @@ const ColorClassSchema = v.pipe(
   v.transform((val): ColorClass => val as ColorClass)
 );
 
+// Schemas are used for type inference via v.InferOutput<typeof Schema>
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ExperienceSchema = v.object({
   title: v.string(),
   company: v.string(),
@@ -55,6 +57,7 @@ const ExperienceSchema = v.object({
   current: v.boolean(),
 });
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ProjectSchema = v.object({
   name: v.string(),
   description: v.string(),
@@ -62,12 +65,14 @@ const ProjectSchema = v.object({
   tags: v.array(v.string()),
 });
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const SkillSchema = v.object({
   category: v.string(),
   items: v.array(v.string()),
   color: ColorClassSchema,
 });
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const EducationSchema = v.object({
   institution: v.string(),
   degree: v.string(),
@@ -75,6 +80,7 @@ const EducationSchema = v.object({
   description: v.string(),
 });
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const CertificationSchema = v.object({
   name: v.string(),
   org: v.string(),
@@ -179,21 +185,36 @@ export const projects = [
   },
 ] as const satisfies readonly Project[];
 
+/** Mapping of color classes to their text- prefixed Tailwind classes */
+const colorTextClasses = {
+  "accent-emerald": "text-accent-emerald",
+  "accent-sky": "text-accent-sky",
+  "accent-amber": "text-accent-amber",
+  "accent-rose": "text-accent-rose",
+} as const;
+
+export type AccentColor = keyof typeof colorTextClasses;
+
+/** Get the text color class for a given accent color */
+export function getTextColorClass(color: AccentColor): string {
+  return colorTextClasses[color];
+}
+
 export const skills = [
   {
     category: "Languages",
     items: ["Python", "TypeScript", "Rust", "JavaScript"],
-    color: "accent-emerald" as ColorClass,
+    color: "accent-emerald" as AccentColor,
   },
   {
     category: "Backend & Data",
     items: ["Django", "PostgreSQL", "GraphQL", "Celery", "REST APIs"],
-    color: "accent-sky" as ColorClass,
+    color: "accent-sky" as AccentColor,
   },
   {
     category: "Infrastructure",
     items: ["Docker", "AWS", "GCP", "Terraform", "Kubernetes"],
-    color: "accent-amber" as ColorClass,
+    color: "accent-amber" as AccentColor,
   },
   {
     category: "Cryptography & Identity",
@@ -204,9 +225,9 @@ export const skills = [
       "E-ID",
       "Homomorphic Encryption",
     ],
-    color: "accent-rose" as ColorClass,
+    color: "accent-rose" as AccentColor,
   },
-] as const satisfies readonly Skill[];
+] as const;
 
 export const education = [
   {
@@ -237,13 +258,11 @@ export const certifications = [
 
 /** Animation delay class names for staggered animations */
 export const animationDelayClasses = [
-  "animation-delay-000",
   "animation-delay-100",
   "animation-delay-200",
   "animation-delay-300",
   "animation-delay-400",
   "animation-delay-500",
-  "animation-delay-600",
 ] as const;
 
 export type AnimationDelayClass = (typeof animationDelayClasses)[number];
@@ -255,32 +274,8 @@ export type AnimationDelayClass = (typeof animationDelayClasses)[number];
  */
 export function getAnimationDelayClass(index: number): AnimationDelayClass {
   const safeIndex = Math.min(Math.max(0, index), animationDelayClasses.length - 1);
-  return animationDelayClasses[safeIndex] ?? "animation-delay-100";
+  const delayClass = animationDelayClasses[safeIndex];
+  // Fallback is unreachable due to clamping above, but satisfies type checker
+  return delayClass ?? "animation-delay-100";
 }
 
-// ============================================================================
-// Validation Utilities (for runtime validation if needed)
-// ============================================================================
-
-export const PortfolioSchemas = {
-  Experience: ExperienceSchema,
-  Project: ProjectSchema,
-  Skill: SkillSchema,
-  Education: EducationSchema,
-  Certification: CertificationSchema,
-} as const;
-
-/**
- * Validate portfolio data at runtime (useful for dynamic data sources)
- */
-export function validateExperience(data: unknown): Experience {
-  return v.parse(ExperienceSchema, data);
-}
-
-export function validateProject(data: unknown): Project {
-  return v.parse(ProjectSchema, data);
-}
-
-export function validateSkill(data: unknown): Skill {
-  return v.parse(SkillSchema, data);
-}
