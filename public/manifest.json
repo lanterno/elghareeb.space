@@ -1,10 +1,72 @@
 {
-  "name": "Ahmed Elghareeb",
+  "id": "/",
+  "name": "Ahmed Elghareeb - Portfolio",
   "short_name": "AE Portfolio",
-  "start_url": ".",
+  "description": "Ahmed Elghareeb - Senior Software Engineer, Climate Fellow, Digital Identity Specialist at EPFL C4DT",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait-primary",
   "theme_color": "#10b981",
   "background_color": "#fefdfb",
-  "description": "Ahmed Elghareeb - Senior Software Engineer, Climate Fellow, Digital Identity Specialist"
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["portfolio", "personal", "technology", "career"],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "View Experience",
+      "short_name": "Experience",
+      "description": "View work experience and career history",
+      "url": "/#experience",
+      "icons": [
+        {
+          "src": "/favicon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "View Projects",
+      "short_name": "Projects",
+      "description": "View open source projects and contributions",
+      "url": "/#projects",
+      "icons": [
+        {
+          "src": "/favicon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
+    }
+  ],
+  "related_applications": [
+    {
+      "platform": "web",
+      "url": "https://elghareeb.space"
+    }
+  ],
+  "edge_side_panel": {
+    "preferred_width": 400
+  }
 }
-

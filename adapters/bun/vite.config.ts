@@ -1,4 +1,4 @@
-import { staticAdapter } from "@builder.io/qwik-city/adapters/static/vite";
+import { bunServerAdapter } from "@builder.io/qwik-city/adapters/bun-server/vite";
 import { extendConfig } from "@builder.io/qwik-city/vite";
 
 import baseConfig from "../../vite.config";
@@ -13,8 +13,11 @@ export default extendConfig(baseConfig as Parameters<typeof extendConfig>[0], ()
       },
     },
     plugins: [
-      staticAdapter({
-        origin: "https://elghareeb.space",
+      bunServerAdapter({
+        ssg: {
+          include: ["/*"],
+          origin: "https://elghareeb.space",
+        },
       }),
     ],
   };

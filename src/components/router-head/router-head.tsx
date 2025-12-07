@@ -1,6 +1,11 @@
 import { component$ } from "@builder.io/qwik";
 import { useDocumentHead, useLocation } from "@builder.io/qwik-city";
 
+/**
+ * RouterHead component renders document metadata from useDocumentHead()
+ * For static sites, head.styles and head.scripts are typically empty
+ * as they're populated by SSR middleware for dynamic content.
+ */
 export const RouterHead = component$(() => {
   const head = useDocumentHead();
   const loc = useLocation();
@@ -20,15 +25,6 @@ export const RouterHead = component$(() => {
       {head.links.map((l) => (
         <link key={l.key} {...l} />
       ))}
-
-      {head.styles.map((s) => (
-        <style key={s.key} {...s.props} dangerouslySetInnerHTML={s.style} />
-      ))}
-
-      {head.scripts.map((s) => (
-        <script key={s.key} {...s.props} dangerouslySetInnerHTML={s.script} />
-      ))}
     </>
   );
 });
-
