@@ -12,8 +12,8 @@ export default defineConfig(() => {
       tsconfigPaths(),
       VitePWA({
         registerType: "autoUpdate",
-        includeAssets: ["favicon.ico", "favicon.svg", "hero.jpg"],
-        manifest: false, // Use existing manifest.json in public
+        includeAssets: ["favicon.ico", "favicon.svg"],
+        manifest: false,
         workbox: {
           globPatterns: ["**/*.{js,css,html,ico,png,svg,jpg,jpeg,webp,woff,woff2}"],
           runtimeCaching: [
@@ -24,7 +24,7 @@ export default defineConfig(() => {
                 cacheName: "google-fonts-cache",
                 expiration: {
                   maxEntries: 10,
-                  maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
+                  maxAgeSeconds: 60 * 60 * 24 * 365,
                 },
                 cacheableResponse: {
                   statuses: [0, 200],
@@ -38,7 +38,7 @@ export default defineConfig(() => {
                 cacheName: "gstatic-fonts-cache",
                 expiration: {
                   maxEntries: 10,
-                  maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
+                  maxAgeSeconds: 60 * 60 * 24 * 365,
                 },
                 cacheableResponse: {
                   statuses: [0, 200],
@@ -49,50 +49,14 @@ export default defineConfig(() => {
         },
       }),
     ],
-
-    // Development server configuration
     server: {
       headers: {
         "Cache-Control": "public, max-age=0",
       },
     },
-
-    // Preview server configuration
     preview: {
       headers: {
         "Cache-Control": "public, max-age=600",
-      },
-    },
-
-    // Build optimizations
-    build: {
-      // Target modern browsers for smaller bundles
-      target: "es2022",
-
-      // Minification settings
-      minify: "esbuild" as const,
-
-      // CSS code splitting
-      cssCodeSplit: true,
-
-      // Chunk size warnings
-      chunkSizeWarningLimit: 500,
-
-      // Note: Qwik handles chunk splitting automatically via its optimizer
-      // Don't use manualChunks as it conflicts with Qwik's build process
-    },
-
-    // Optimizations for dependencies
-    optimizeDeps: {
-      // Pre-bundle these dependencies for faster dev startup
-      include: ["valibot"],
-    },
-
-    // CSS configuration
-    css: {
-      // Enable CSS modules
-      modules: {
-        localsConvention: "camelCase" as const,
       },
     },
   };

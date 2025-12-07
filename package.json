@@ -44,7 +44,7 @@
     "typescript": "5.7.2",
     "typescript-eslint": "^8.18.1",
     "valibot": "^1.2.0",
-    "vite": "^6.0.5",
+    "vite": "^5.4.11",
     "vite-plugin-pwa": "^1.0.0",
     "vite-tsconfig-paths": "^5.1.4"
   }
