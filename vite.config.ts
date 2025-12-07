@@ -15,7 +15,8 @@ export default defineConfig(() => {
         includeAssets: ["favicon.ico", "favicon.svg"],
         manifest: false,
         workbox: {
-          globPatterns: ["**/*.{js,css,html,ico,png,svg,jpg,jpeg,webp,woff,woff2}"],
+          globPatterns: ["**/*.{js,css,html,ico,png,svg,webp,woff,woff2}"],
+          globIgnores: ["**/hero.jpg"],
           runtimeCaching: [
             {
               urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,

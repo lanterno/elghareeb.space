@@ -15,7 +15,6 @@ import {
   projects,
   skills,
 } from "~/data/portfolio";
-import HeroImage from "~/media/hero.jpg?jsx";
 
 import type { DocumentHead } from "@builder.io/qwik-city";
 
@@ -29,8 +28,11 @@ export default component$(() => {
           <div class="opacity-0 animate-fade-in flex-shrink-0">
             <div class="relative group">
               <div class="absolute -inset-2 bg-gradient-to-r from-accent-emerald to-accent-sky rounded-full blur-lg opacity-30 group-hover:opacity-50 transition-opacity" />
-              <HeroImage
+              <img
+                src="/hero.jpg"
                 alt="Ahmed Elghareeb"
+                width={180}
+                height={180}
                 class="relative rounded-full border-4 border-cream-100 shadow-xl w-[180px] h-[180px] object-cover"
               />
               <span class="absolute bottom-2 right-2 text-3xl" aria-label="Turtle emoji">
