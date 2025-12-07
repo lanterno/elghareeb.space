@@ -6,16 +6,16 @@ Personal portfolio website for Ahmed Elghareeb, built with [Qwik](https://qwik.d
 
 ```bash
 # Install dependencies
-npm install
+bun install
 
 # Start development server
-npm run dev
+bun run dev
 
 # Build for production
-npm run build
+bun run build
 
 # Preview production build
-npm run preview
+bun run preview
 ```
 
 ## 🛠 Tech Stack
