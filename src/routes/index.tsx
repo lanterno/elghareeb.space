@@ -81,7 +81,7 @@ export default component$(() => {
             <div class="opacity-0 animate-fade-up animation-delay-400 mb-6">
               <span class="inline-flex items-center gap-2 px-4 py-2 bg-accent-emerald/10 text-accent-emerald rounded-full text-sm font-medium border border-accent-emerald/20">
                 <span class="w-2 h-2 bg-accent-emerald rounded-full animate-pulse-soft"></span>
-                Open to Work -- Digital Identity · Sustainability · IOT
+                Open to collaborate in: Digital Identity · Sustainability · IoT
               </span>
             </div>
 
