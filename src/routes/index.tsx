@@ -50,7 +50,14 @@ export default component$(() => {
 
             <p class="opacity-0 animate-fade-up animation-delay-100 text-xl text-ink-600 mb-6 font-light">
               <span class="font-semibold text-ink-900">Staff Software Engineer</span> ·{" "}
-              <span class="text-accent-emerald font-medium">ClimateBase Fellow</span>
+              <a
+                href="https://climatebase.org"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-accent-emerald font-medium hover:underline transition-colors"
+              >
+                ClimateBase Fellow
+              </a>
             </p>
 
             <div class="opacity-0 animate-fade-up animation-delay-200 flex items-center gap-2 text-ink-500 mb-6">
