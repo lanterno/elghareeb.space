@@ -55,9 +55,9 @@ export default component$(() => {
 
             <div class="opacity-0 animate-fade-up animation-delay-200 flex items-center gap-2 text-ink-500 mb-6">
               <LocationIcon />
-              <span>Chavannes, Vaud, Switzerland</span>
+              <span>Renens, Vaud, Switzerland</span>
               <span class="text-ink-300 mx-2">·</span>
-              <span class="font-mono text-sm">@c4dt · EPFL</span>
+              <span class="font-mono text-sm">@Resilio</span>
             </div>
 
             <p class="opacity-0 animate-fade-up animation-delay-300 text-lg text-ink-600 leading-relaxed mb-6 max-w-2xl">
