@@ -57,7 +57,14 @@ export default component$(() => {
               <LocationIcon />
               <span>Renens, Vaud, Switzerland</span>
               <span class="text-ink-300 mx-2">·</span>
-              <span class="font-mono text-sm">@Resilio</span>
+              <a
+                href="https://resilio.tech"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="font-mono text-sm text-ink-500 hover:text-accent-emerald transition-colors"
+              >
+                @Resilio
+              </a>
             </div>
 
             <p class="opacity-0 animate-fade-up animation-delay-300 text-lg text-ink-600 leading-relaxed mb-6 max-w-2xl">
