@@ -62,10 +62,9 @@ export default component$(() => {
 
             <p class="opacity-0 animate-fade-up animation-delay-300 text-lg text-ink-600 leading-relaxed mb-6 max-w-2xl">
               Building{" "}
-              <strong class="text-ink-900">Switzerland's digital identity infrastructure</strong> at{" "}
-              <strong class="text-ink-900">EPFL's Center for Digital Trust (C4DT)</strong>.
-              Experimenting with cutting-edge standards for digital wallets, verifiable credentials,
-              and privacy-preserving technologies.
+              <strong class="text-ink-900">environmental accountability platforms</strong> at{" "}
+              <strong class="text-ink-900">Resilio</strong>.
+              Creating solutions that help sustainability professionals understand and improve their environmental impact.
             </p>
 
             <p class="opacity-0 animate-fade-up animation-delay-400 text-ink-500 leading-relaxed mb-8 max-w-2xl">
@@ -190,19 +189,18 @@ export default component$(() => {
         </h2>
         <div class="grid md:grid-cols-3 gap-6">
           <div class="opacity-0 animate-fade-up glass-card rounded-2xl p-6 group hover:scale-[1.02] transition-transform">
-            <div class="text-3xl mb-4">🪪</div>
-            <h3 class="text-lg font-semibold mb-2">Digital Identity @ C4DT</h3>
+            <div class="text-3xl mb-4">♻️</div>
+            <h3 class="text-lg font-semibold mb-2">Environmental Accountability @ Resilio</h3>
             <p class="text-ink-500 text-sm leading-relaxed">
-              Building Switzerland's E-ID infrastructure — digital wallets, verifiable credentials,
-              and identity standards that respect privacy.
+              Building platforms that help sustainability professionals analyze and understand their environmental impact.
             </p>
             <a
-              href="https://github.com/c4dt/how-2025-06-eID"
+              href="https://resilio-solutions.com"
               target="_blank"
               rel="noopener noreferrer"
               class="inline-flex items-center gap-1 mt-4 text-sm font-medium text-accent-emerald hover:underline"
             >
-              E-ID Workshop <ExternalLinkIcon />
+              Resilio <ExternalLinkIcon />
             </a>
           </div>
 

@@ -104,13 +104,33 @@ export type Certification = v.InferOutput<typeof CertificationSchema>;
 export const experiences = [
   {
     title: "Staff Software Engineer",
+    company: "Resilio",
+    type: "Full-time",
+    period: "Dec 2025 - Present" as DateRange,
+    duration: "9 months",
+    location: "Renens, Switzerland",
+    description: [
+      "Building an Environmental accountability platform helping sustainability professionals analyze and understand their sustainability and environmental impact.",
+      "Working with Domain-Driven Design (DDD) and modern Python frameworks to create scalable solutions.",
+    ],
+    skills: [
+      "Domain-Driven Design",
+      "Django",
+      "REST Framework",
+      "Python",
+      "Sustainability Tech",
+    ],
+    current: true,
+  },
+  {
+    title: "Research Software Engineer in Digital Identities",
     company: "Center for Digital Trust (C4DT), EPFL",
     type: "Full-time",
-    period: "Apr 2023 - Present" as DateRange,
-    duration: "3+ years",
-    location: "Chavannes, Switzerland",
+    period: "Apr 2023 - Apr 2026" as DateRange,
+    duration: "3 years 1 month",
+    location: "Lausanne, Switzerland",
     description: [
-      "E-ID (Digital Identity Infrastructure In Switzerland): Experimenting with cutting-edge standards and technologies for Digital Identities, digital wallets, and verifiable credentials.",
+      "E-ID (Digital Identity Infrastructure In Switzerland): Experimented with cutting-edge standards and technologies for Digital Identities, digital wallets, and verifiable credentials.",
       "Predictive Maintenance (Private Multi-party ML): Using modern ML privacy technology including Homomorphic Encryption and Decentralized Learning on neural networks.",
       "Working in a research environment, reading papers and specifications, and building proof-of-concepts in various programming languages.",
     ],
@@ -122,7 +142,7 @@ export const experiences = [
       "E-ID",
       "Zero-Knowledge Proofs",
     ],
-    current: true,
+    current: false,
   },
   {
     title: "Climate Fellow - Cohort 6",
