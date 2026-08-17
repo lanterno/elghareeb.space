@@ -3,40 +3,44 @@
 /* Custom theme configuration */
 @theme {
   /* Fonts */
-  --font-sans: "Sora", system-ui, sans-serif;
+  --font-sans: "Sora", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-display: "Instrument Serif", Georgia, serif;
-  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+  --font-mono: "JetBrains Mono", "SF Mono", "Fira Code", monospace;
 
-  /* Custom colors - Cream palette */
+  /* Custom colors - Warm Paper / Editorial Cream palette */
   --color-cream-50: #fefdfb;
-  --color-cream-100: #fdf9f3;
-  --color-cream-200: #faf2e6;
-  --color-cream-300: #f5e8d3;
-  --color-cream-400: #e8d4b3;
+  --color-cream-100: #faf6ee;
+  --color-cream-200: #f4ede0;
+  --color-cream-300: #ebdfcd;
+  --color-cream-400: #dfceb5;
+  --color-cream-500: #ccb697;
 
-  /* Custom colors - Ink palette */
-  --color-ink-50: #f7f7f6;
-  --color-ink-100: #e3e3e1;
-  --color-ink-200: #c7c7c4;
-  --color-ink-300: #a4a4a0;
-  --color-ink-400: #81817c;
-  --color-ink-500: #666662;
-  --color-ink-600: #51514e;
-  --color-ink-700: #434340;
-  --color-ink-800: #383835;
-  --color-ink-900: #2c2c2a;
-  --color-ink-950: #1a1a18;
+  /* Custom colors - Rich Deep Ink palette */
+  --color-ink-50: #f8f8f7;
+  --color-ink-100: #eaeae7;
+  --color-ink-200: #cfcfcb;
+  --color-ink-300: #adada7;
+  --color-ink-400: #888882;
+  --color-ink-500: #686862;
+  --color-ink-600: #52524d;
+  --color-ink-700: #3f3f3a;
+  --color-ink-800: #2b2b27;
+  --color-ink-900: #1b1b18;
+  --color-ink-950: #11110f;
 
-  /* Custom colors - Accent */
-  --color-accent-emerald: #10b981;
-  --color-accent-amber: #f59e0b;
-  --color-accent-rose: #f43f5e;
-  --color-accent-sky: #0ea5e9;
+  /* Refined Accent colors */
+  --color-accent-emerald: #059669;
+  --color-accent-emerald-dark: #047857;
+  --color-accent-amber: #d97706;
+  --color-accent-rose: #e11d48;
+  --color-accent-sky: #0284c7;
+  --color-accent-indigo: #4f46e5;
 
   /* Custom animations */
-  --animate-fade-in: fadeIn 0.6s ease-out forwards;
-  --animate-fade-up: fadeUp 0.7s ease-out forwards;
-  --animate-pulse-soft: pulseSoft 3s ease-in-out infinite;
+  --animate-fade-in: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-fade-up: fadeUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-pulse-soft: pulseSoft 2.5s ease-in-out infinite;
+  --animate-float: float 4s ease-in-out infinite;
 
   @keyframes fadeIn {
     0% {
@@ -50,7 +54,7 @@
   @keyframes fadeUp {
     0% {
       opacity: 0;
-      transform: translateY(30px);
+      transform: translateY(24px);
     }
     100% {
       opacity: 1;
@@ -62,9 +66,21 @@
     0%,
     100% {
       opacity: 1;
+      transform: scale(1);
     }
     50% {
-      opacity: 0.7;
+      opacity: 0.65;
+      transform: scale(0.95);
+    }
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-6px);
     }
   }
 }
@@ -73,11 +89,18 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
+  }
+
+  body {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   ::selection {
-    background-color: var(--color-accent-emerald);
-    color: white;
+    background-color: #059669;
+    color: #ffffff;
   }
 
   /* Custom scrollbar */
@@ -87,28 +110,44 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: var(--color-cream-100);
+    background: #faf6ee;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: var(--color-ink-200);
+    background: #cfcfcb;
     border-radius: 4px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: var(--color-ink-300);
+    background: #adada7;
   }
 }
 
 /* Component styles */
 @layer components {
   .glass-card {
-    @apply backdrop-blur-md bg-white/40 border border-white/50 shadow-lg;
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(223, 206, 181, 0.45);
+    box-shadow: 0 4px 20px -2px rgba(27, 27, 24, 0.04), 0 1px 3px rgba(27, 27, 24, 0.02);
   }
 
-  .pattern-dots {
-    background-image: radial-gradient(circle, var(--color-ink-200) 1px, transparent 1px);
-    background-size: 24px 24px;
+  .glass-card:hover {
+    box-shadow: 0 12px 30px -4px rgba(27, 27, 24, 0.08), 0 2px 6px rgba(27, 27, 24, 0.03);
+  }
+
+  .glass-nav {
+    background: rgba(254, 253, 251, 0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(223, 206, 181, 0.5);
+    box-shadow: 0 10px 30px -10px rgba(27, 27, 24, 0.06), 0 1px 2px rgba(27, 27, 24, 0.02);
+  }
+
+  .pattern-grid-swiss {
+    background-image: radial-gradient(circle, rgba(136, 136, 130, 0.15) 1px, transparent 1px);
+    background-size: 28px 28px;
   }
 
   .noise-bg {
@@ -119,8 +158,8 @@
     content: "";
     position: absolute;
     inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.025;
     pointer-events: none;
     z-index: 0;
   }
