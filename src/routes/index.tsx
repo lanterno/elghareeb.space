@@ -49,13 +49,13 @@ export default component$(() => {
             </h1>
 
             <p class="opacity-0 animate-fade-up animation-delay-100 text-xl text-ink-600 mb-6 font-light">
-              <span class="font-semibold text-ink-900">Senior Backend Engineer</span> ·{" "}
+              <span class="font-semibold text-ink-900">Staff Software Engineer</span> ·{" "}
               <span class="text-accent-emerald font-medium">ClimateBase Fellow</span>
             </p>
 
             <div class="opacity-0 animate-fade-up animation-delay-200 flex items-center gap-2 text-ink-500 mb-6">
               <LocationIcon />
-              <span>Lausanne, Switzerland</span>
+              <span>Chavannes, Vaud, Switzerland</span>
               <span class="text-ink-300 mx-2">·</span>
               <span class="font-mono text-sm">@c4dt · EPFL</span>
             </div>
@@ -393,27 +393,27 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: "Ahmed Elghareeb | Senior Backend Engineer",
+  title: "Ahmed Elghareeb | Staff Software Engineer",
   meta: [
     {
       name: "description",
       content:
-        "Senior Backend Engineer and ClimateBase Fellow. Building Switzerland's digital identity infrastructure at EPFL's Center for Digital Trust (C4DT). Passionate about climate tech and sustainable IT.",
+        "Staff Software Engineer and ClimateBase Fellow. Building Switzerland's digital identity infrastructure at EPFL's Center for Digital Trust (C4DT). Passionate about climate tech and sustainable IT.",
     },
     {
       name: "keywords",
       content:
-        "Ahmed Elghareeb, Software Engineer, Digital Identity, EPFL, C4DT, Climate Tech, Switzerland, Backend Engineer, Django, Python, Rust",
+        "Ahmed Elghareeb, Software Engineer, Digital Identity, EPFL, C4DT, Climate Tech, Switzerland, Staff Engineer, Django, Python, Rust",
     },
     // Open Graph
     {
       property: "og:title",
-      content: "Ahmed Elghareeb | Senior Backend Engineer",
+      content: "Ahmed Elghareeb | Staff Software Engineer",
     },
     {
       property: "og:description",
       content:
-        "Senior Backend Engineer and ClimateBase Fellow at EPFL's Center for Digital Trust. Building digital identity infrastructure for Switzerland.",
+        "Staff Software Engineer and ClimateBase Fellow at EPFL's Center for Digital Trust. Building digital identity infrastructure for Switzerland.",
     },
     {
       property: "og:type",
@@ -442,12 +442,12 @@ export const head: DocumentHead = {
     },
     {
       name: "twitter:title",
-      content: "Ahmed Elghareeb | Senior Backend Engineer",
+      content: "Ahmed Elghareeb | Staff Software Engineer",
     },
     {
       name: "twitter:description",
       content:
-        "Senior Backend Engineer and ClimateBase Fellow at EPFL's Center for Digital Trust. Building digital identity infrastructure for Switzerland.",
+        "Staff Software Engineer and ClimateBase Fellow at EPFL's Center for Digital Trust. Building digital identity infrastructure for Switzerland.",
     },
     {
       name: "twitter:image",

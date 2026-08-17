@@ -103,12 +103,12 @@ export type Certification = v.InferOutput<typeof CertificationSchema>;
 
 export const experiences = [
   {
-    title: "Senior Software Engineer",
+    title: "Staff Software Engineer",
     company: "Center for Digital Trust (C4DT), EPFL",
     type: "Full-time",
     period: "Apr 2023 - Present" as DateRange,
-    duration: "2+ years",
-    location: "Lausanne, Switzerland",
+    duration: "3+ years",
+    location: "Chavannes, Switzerland",
     description: [
       "E-ID (Digital Identity Infrastructure In Switzerland): Experimenting with cutting-edge standards and technologies for Digital Identities, digital wallets, and verifiable credentials.",
       "Predictive Maintenance (Private Multi-party ML): Using modern ML privacy technology including Homomorphic Encryption and Decentralized Learning on neural networks.",
