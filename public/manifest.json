@@ -2,13 +2,13 @@
   "id": "/",
   "name": "Ahmed Elghareeb - Portfolio",
   "short_name": "AE Portfolio",
-  "description": "Ahmed Elghareeb - Senior Software Engineer, Climate Fellow, Digital Identity Specialist at EPFL C4DT",
+  "description": "Ahmed Elghareeb - Staff Software Engineer at Resilio, formerly digital identity research at EPFL C4DT, Climatebase Fellow",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "theme_color": "#10b981",
-  "background_color": "#fefdfb",
+  "theme_color": "#8cc1e2",
+  "background_color": "#e4f0f1",
   "lang": "en",
   "dir": "ltr",
   "categories": ["portfolio", "personal", "technology", "career"],
@@ -34,10 +34,10 @@
   ],
   "shortcuts": [
     {
-      "name": "View Experience",
-      "short_name": "Experience",
-      "description": "View work experience and career history",
-      "url": "/#experience",
+      "name": "View work",
+      "short_name": "Work",
+      "description": "Where I've worked and what I built there",
+      "url": "/work/",
       "icons": [
         {
           "src": "/favicon.svg",
@@ -47,10 +47,10 @@
       ]
     },
     {
-      "name": "View Projects",
+      "name": "View projects",
       "short_name": "Projects",
-      "description": "View open source projects and contributions",
-      "url": "/#projects",
+      "description": "Open-source projects",
+      "url": "/projects/",
       "icons": [
         {
           "src": "/favicon.svg",
