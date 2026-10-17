@@ -1,5 +1,7 @@
+export { ArrowRightIcon } from "./ArrowRightIcon";
+export { ArrowUpRightIcon } from "./ArrowUpRightIcon";
+export { CloseIcon } from "./CloseIcon";
+export { CodeIcon } from "./CodeIcon";
 export { GitHubIcon } from "./GitHubIcon";
 export { LinkedInIcon } from "./LinkedInIcon";
-export { LocationIcon } from "./LocationIcon";
-export { ExternalLinkIcon } from "./ExternalLinkIcon";
-export { CalendarIcon } from "./CalendarIcon";
+export { MenuIcon } from "./MenuIcon";

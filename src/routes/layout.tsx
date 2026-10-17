@@ -1,5 +1,10 @@
 import { component$, Slot } from "@builder.io/qwik";
 
+import { Clouds } from "~/components/clouds/Clouds";
+import { GitHubIcon, LinkedInIcon } from "~/components/icons";
+import { Navbar } from "~/components/navbar/Navbar";
+import { links } from "~/data/portfolio";
+
 import type { RequestHandler } from "@builder.io/qwik-city";
 
 export const onGet: RequestHandler = ({ cacheControl }) => {
@@ -11,34 +16,50 @@ export const onGet: RequestHandler = ({ cacheControl }) => {
 
 export default component$(() => {
   return (
-    <div class="min-h-screen relative noise-bg">
-      {/* Subtle background pattern */}
-      <div class="fixed inset-0 pattern-dots opacity-30 pointer-events-none" />
+    <div class="sky-afternoon relative min-h-screen overflow-x-clip">
+      <Clouds />
 
-      {/* Gradient orbs */}
-      <div class="fixed top-20 -left-32 w-96 h-96 bg-accent-emerald/10 rounded-full blur-3xl pointer-events-none" />
-      <div class="fixed bottom-20 -right-32 w-96 h-96 bg-accent-sky/10 rounded-full blur-3xl pointer-events-none" />
+      <a
+        href="#main"
+        class="sr-only z-30 rounded-full bg-ink px-5 py-3 font-bold text-panel focus:not-sr-only focus:absolute focus:left-4 focus:top-4"
+      >
+        Skip to content
+      </a>
 
-      {/* Main content */}
-      <div class="relative z-10">
+      <header class="wrap relative z-20 pt-4 md:pt-6">
+        <Navbar />
+      </header>
+
+      <main id="main" class="relative z-10">
         <Slot />
-      </div>
+      </main>
 
-      {/* Footer */}
-      <footer class="relative z-10 py-12 mt-20 border-t border-ink-100">
-        <div class="max-w-5xl mx-auto px-6 text-center">
-          <p class="text-ink-400 text-sm font-mono">
-            © {String(new Date().getFullYear())} Ahmed Elghareeb · Built with{" "}
+      <footer class="wrap relative flex flex-wrap items-center justify-between gap-3 pb-8 pt-7 text-sm text-ink-muted">
+        <p>© {String(new Date().getFullYear())} Ahmed Elghareeb · Renens, Switzerland</p>
+        <ul class="flex gap-2">
+          <li>
             <a
-              href="https://qwik.dev"
+              href={links.github}
               target="_blank"
               rel="noopener noreferrer"
-              class="text-accent-emerald hover:underline"
+              class="inline-flex min-h-10 items-center gap-2 rounded-full px-3 text-ink hover:bg-wash/16"
             >
-              Qwik
+              <GitHubIcon />
+              GitHub
             </a>
-          </p>
-        </div>
+          </li>
+          <li>
+            <a
+              href={links.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex min-h-10 items-center gap-2 rounded-full px-3 text-ink hover:bg-wash/16"
+            >
+              <LinkedInIcon />
+              LinkedIn
+            </a>
+          </li>
+        </ul>
       </footer>
     </div>
   );

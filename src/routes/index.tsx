@@ -1,475 +1,257 @@
 import { component$ } from "@builder.io/qwik";
+import { Link } from "@builder.io/qwik-city";
 
-import {
-  CalendarIcon,
-  ExternalLinkIcon,
-  GitHubIcon,
-  LinkedInIcon,
-  LocationIcon,
-} from "~/components/icons";
-import {
-  certifications,
-  education,
-  experiences,
-  getAnimationDelayClass,
-  getTextColorClass,
-  projects,
-  skills,
-} from "~/data/portfolio";
+import { Hills } from "~/components/hills/Hills";
+import { ArrowRightIcon } from "~/components/icons";
+import { pageHead } from "~/components/router-head/page-head";
+import { SkillsMarquee } from "~/components/skills-marquee/SkillsMarquee";
+import { TalkCard } from "~/components/talk-card/TalkCard";
+import { projects, yearsOfExperience } from "~/data/portfolio";
+import { type Tone, toneClasses } from "~/data/tones";
+import ImgHero from "~/media/hero.jpg?aspect=1:1&jsx";
 
 import type { DocumentHead } from "@builder.io/qwik-city";
 
+const floatingChips = [
+  {
+    label: "Staff engineer · Resilio",
+    tone: "teal",
+    place: "left-[-10px] top-[70px] hidden lg:inline-flex",
+    delay: "",
+  },
+  {
+    label: "3 years on Swiss E-ID",
+    tone: "blue",
+    place: "right-0 bottom-3 inline-flex lg:right-[-16px] lg:top-[210px] lg:bottom-auto",
+    delay: "[animation-delay:-2s]",
+  },
+  {
+    label: "Climatebase Fellow",
+    tone: "lavender",
+    place: "left-[10px] bottom-[60px] hidden lg:inline-flex",
+    delay: "[animation-delay:-4s]",
+  },
+] as const satisfies readonly { label: string; tone: Tone; place: string; delay: string }[];
+
+const builtAt = ["Resilio", "EPFL · C4DT", "Back Market", "Climatebase"] as const;
+
+interface Tile {
+  href: string;
+  /** `null` for a plain panel that isn't tied to one organisation */
+  tone: Tone | null;
+  label: string;
+  figure: string;
+  line: string;
+  cta: string;
+  live: boolean;
+}
+
+const tiles: readonly Tile[] = [
+  {
+    href: "/work/",
+    tone: null,
+    label: "Experience",
+    figure: `${String(yearsOfExperience)} yrs`,
+    line: "building software, from startups to research labs",
+    cta: "Read the chapters",
+    live: false,
+  },
+  {
+    href: "/work/",
+    tone: "teal",
+    label: "Right now",
+    figure: "Resilio",
+    line: "making environmental impact measurable",
+    cta: "What I do there",
+    live: true,
+  },
+  {
+    href: "/projects/",
+    tone: "coral",
+    label: "Open source",
+    figure: String(projects.length),
+    line: "projects built in the open",
+    cta: "See the projects",
+    live: false,
+  },
+  {
+    href: "/about/",
+    tone: "lavender",
+    label: "Climatebase · 2024",
+    figure: "Fellow",
+    line: "climate tech and sustainable IT",
+    cta: "More about me",
+    live: false,
+  },
+];
+
 export default component$(() => {
   return (
-    <main class="max-w-5xl mx-auto px-6 py-16">
-      {/* Hero Section */}
-      <section class="mb-24">
-        <div class="flex flex-col lg:flex-row items-start gap-12">
-          {/* Profile Image */}
-          <div class="opacity-0 animate-fade-in flex-shrink-0">
-            <div class="relative group">
-              <div class="absolute -inset-2 bg-gradient-to-r from-accent-emerald to-accent-sky rounded-full blur-lg opacity-30 group-hover:opacity-50 transition-opacity" />
-              <img
-                src="/hero.jpg"
-                alt="Ahmed Elghareeb"
-                width={180}
-                height={180}
-                class="relative rounded-full border-4 border-cream-100 shadow-xl w-[180px] h-[180px] object-cover"
+    <>
+      {/* Hero */}
+      <section aria-labelledby="hero-title" class="relative pb-[150px]">
+        <div class="wrap grid items-center gap-8 pt-10 md:pt-[72px] lg:grid-cols-[7fr_5fr]">
+          <div class="flex min-w-0 flex-col gap-7">
+            <p class="inline-flex items-center gap-2.5 self-start rounded-full bg-panel/94 py-2 pl-3 pr-4 text-sm font-bold text-leaf-ink shadow-hair">
+              <span
+                aria-hidden="true"
+                class="h-2.5 w-2.5 shrink-0 rounded-full bg-leaf shadow-[0_0_0_4px_rgb(62_141_83/0.18)]"
               />
-              <span class="absolute bottom-2 right-2 text-3xl" aria-label="Turtle emoji">
-                🐢
-              </span>
-            </div>
-          </div>
-
-          {/* Info */}
-          <div class="flex-1">
-            <h1 class="opacity-0 animate-fade-up text-5xl lg:text-6xl font-display font-normal mb-4">
-              Ahmed <span class="italic">Elghareeb</span>
-            </h1>
-
-            <p class="opacity-0 animate-fade-up animation-delay-100 text-xl text-ink-600 mb-6 font-light">
-              <span class="font-semibold text-ink-900">Staff Software Engineer</span> ·{" "}
-              <a
-                href="https://climatebase.org"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-accent-emerald font-medium hover:underline transition-colors"
-              >
-                ClimateBase Fellow
-              </a>
+              Open to collaborate on digital identity, climate and IoT
             </p>
-
-            <div class="opacity-0 animate-fade-up animation-delay-200 flex items-center gap-2 text-ink-500 mb-6">
-              <LocationIcon />
-              <span>Renens, Vaud, Switzerland</span>
-              <span class="text-ink-300 mx-2">·</span>
+            <h1
+              id="hero-title"
+              class="text-[clamp(52px,7.4vw,104px)] leading-[0.98] tracking-[-0.025em]"
+            >
+              I build software people can{" "}
+              <span class="inline-block -rotate-[2.5deg] rounded-[0.28em] bg-panel px-[0.18em] pb-[0.06em] shadow-raised">
+                trust.
+              </span>
+            </h1>
+            <p class="max-w-[30em] text-lg leading-relaxed text-ink-sky md:text-xl">
+              Staff Software Engineer at{" "}
               <a
                 href="https://resilio.tech"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="font-mono text-sm text-ink-500 hover:text-accent-emerald transition-colors"
+                class="font-bold text-ink underline decoration-ink/30 underline-offset-4 hover:decoration-ink"
               >
-                @Resilio
+                Resilio
               </a>
-            </div>
-
-            <p class="opacity-0 animate-fade-up animation-delay-300 text-lg text-ink-600 leading-relaxed mb-6 max-w-2xl">
-              Building{" "}
-              <strong class="text-ink-900">environmental accountability platforms</strong> at{" "}
-              <strong class="text-ink-900">Resilio</strong>.
-              Creating solutions that help sustainability professionals understand and improve their environmental impact.
+              , building climate accountability software. Before that, three years on Switzerland’s
+              digital identity at EPFL.
             </p>
-
-            <p class="opacity-0 animate-fade-up animation-delay-400 text-ink-500 leading-relaxed mb-8 max-w-2xl">
-              Beyond code, I'm passionate about{" "}
-              <strong class="text-accent-emerald">climate tech</strong> and{" "}
-              <strong class="text-accent-emerald">sustainable IT</strong>. As a{" "}
-              <strong class="text-ink-700">Climatebase Fellow</strong>, I explore the intersection
-              of technology and sustainability in energy, transportation, and agriculture. Currently
-              leading a <strong class="text-ink-700">Sustainable IT working group</strong> at EPFL.
-            </p>
-
-            {/* Open to Work Badge */}
-            <div class="opacity-0 animate-fade-up animation-delay-400 mb-6">
-              <span class="inline-flex items-center gap-2 px-4 py-2 bg-accent-emerald/10 text-accent-emerald rounded-full text-sm font-medium border border-accent-emerald/20">
-                <span class="w-2 h-2 bg-accent-emerald rounded-full animate-pulse-soft"></span>
-                Open to collaborate in: Digital Identity · Sustainability · IoT
-              </span>
-            </div>
-
-            {/* Social Links */}
-            <div class="opacity-0 animate-fade-up animation-delay-500 flex gap-4">
+            <div class="flex flex-wrap gap-3">
               <a
-                href="https://github.com/lanterno"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="flex items-center gap-2 px-5 py-2.5 bg-ink-900 text-cream-50 rounded-lg hover:bg-ink-800 transition-colors"
+                href="#talk"
+                class="inline-flex min-h-14 items-center gap-2.5 rounded-full bg-sun px-7 text-base font-bold text-ink shadow-sun transition-transform hover:-translate-y-0.5"
               >
-                <GitHubIcon />
-                <span class="font-medium">GitHub</span>
+                Start a conversation
+                <ArrowRightIcon />
               </a>
-              <a
-                href="https://linkedin.com/in/ahmedelghareeb"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="flex items-center gap-2 px-5 py-2.5 border-2 border-ink-200 text-ink-700 rounded-lg hover:border-ink-400 hover:bg-ink-50 transition-colors"
+              <Link
+                href="/work/"
+                class="inline-flex min-h-14 items-center rounded-full bg-panel/94 px-[26px] text-base font-bold text-ink transition-colors hover:bg-panel"
               >
-                <LinkedInIcon />
-                <span class="font-medium">LinkedIn</span>
-              </a>
+                See my work
+              </Link>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Experience Section */}
-      <section class="mb-24">
-        <h2 class="text-3xl font-display mb-8 opacity-0 animate-fade-up">
-          💼 <span class="italic">Experience</span>
-        </h2>
-        <div class="space-y-8">
-          {experiences.map((exp, i) => (
-            <div
-              key={exp.company}
-              class={`opacity-0 animate-fade-up ${getAnimationDelayClass(i)} relative pl-8 border-l-2 ${
-                exp.current ? "border-accent-emerald" : "border-ink-200"
-              }`}
-            >
-              {/* Timeline dot */}
-              <div
-                class={`absolute -left-[9px] top-0 w-4 h-4 rounded-full border-2 ${
-                  exp.current
-                    ? "bg-accent-emerald border-accent-emerald"
-                    : "bg-cream-50 border-ink-300"
-                }`}
-              />
-
-              <div class="flex flex-wrap items-start justify-between gap-2 mb-2">
-                <div>
-                  <h3 class="text-xl font-semibold text-ink-900">{exp.title}</h3>
-                  <p class="text-ink-600 font-medium">{exp.company}</p>
-                </div>
-                {exp.current && (
-                  <span class="px-3 py-1 text-xs font-medium bg-accent-emerald/10 text-accent-emerald rounded-full">
-                    Current
-                  </span>
-                )}
-              </div>
-
-              <div class="flex flex-wrap items-center gap-3 text-sm text-ink-500 mb-4">
-                <span class="flex items-center gap-1">
-                  <CalendarIcon />
-                  {exp.period}
-                </span>
-                <span>·</span>
-                <span>{exp.duration}</span>
-                <span>·</span>
-                <span>{exp.location}</span>
-                <span>·</span>
-                <span class="text-ink-400">{exp.type}</span>
-              </div>
-
-              <ul class="space-y-2 mb-4">
-                {exp.description.map((desc) => (
-                  <li
-                    key={desc}
-                    class="text-ink-600 text-sm leading-relaxed pl-4 relative before:content-['→'] before:absolute before:left-0 before:text-accent-emerald"
-                  >
-                    {desc}
+            <div class="flex flex-wrap items-center gap-x-[26px] gap-y-2.5 pt-2 text-ink-sky">
+              <span class="text-sm">Built at</span>
+              <ul class="contents">
+                {builtAt.map((name) => (
+                  <li key={name} class="font-display text-[19px] font-extrabold">
+                    {name}
                   </li>
                 ))}
               </ul>
-
-              <div class="flex flex-wrap gap-2">
-                {exp.skills.map((skill) => (
-                  <span
-                    key={skill}
-                    class="px-2.5 py-1 text-xs font-mono bg-ink-100 text-ink-600 rounded"
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
             </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Current Focus */}
-      <section class="mb-24">
-        <h2 class="text-3xl font-display mb-8 opacity-0 animate-fade-up">
-          🔭 <span class="italic">Current Focus</span>
-        </h2>
-        <div class="grid md:grid-cols-3 gap-6">
-          <div class="opacity-0 animate-fade-up glass-card rounded-2xl p-6 group hover:scale-[1.02] transition-transform">
-            <div class="text-3xl mb-4">♻️</div>
-            <h3 class="text-lg font-semibold mb-2">Environmental Accountability @ Resilio</h3>
-            <p class="text-ink-500 text-sm leading-relaxed">
-              Building platforms that help sustainability professionals analyze and understand their environmental impact.
-            </p>
-            <a
-              href="https://resilio-solutions.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center gap-1 mt-4 text-sm font-medium text-accent-emerald hover:underline"
-            >
-              Resilio <ExternalLinkIcon />
-            </a>
           </div>
 
-          <div class="opacity-0 animate-fade-up animation-delay-100 glass-card rounded-2xl p-6 group hover:scale-[1.02] transition-transform">
-            <div class="text-3xl mb-4">🌿</div>
-            <h3 class="text-lg font-semibold mb-2">Sustainable IT @ EPFL</h3>
-            <p class="text-ink-500 text-sm leading-relaxed">
-              Leading a working group on Sustainable IT, sponsored by the Research Software
-              Engineering community at EPFL. Working with ClimateRoboticsNetworks.
-            </p>
-          </div>
-
-          <div class="opacity-0 animate-fade-up animation-delay-200 glass-card rounded-2xl p-6 group hover:scale-[1.02] transition-transform">
-            <div class="text-3xl mb-4">📜</div>
-            <h3 class="text-lg font-semibold mb-2">Archetype Project</h3>
-            <p class="text-ink-500 text-sm leading-relaxed">
-              Leading the rewrite of an open-source palaeographic annotation platform for medieval
-              manuscript research.
-            </p>
-            <a
-              href="https://github.com/archetype-pal/backend"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center gap-1 mt-4 text-sm font-medium text-accent-emerald hover:underline"
-            >
-              archetype-pal <ExternalLinkIcon />
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* Technical Toolkit */}
-      <section class="mb-24">
-        <h2 class="text-3xl font-display mb-8 opacity-0 animate-fade-up">
-          🛠 <span class="italic">Technical Toolkit</span>
-        </h2>
-        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {skills.map((skill, i) => (
+          <div class="relative order-first grid min-h-[290px] place-items-center lg:order-none lg:min-h-[520px]">
             <div
-              key={skill.category}
-              class={`opacity-0 animate-fade-up ${getAnimationDelayClass(i)} p-5 rounded-xl border border-ink-100 bg-cream-100/50`}
-            >
-              <h3 class={`text-sm font-mono font-semibold mb-3 ${getTextColorClass(skill.color)}`}>
-                {skill.category}
-              </h3>
-              <div class="flex flex-wrap gap-2">
-                {skill.items.map((item) => (
-                  <span
-                    key={item}
-                    class="px-2.5 py-1 text-sm bg-cream-200/80 text-ink-700 rounded-md"
-                  >
-                    {item}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Open Source Highlights */}
-      <section class="mb-24">
-        <h2 class="text-3xl font-display mb-8 opacity-0 animate-fade-up">
-          🌱 <span class="italic">Open Source Highlights</span>
-        </h2>
-        <div class="grid md:grid-cols-2 gap-6">
-          {projects.map((project, i) => (
-            <a
-              key={project.name}
-              href={project.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              class={`opacity-0 animate-fade-up ${getAnimationDelayClass(i)} group block p-6 rounded-xl border border-ink-100 hover:border-accent-emerald/50 bg-cream-100/30 hover:bg-cream-100/60 transition-all`}
-            >
-              <div class="flex items-start justify-between mb-3">
-                <h3 class="text-lg font-semibold group-hover:text-accent-emerald transition-colors">
-                  {project.name}
-                </h3>
-                <ExternalLinkIcon />
-              </div>
-              <p class="text-ink-500 text-sm leading-relaxed mb-4">{project.description}</p>
-              <div class="flex flex-wrap gap-2">
-                {project.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    class="px-2 py-0.5 text-xs font-mono bg-ink-100 text-ink-600 rounded"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </a>
-          ))}
-        </div>
-      </section>
-
-      {/* Education & Certifications */}
-      <section class="mb-24">
-        <h2 class="text-3xl font-display mb-8 opacity-0 animate-fade-up">
-          📚 <span class="italic">Education & Certifications</span>
-        </h2>
-
-        <div class="grid md:grid-cols-2 gap-12">
-          {/* Education */}
-          <div class="opacity-0 animate-fade-up animation-delay-100">
-            <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
-              <span class="text-xl">🎓</span> Education
-            </h3>
-            <div class="space-y-6">
-              {education.map((edu) => (
-                <div key={edu.institution} class="pl-4 border-l-2 border-ink-200">
-                  <h4 class="font-semibold text-ink-800">{edu.institution}</h4>
-                  <p class="text-sm font-medium text-accent-emerald">{edu.degree}</p>
-                  <p class="text-xs text-ink-400 mb-2">{edu.period}</p>
-                  <p class="text-sm text-ink-500">{edu.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Certifications */}
-          <div class="opacity-0 animate-fade-up animation-delay-200">
-            <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
-              <span class="text-xl">🏅</span> Certifications
-            </h3>
-            <div class="space-y-4">
-              {certifications.map((cert) => (
-                <div key={cert.name} class="pl-4 border-l-2 border-accent-emerald/40">
-                  <h4 class="font-semibold text-ink-800">{cert.name}</h4>
-                  <p class="text-sm text-ink-500">
-                    {cert.org} · {cert.year}
-                  </p>
-                </div>
-              ))}
-            </div>
+              aria-hidden="true"
+              class="sun-glow absolute h-[340px] w-[340px] rounded-full lg:h-[560px] lg:w-[560px]"
+            />
+            <ImgHero
+              alt="Ahmed Elghareeb, smiling, in green glasses and a white shirt"
+              loading="eager"
+              sizes="(min-width: 1024px) 400px, 230px"
+              class="relative aspect-square w-[230px] rounded-full border-8 border-panel object-cover shadow-raised lg:w-[400px] lg:border-[10px]"
+            />
+            {floatingChips.map((chip) => (
+              <span
+                key={chip.label}
+                class={[
+                  "absolute items-center gap-2.5 rounded-full bg-panel px-[18px] py-3 text-sm font-bold shadow-raised motion-safe:animate-bob",
+                  chip.place,
+                  chip.delay,
+                ]}
+              >
+                <span
+                  aria-hidden="true"
+                  class={["h-2.5 w-2.5 rounded-full", toneClasses[chip.tone].dot]}
+                />
+                {chip.label}
+              </span>
+            ))}
           </div>
         </div>
+        <Hills class="h-[110px] md:h-[190px]" />
       </section>
 
-      {/* Organizations */}
-      <section class="mb-12">
-        <h2 class="text-3xl font-display mb-8 opacity-0 animate-fade-up">
-          🏢 <span class="italic">Organizations</span>
-        </h2>
-        <div class="opacity-0 animate-fade-up animation-delay-100 flex flex-wrap gap-4">
-          <a
-            href="https://github.com/c4dt"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="px-4 py-2 rounded-lg bg-ink-900 text-cream-50 font-mono text-sm hover:bg-ink-800 transition-colors"
-          >
-            @c4dt
-          </a>
-          <a
-            href="https://climatebase.org"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="px-4 py-2 rounded-lg bg-accent-emerald/10 text-accent-emerald font-mono text-sm hover:bg-accent-emerald/20 transition-colors border border-accent-emerald/20"
-          >
-            Climatebase
-          </a>
-        </div>
-      </section>
+      <SkillsMarquee />
 
-      {/* Contact CTA */}
-      <section class="mt-24 mb-12">
-        <div class="opacity-0 animate-fade-up text-center p-8 rounded-2xl glass-card">
-          <h2 class="text-2xl font-display mb-4">Let's Connect</h2>
-          <p class="text-ink-500 mb-6 max-w-lg mx-auto">
-            I'm always interested in discussing digital identity, climate tech, or interesting
-            engineering challenges.
+      {/* The short version: four doors into the rest of the site */}
+      <section
+        aria-labelledby="short-title"
+        class="wrap flex flex-col gap-[30px] pt-20 md:pt-[110px]"
+      >
+        <div class="flex flex-wrap items-end justify-between gap-4">
+          <h2 id="short-title" class="text-[clamp(38px,5vw,60px)] leading-none tracking-[-0.02em]">
+            The short version.
+          </h2>
+          <p class="max-w-[26em] text-lg leading-relaxed text-ink-sky">
+            Identity, climate and scale — three domains where getting it wrong isn’t an option.
           </p>
-          <div class="flex justify-center gap-4">
-            <a
-              href="https://linkedin.com/in/ahmedelghareeb"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="flex items-center gap-2 px-6 py-3 bg-ink-900 text-cream-50 rounded-lg hover:bg-ink-800 transition-colors"
-            >
-              <LinkedInIcon />
-              <span class="font-medium">Message me on LinkedIn</span>
-            </a>
-          </div>
         </div>
+        <ul class="grid grid-cols-2 gap-3 sm:gap-[18px] lg:grid-cols-4">
+          {tiles.map((tile) => {
+            const ink = tile.tone === null ? "text-ink" : toneClasses[tile.tone].ink;
+            return (
+              <li key={tile.label}>
+                <Link
+                  href={tile.href}
+                  class={[
+                    "flex h-full min-h-[200px] flex-col gap-2 rounded-tile p-[18px] text-ink transition-transform hover:-translate-y-1 sm:min-h-[240px] sm:gap-2.5 sm:rounded-card sm:p-[26px] lg:min-h-[280px]",
+                    tile.tone === null ? "bg-panel shadow-raised" : toneClasses[tile.tone].tint,
+                  ]}
+                >
+                  <span
+                    class={["inline-flex items-center gap-2 text-[13px] font-bold sm:text-sm", ink]}
+                  >
+                    {tile.live && tile.tone !== null && (
+                      <span
+                        aria-hidden="true"
+                        class={[
+                          "h-[9px] w-[9px] rounded-full shadow-[0_0_0_4px_rgb(46_156_148/0.2)]",
+                          toneClasses[tile.tone].dot,
+                        ]}
+                      />
+                    )}
+                    {tile.label}
+                  </span>
+                  <span
+                    class={[
+                      "mt-auto font-display text-[32px] font-extrabold leading-[0.95] tracking-[-0.04em] sm:text-[52px]",
+                      ink,
+                    ]}
+                  >
+                    {tile.figure}
+                  </span>
+                  <span class="text-sm font-bold leading-snug sm:text-base">{tile.line}</span>
+                  <span class={["text-[13px] font-bold sm:text-sm", ink]}>
+                    {tile.cta} <span aria-hidden="true">→</span>
+                  </span>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
       </section>
-    </main>
+
+      <TalkCard
+        eyebrow="The day’s almost done. Your project isn’t."
+        title="Let’s build something people can trust."
+        body="Digital identity, climate software or IoT — if it has to be right, I’d like to hear about it."
+      />
+    </>
   );
 });
 
-export const head: DocumentHead = {
+export const head: DocumentHead = pageHead({
   title: "Ahmed Elghareeb | Staff Software Engineer",
-  meta: [
-    {
-      name: "description",
-      content:
-        "Staff Software Engineer and ClimateBase Fellow. Building Switzerland's digital identity infrastructure at EPFL's Center for Digital Trust (C4DT). Passionate about climate tech and sustainable IT.",
-    },
-    {
-      name: "keywords",
-      content:
-        "Ahmed Elghareeb, Software Engineer, Digital Identity, EPFL, C4DT, Climate Tech, Switzerland, Staff Engineer, Django, Python, Rust",
-    },
-    // Open Graph
-    {
-      property: "og:title",
-      content: "Ahmed Elghareeb | Staff Software Engineer",
-    },
-    {
-      property: "og:description",
-      content:
-        "Staff Software Engineer and ClimateBase Fellow at EPFL's Center for Digital Trust. Building digital identity infrastructure for Switzerland.",
-    },
-    {
-      property: "og:type",
-      content: "website",
-    },
-    {
-      property: "og:url",
-      content: "https://elghareeb.space",
-    },
-    {
-      property: "og:image",
-      content: "https://elghareeb.space/hero.jpg",
-    },
-    {
-      property: "og:locale",
-      content: "en_US",
-    },
-    {
-      property: "og:site_name",
-      content: "Ahmed Elghareeb Portfolio",
-    },
-    // Twitter Card
-    {
-      name: "twitter:card",
-      content: "summary_large_image",
-    },
-    {
-      name: "twitter:title",
-      content: "Ahmed Elghareeb | Staff Software Engineer",
-    },
-    {
-      name: "twitter:description",
-      content:
-        "Staff Software Engineer and ClimateBase Fellow at EPFL's Center for Digital Trust. Building digital identity infrastructure for Switzerland.",
-    },
-    {
-      name: "twitter:image",
-      content: "https://elghareeb.space/hero.jpg",
-    },
-  ],
-  links: [
-    {
-      rel: "canonical",
-      href: "https://elghareeb.space",
-    },
-  ],
-};
+  description:
+    "Staff Software Engineer at Resilio, building climate accountability software. Before that, three years on Switzerland’s digital identity at EPFL’s Center for Digital Trust. Open to collaborate on digital identity, climate and IoT.",
+  path: "/",
+});

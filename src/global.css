@@ -1,152 +1,167 @@
 @import "tailwindcss";
 
-/* Custom theme configuration */
+/*
+  Bright design style: the sky is the ground, content sits on cloud-white
+  panels, sunlight falls on the one thing that matters, and every face is
+  rounded. Each page walks from afternoon into a dusk scene at the bottom.
+*/
 @theme {
   /* Fonts */
-  --font-sans: "Sora", system-ui, sans-serif;
-  --font-display: "Instrument Serif", Georgia, serif;
-  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+  --font-sans: "Zen Maru Gothic", system-ui, sans-serif;
+  --font-display: "M PLUS Rounded 1c", "Zen Maru Gothic", system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
-  /* Custom colors - Cream palette */
-  --color-cream-50: #fefdfb;
-  --color-cream-100: #fdf9f3;
-  --color-cream-200: #faf2e6;
-  --color-cream-300: #f5e8d3;
-  --color-cream-400: #e8d4b3;
+  /* Only the palette below exists, so nothing off-brand slips in */
+  --color-*: initial;
 
-  /* Custom colors - Ink palette */
-  --color-ink-50: #f7f7f6;
-  --color-ink-100: #e3e3e1;
-  --color-ink-200: #c7c7c4;
-  --color-ink-300: #a4a4a0;
-  --color-ink-400: #81817c;
-  --color-ink-500: #666662;
-  --color-ink-600: #51514e;
-  --color-ink-700: #434340;
-  --color-ink-800: #383835;
-  --color-ink-900: #2c2c2a;
-  --color-ink-950: #1a1a18;
+  /* Afternoon */
+  --color-ink: #2b3a44;
+  --color-ink-muted: #5c6770;
+  --color-ink-sky: #3d5160;
+  --color-sky: #e4f0f1;
+  --color-panel: #fffdf7;
+  --color-sun: #f2b233;
+  --color-sun-ink: #8c5e12;
+  --color-wash: #72b0d6;
+  --color-leaf: #3e8d53;
+  --color-leaf-ink: #2a6f3d;
+  --color-hill-far: #b9d9a8;
+  --color-hill-mid: #8ac07c;
+  --color-hill-near: #5c9f5e;
 
-  /* Custom colors - Accent */
-  --color-accent-emerald: #10b981;
-  --color-accent-amber: #f59e0b;
-  --color-accent-rose: #f43f5e;
-  --color-accent-sky: #0ea5e9;
+  /* Data colours: one per organisation or domain, with an ink for text and a tint for fills */
+  --color-blue: #4f8fd6;
+  --color-blue-ink: #2c65a3;
+  --color-blue-tint: color-mix(in srgb, #4f8fd6 16%, #fffdf7);
+  --color-teal: #2e9c94;
+  --color-teal-ink: #1c6e67;
+  --color-teal-tint: color-mix(in srgb, #2e9c94 15%, #fffdf7);
+  --color-orange: #fb923c;
+  --color-orange-ink: #a8521a;
+  --color-orange-tint: color-mix(in srgb, #fb923c 17%, #fffdf7);
+  --color-lavender: #8e7cc3;
+  --color-lavender-ink: #5e4f9c;
+  --color-lavender-tint: color-mix(in srgb, #8e7cc3 18%, #fffdf7);
+  --color-coral: #e07a5f;
+  --color-coral-ink: #a9472d;
+  --color-coral-tint: color-mix(in srgb, #e07a5f 18%, #fffdf7);
 
-  /* Custom animations */
-  --animate-fade-in: fadeIn 0.6s ease-out forwards;
-  --animate-fade-up: fadeUp 0.7s ease-out forwards;
-  --animate-pulse-soft: pulseSoft 3s ease-in-out infinite;
+  /* Dusk, for the closing scene */
+  --color-dusk-ink: #eef2f7;
+  --color-dusk-muted: #c9d3e0;
+  --color-dusk-sun: #f5c45a;
+  --color-dusk-wash: #8dbde6;
+  --color-dusk-hill-far: #3b5470;
+  --color-dusk-hill-mid: #2c4a44;
+  --color-dusk-hill-near: #1f3a31;
 
-  @keyframes fadeIn {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
+  /* Shape */
+  --radius-tile: 22px;
+  --radius-card: 32px;
+  --radius-panel: 40px;
+  --radius-scene: 44px;
+
+  --shadow-hair: 0 1px 2px rgb(43 58 68 / 0.06);
+  --shadow-raised: 0 1px 2px rgb(43 58 68 / 0.06), 0 12px 32px rgb(43 58 68 / 0.08);
+  --shadow-sun: 0 10px 30px rgb(242 178 51 / 0.45);
+  --shadow-dusk-sun: 0 10px 40px rgb(245 196 90 / 0.45);
+
+  /* Motion (always applied through motion-safe:) */
+  --animate-drift: drift 38s linear infinite;
+  --animate-bob: bob 6s ease-in-out infinite;
+  --animate-cloud: cloud 60s ease-in-out infinite alternate;
+
+  @keyframes drift {
+    to {
+      transform: translateX(-50%);
     }
   }
 
-  @keyframes fadeUp {
-    0% {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes pulseSoft {
+  @keyframes bob {
     0%,
     100% {
-      opacity: 1;
+      transform: translateY(0);
     }
     50% {
-      opacity: 0.7;
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes cloud {
+    from {
+      transform: translateX(-6%);
+    }
+    to {
+      transform: translateX(6%);
     }
   }
 }
 
-/* Base styles */
 @layer base {
   html {
     scroll-behavior: smooth;
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 800;
+  }
+
   ::selection {
-    background-color: var(--color-accent-emerald);
-    color: white;
+    background-color: var(--color-sun);
+    color: var(--color-ink);
   }
 
-  /* Custom scrollbar */
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: var(--color-cream-100);
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: var(--color-ink-200);
-    border-radius: 4px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--color-ink-300);
+  :focus-visible {
+    outline: 3px solid var(--color-blue-ink);
+    outline-offset: 3px;
   }
 }
 
-/* Component styles */
-@layer components {
-  .glass-card {
-    @apply backdrop-blur-md bg-white/40 border border-white/50 shadow-lg;
-  }
+/* The page column */
+@utility wrap {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1180px;
+  margin-inline: auto;
+  padding-inline: 16px;
 
-  .pattern-dots {
-    background-image: radial-gradient(circle, var(--color-ink-200) 1px, transparent 1px);
-    background-size: 24px 24px;
-  }
-
-  .noise-bg {
-    position: relative;
-  }
-
-  .noise-bg::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-    opacity: 0.03;
-    pointer-events: none;
-    z-index: 0;
+  @media (width >= 48rem) {
+    padding-inline: 32px;
   }
 }
 
-/* Utility styles */
-@utility text-balance {
-  text-wrap: balance;
+/* The sky is the only gradient, plus the low sun glowing behind a horizon */
+@utility sky-afternoon {
+  background-image: linear-gradient(180deg, #8cc1e2 0%, #bcddee 30%, #e4f0f1 70%, #e9f2e6 100%);
 }
 
-@utility animation-delay-100 {
-  animation-delay: 100ms;
+@utility sky-dusk {
+  background-image: linear-gradient(180deg, #1a2446 0%, #2e3e6e 34%, #6a5a82 78%, #c98a63 100%);
 }
 
-@utility animation-delay-200 {
-  animation-delay: 200ms;
+@utility sun-glow {
+  background-image: radial-gradient(
+    circle,
+    rgb(242 178 51 / 0.45) 0%,
+    rgb(242 178 51 / 0.18) 40%,
+    rgb(242 178 51 / 0) 70%
+  );
 }
 
-@utility animation-delay-300 {
-  animation-delay: 300ms;
-}
-
-@utility animation-delay-400 {
-  animation-delay: 400ms;
-}
-
-@utility animation-delay-500 {
-  animation-delay: 500ms;
+@utility sun-glow-dusk {
+  background-image: radial-gradient(
+    circle,
+    rgb(245 196 90 / 0.55) 0%,
+    rgb(245 196 90 / 0.2) 40%,
+    rgb(245 196 90 / 0) 70%
+  );
 }
