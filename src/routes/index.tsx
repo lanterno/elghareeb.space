@@ -51,7 +51,7 @@ const tiles: readonly Tile[] = [
     href: "/work/",
     tone: null,
     label: "Experience",
-    figure: `${String(yearsOfExperience)} yrs`,
+    figure: `${String(yearsOfExperience())} yrs`,
     line: "building software, from startups to research labs",
     cta: "Read the chapters",
     live: false,

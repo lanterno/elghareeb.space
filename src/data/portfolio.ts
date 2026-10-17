@@ -12,12 +12,16 @@ import { type Tone, tones } from "./tones";
 
 declare const UrlBrand: unique symbol;
 declare const YearMonthBrand: unique symbol;
+declare const IsoDateBrand: unique symbol;
 
 /** Branded type for validated URLs */
 export type Url = string & { readonly [UrlBrand]: typeof UrlBrand };
 
 /** Branded type for a calendar month (e.g., "2025-12") */
 export type YearMonth = string & { readonly [YearMonthBrand]: typeof YearMonthBrand };
+
+/** Branded type for a calendar day (e.g., "2025-12-07") */
+export type IsoDate = string & { readonly [IsoDateBrand]: typeof IsoDateBrand };
 
 // ============================================================================
 // Valibot Schemas
@@ -35,6 +39,12 @@ const YearMonthSchema = v.pipe(
   v.transform((val): YearMonth => val as YearMonth)
 );
 
+const IsoDateSchema = v.pipe(
+  v.string(),
+  v.isoDate("Must be a YYYY-MM-DD day"),
+  v.transform((val): IsoDate => val as IsoDate)
+);
+
 const ToneSchema = v.picklist(tones);
 
 // Schemas are used for type inference via v.InferOutput<typeof Schema>
@@ -44,7 +54,8 @@ const ExperienceSchema = v.object({
   company: v.string(),
   companyUrl: v.optional(UrlSchema),
   type: v.picklist(["Full-time", "Part-time", "Contract", "Fellowship", "Permanent"]),
-  start: YearMonthSchema,
+  /** The day it started when I know it, otherwise the month */
+  start: v.union([IsoDateSchema, YearMonthSchema]),
   /** `null` while this is the current role */
   end: v.nullable(YearMonthSchema),
   location: v.string(),
@@ -129,8 +140,8 @@ export const links = {
   linkedin: "https://linkedin.com/in/ahmedelghareeb" as Url,
 } as const;
 
-/** Total years in the industry, as of October 2026 — bump it each year */
-export const yearsOfExperience = 12;
+/** The day my first job started; years of experience count from here */
+export const careerStart = "2014-07-15" as IsoDate;
 
 /** Most recent first */
 export const experiences = [
@@ -139,7 +150,7 @@ export const experiences = [
     company: "Resilio",
     companyUrl: "https://resilio.tech" as Url,
     type: "Full-time",
-    start: "2025-12" as YearMonth,
+    start: "2025-12-07" as IsoDate,
     end: null,
     location: "Renens, Switzerland",
     description:
@@ -406,10 +417,32 @@ interface CalendarMonth {
   readonly month: number;
 }
 
+interface CalendarDay extends CalendarMonth {
+  readonly day: number;
+}
+
 type Span = Pick<Experience, "start" | "end">;
 
-function toCalendarMonth(value: YearMonth): CalendarMonth {
+function isDay(value: IsoDate | YearMonth): value is IsoDate {
+  return value.length === 10;
+}
+
+/** Works on a day too: "2025-12-07" is in December 2025 */
+function toCalendarMonth(value: IsoDate | YearMonth): CalendarMonth {
   return { year: Number(value.slice(0, 4)), month: Number(value.slice(5, 7)) };
+}
+
+function toCalendarDay(value: IsoDate): CalendarDay {
+  return { ...toCalendarMonth(value), day: Number(value.slice(8, 10)) };
+}
+
+function fromDate(date: Date): CalendarDay {
+  return { year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate() };
+}
+
+/** Whole months between two days: 7 Dec 2025 to 17 Oct 2026 is 10 */
+function completedMonths(from: CalendarDay, to: CalendarDay): number {
+  return (to.year - from.year) * 12 + (to.month - from.month) - (to.day < from.day ? 1 : 0);
 }
 
 function monthName({ month }: CalendarMonth): string {
@@ -441,24 +474,39 @@ export function formatPeriod(span: Span): string {
 }
 
 /**
- * "11 months" or "3 years 1 month". Months count inclusively, the way
- * LinkedIn does: September to November is three months. A current role
- * counts up to the month the site was built.
+ * How many months a role has lasted. A current role that started on a known
+ * day counts whole months up to the day the site was built. Otherwise months
+ * count inclusively, the way LinkedIn does: September to November is three.
+ */
+function monthsInRole(span: Span, today: Date): number {
+  if (span.end === null && isDay(span.start)) {
+    return completedMonths(toCalendarDay(span.start), fromDate(today));
+  }
+  const from = toCalendarMonth(span.start);
+  const to = span.end === null ? fromDate(today) : toCalendarMonth(span.end);
+  return (to.year - from.year) * 12 + (to.month - from.month) + 1;
+}
+
+/**
+ * "10 months" or "3 years 1 month"
  */
 export function formatDuration(span: Span, today: Date = new Date()): string {
-  const from = toCalendarMonth(span.start);
-  const to =
-    span.end === null
-      ? { year: today.getFullYear(), month: today.getMonth() + 1 }
-      : toCalendarMonth(span.end);
-  const total = (to.year - from.year) * 12 + (to.month - from.month) + 1;
+  const total = monthsInRole(span, today);
   const years = Math.floor(total / 12);
   const months = total % 12;
 
   const parts: string[] = [];
   if (years > 0) parts.push(plural(years, "year"));
   if (months > 0) parts.push(plural(months, "month"));
-  return parts.join(" ");
+  return parts.length > 0 ? parts.join(" ") : "under a month";
+}
+
+/**
+ * Whole years since my first job started, counted on the day the site was
+ * built (the deploy workflow rebuilds it daily)
+ */
+export function yearsOfExperience(today: Date = new Date()): number {
+  return Math.floor(completedMonths(toCalendarDay(careerStart), fromDate(today)) / 12);
 }
 
 /**
