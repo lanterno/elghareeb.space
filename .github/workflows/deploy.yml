@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
-  # Rebuild daily so the years of experience and the current role's length stay current
+  # Rebuild daily so the years of experience, the current role's length and the GitHub card stay current
   schedule:
     - cron: "17 3 * * *"
   workflow_dispatch:
@@ -39,6 +39,9 @@ jobs:
 
       - name: Build
         run: bun run build
+        env:
+          # Reads my contribution calendar for the home page's GitHub card
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
