@@ -135,8 +135,10 @@ export type Certification = v.InferOutput<typeof CertificationSchema>;
 // Portfolio Data with `satisfies` for Type-Safe Validation
 // ============================================================================
 
+export const githubLogin = "lanterno";
+
 export const links = {
-  github: "https://github.com/lanterno" as Url,
+  github: `https://github.com/${githubLogin}` as Url,
   linkedin: "https://linkedin.com/in/ahmedelghareeb" as Url,
 } as const;
 
@@ -449,8 +451,15 @@ function monthName({ month }: CalendarMonth): string {
   return monthNames[month - 1] ?? "";
 }
 
-function plural(count: number, unit: string): string {
-  return `${String(count)} ${unit}${count === 1 ? "" : "s"}`;
+/** "1 month", "954 contributions" */
+export function plural(count: number, unit: string): string {
+  return `${count.toLocaleString("en-US")} ${unit}${count === 1 ? "" : "s"}`;
+}
+
+/** "5 Apr 2026" */
+export function formatDay(value: IsoDate): string {
+  const day = toCalendarDay(value);
+  return `${String(day.day)} ${monthName(day)} ${String(day.year)}`;
 }
 
 /** Whether the role is still going */

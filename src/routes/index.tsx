@@ -1,12 +1,14 @@
 import { component$ } from "@builder.io/qwik";
-import { Link } from "@builder.io/qwik-city";
+import { Link, routeLoader$ } from "@builder.io/qwik-city";
 
+import { GitHubCard } from "~/components/github-card/GitHubCard";
 import { Hills } from "~/components/hills/Hills";
 import { ArrowRightIcon } from "~/components/icons";
 import { pageHead } from "~/components/router-head/page-head";
 import { SkillsMarquee } from "~/components/skills-marquee/SkillsMarquee";
 import { TalkCard } from "~/components/talk-card/TalkCard";
-import { projects, yearsOfExperience } from "~/data/portfolio";
+import { loadGitHubActivity } from "~/data/github";
+import { githubLogin, projects, yearsOfExperience } from "~/data/portfolio";
 import { type Tone, toneClasses } from "~/data/tones";
 import ImgHero from "~/media/hero.jpg?aspect=1:1&jsx";
 
@@ -85,7 +87,13 @@ const tiles: readonly Tile[] = [
   },
 ];
 
+/** Runs while the site is built, so visitors never wait on GitHub */
+export const useGitHubActivity = routeLoader$(({ env }) =>
+  loadGitHubActivity(githubLogin, env.get("GITHUB_TOKEN"))
+);
+
 export default component$(() => {
+  const gitHubActivity = useGitHubActivity();
   return (
     <>
       {/* Hero */}
@@ -195,49 +203,55 @@ export default component$(() => {
             Identity, climate and scale — three domains where getting it wrong isn’t an option.
           </p>
         </div>
-        <ul class="grid grid-cols-2 gap-3 sm:gap-[18px] lg:grid-cols-4">
-          {tiles.map((tile) => {
-            const ink = tile.tone === null ? "text-ink" : toneClasses[tile.tone].ink;
-            return (
-              <li key={tile.label}>
-                <Link
-                  href={tile.href}
-                  class={[
-                    "flex h-full min-h-[200px] flex-col gap-2 rounded-tile p-[18px] text-ink transition-transform hover:-translate-y-1 sm:min-h-[240px] sm:gap-2.5 sm:rounded-card sm:p-[26px] lg:min-h-[280px]",
-                    tile.tone === null ? "bg-panel shadow-raised" : toneClasses[tile.tone].tint,
-                  ]}
-                >
-                  <span
-                    class={["inline-flex items-center gap-2 text-[13px] font-bold sm:text-sm", ink]}
-                  >
-                    {tile.live && tile.tone !== null && (
-                      <span
-                        aria-hidden="true"
-                        class={[
-                          "h-[9px] w-[9px] rounded-full shadow-[0_0_0_4px_rgb(46_156_148/0.2)]",
-                          toneClasses[tile.tone].dot,
-                        ]}
-                      />
-                    )}
-                    {tile.label}
-                  </span>
-                  <span
+        <div class="flex flex-col gap-3 sm:gap-[18px]">
+          <ul class="grid grid-cols-2 gap-3 sm:gap-[18px] lg:grid-cols-4">
+            {tiles.map((tile) => {
+              const ink = tile.tone === null ? "text-ink" : toneClasses[tile.tone].ink;
+              return (
+                <li key={tile.label}>
+                  <Link
+                    href={tile.href}
                     class={[
-                      "mt-auto font-display text-[32px] font-extrabold leading-[0.95] tracking-[-0.04em] sm:text-[52px]",
-                      ink,
+                      "flex h-full min-h-[200px] flex-col gap-2 rounded-tile p-[18px] text-ink transition-transform hover:-translate-y-1 sm:min-h-[240px] sm:gap-2.5 sm:rounded-card sm:p-[26px] lg:min-h-[280px]",
+                      tile.tone === null ? "bg-panel shadow-raised" : toneClasses[tile.tone].tint,
                     ]}
                   >
-                    {tile.figure}
-                  </span>
-                  <span class="text-sm font-bold leading-snug sm:text-base">{tile.line}</span>
-                  <span class={["text-[13px] font-bold sm:text-sm", ink]}>
-                    {tile.cta} <span aria-hidden="true">→</span>
-                  </span>
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+                    <span
+                      class={[
+                        "inline-flex items-center gap-2 text-[13px] font-bold sm:text-sm",
+                        ink,
+                      ]}
+                    >
+                      {tile.live && tile.tone !== null && (
+                        <span
+                          aria-hidden="true"
+                          class={[
+                            "h-[9px] w-[9px] rounded-full shadow-[0_0_0_4px_rgb(46_156_148/0.2)]",
+                            toneClasses[tile.tone].dot,
+                          ]}
+                        />
+                      )}
+                      {tile.label}
+                    </span>
+                    <span
+                      class={[
+                        "mt-auto font-display text-[32px] font-extrabold leading-[0.95] tracking-[-0.04em] sm:text-[52px]",
+                        ink,
+                      ]}
+                    >
+                      {tile.figure}
+                    </span>
+                    <span class="text-sm font-bold leading-snug sm:text-base">{tile.line}</span>
+                    <span class={["text-[13px] font-bold sm:text-sm", ink]}>
+                      {tile.cta} <span aria-hidden="true">→</span>
+                    </span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+          <GitHubCard activity={gitHubActivity.value} />
+        </div>
       </section>
 
       <TalkCard
