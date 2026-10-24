@@ -19,8 +19,11 @@ export default component$(() => {
               Hi, I’m Ahmed.
             </h1>
             <p class="max-w-[30em] text-xl leading-relaxed md:text-[21px]">
-              I’m a software engineer in Renens, Switzerland. I like the problems where the software
-              has to be right — because money, identity or the planet depends on it.
+              I build software with real-world stakes: the environmental footprint of IT at Resilio,
+              Switzerland’s national E-ID at EPFL, and fintech and e-commerce at scale before that.
+              At Resilio I lead the platform’s architecture, and by pairing AI agents with careful
+              design, I push forward faster than ever before while maintaining the same quality or
+              better.
             </p>
             <p class="max-w-[36em] text-[17px] leading-[1.8] text-ink-sky">
               Beyond code, I care about climate tech and sustainable IT. As a Climatebase Fellow I
