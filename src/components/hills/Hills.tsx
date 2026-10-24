@@ -12,6 +12,10 @@ const fills = {
   dusk: ["fill-dusk-hill-far", "fill-dusk-hill-mid", "fill-dusk-hill-near"],
 } as const;
 
+/** The front hill's outline, for drawings that need to pass behind it */
+export const nearHill =
+  "M0 176 C 320 140, 660 150, 940 170 S 1280 150, 1440 160 L1440 200 L0 200 Z";
+
 /** Three rolling hills along the bottom edge of the nearest positioned parent. */
 export const Hills = component$<HillsProps>(({ time = "afternoon", class: className }) => {
   const [far, mid, near] = fills[time];
@@ -28,10 +32,7 @@ export const Hills = component$<HillsProps>(({ time = "afternoon", class: classN
         class={mid}
         d="M0 140 C 260 90, 560 100, 820 130 S 1220 96, 1440 120 L1440 200 L0 200 Z"
       />
-      <path
-        class={near}
-        d="M0 176 C 320 140, 660 150, 940 170 S 1280 150, 1440 160 L1440 200 L0 200 Z"
-      />
+      <path class={near} d={nearHill} />
     </svg>
   );
 });
