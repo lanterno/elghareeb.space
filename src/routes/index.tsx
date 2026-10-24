@@ -78,7 +78,7 @@ const tiles: readonly Tile[] = [
     tone: null,
     label: "Experience",
     figure: `${String(yearsOfExperience())} yrs`,
-    line: "building software, from startups to research labs",
+    line: "in backend and DevOps, from startups to research labs",
     cta: "Read the chapters",
     live: false,
   },
