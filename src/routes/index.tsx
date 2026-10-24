@@ -4,6 +4,7 @@ import { Link, routeLoader$ } from "@builder.io/qwik-city";
 import { GitHubCard } from "~/components/github-card/GitHubCard";
 import { Hills } from "~/components/hills/Hills";
 import { ArrowRightIcon } from "~/components/icons";
+import { type Org, OrgMark } from "~/components/org-mark/OrgMark";
 import { pageHead } from "~/components/router-head/page-head";
 import { SkillsMarquee } from "~/components/skills-marquee/SkillsMarquee";
 import { TalkCard } from "~/components/talk-card/TalkCard";
@@ -17,25 +18,47 @@ import type { DocumentHead } from "@builder.io/qwik-city";
 const floatingChips = [
   {
     label: "Staff engineer · Resilio",
+    org: "resilio",
     tone: "teal",
+    mark: "h-4",
     place: "left-[-10px] top-[70px] hidden lg:inline-flex",
     delay: "",
   },
   {
     label: "3 years on Swiss E-ID",
+    org: "epfl",
     tone: "blue",
+    mark: "h-3",
     place: "right-0 bottom-3 inline-flex lg:right-[-16px] lg:top-[210px] lg:bottom-auto",
     delay: "[animation-delay:-2s]",
   },
   {
     label: "Climatebase Fellow",
+    org: "climatebase",
     tone: "lavender",
+    mark: "h-4",
     place: "left-[10px] bottom-[60px] hidden lg:inline-flex",
     delay: "[animation-delay:-4s]",
   },
-] as const satisfies readonly { label: string; tone: Tone; place: string; delay: string }[];
+] as const satisfies readonly {
+  label: string;
+  org: Org;
+  tone: Tone;
+  mark: string;
+  place: string;
+  delay: string;
+}[];
 
-const builtAt = ["Resilio", "EPFL · C4DT", "Back Market", "Climatebase"] as const;
+/** EPFL's logo is its name, so its entry names only the lab */
+const builtAt = [
+  { name: "Resilio", org: "resilio", tone: "teal", mark: "h-[19px]" },
+  { name: "Transparium", org: "transparium", tone: "blue", mark: "h-[15px]" },
+  { name: "LifePete", org: "lifePete", tone: "orange", mark: "h-[19px]" },
+  { name: "Archetype", org: "archetype", tone: "coral", mark: "h-[20px]" },
+  { name: "C4DT", org: "epfl", tone: "blue", mark: "h-[15px]" },
+  { name: "Back Market", org: "backMarket", tone: "orange", mark: "h-[19px]" },
+  { name: "Climatebase", org: "climatebase", tone: "lavender", mark: "h-[21px]" },
+] as const satisfies readonly { name: string; org: Org; tone: Tone; mark: string }[];
 
 interface Tile {
   href: string;
@@ -144,12 +167,16 @@ export default component$(() => {
                 See my work
               </Link>
             </div>
-            <div class="flex flex-wrap items-center gap-x-[26px] gap-y-2.5 pt-2 text-ink-sky">
+            <div class="flex flex-wrap items-center gap-x-[22px] gap-y-2.5 pt-2 text-ink-sky">
               <span class="text-sm">Built at</span>
               <ul class="contents">
-                {builtAt.map((name) => (
-                  <li key={name} class="font-display text-[19px] font-extrabold">
-                    {name}
+                {builtAt.map((org) => (
+                  <li
+                    key={org.name}
+                    class="inline-flex items-center gap-1.5 font-display text-[19px] font-extrabold"
+                  >
+                    <OrgMark org={org.org} class={[org.mark, toneClasses[org.tone].ink]} />
+                    {org.name}
                   </li>
                 ))}
               </ul>
@@ -176,10 +203,7 @@ export default component$(() => {
                   chip.delay,
                 ]}
               >
-                <span
-                  aria-hidden="true"
-                  class={["h-2.5 w-2.5 rounded-full", toneClasses[chip.tone].dot]}
-                />
+                <OrgMark org={chip.org} class={[chip.mark, toneClasses[chip.tone].ink]} />
                 {chip.label}
               </span>
             ))}
