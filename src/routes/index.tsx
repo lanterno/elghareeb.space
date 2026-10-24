@@ -2,6 +2,7 @@ import { component$ } from "@builder.io/qwik";
 import { Link, routeLoader$ } from "@builder.io/qwik-city";
 
 import { GitHubCard } from "~/components/github-card/GitHubCard";
+import { HillsScene, SatelliteOrbit, StarshipCatch } from "~/components/hero-scene/HeroScene";
 import { Hills } from "~/components/hills/Hills";
 import { ArrowRightIcon } from "~/components/icons";
 import { type Org, OrgMark } from "~/components/org-mark/OrgMark";
@@ -191,6 +192,7 @@ export default component$(() => {
               aria-hidden="true"
               class="sun-glow absolute h-[340px] w-[340px] rounded-full lg:h-[560px] lg:w-[560px]"
             />
+            <SatelliteOrbit />
             <ImgHero
               alt="Ahmed Elghareeb, smiling, in green glasses and a white shirt"
               loading="eager"
@@ -212,7 +214,9 @@ export default component$(() => {
             ))}
           </div>
         </div>
+        <StarshipCatch />
         <Hills class="h-[110px] md:h-[190px]" />
+        <HillsScene />
       </section>
 
       <SkillsMarquee />
