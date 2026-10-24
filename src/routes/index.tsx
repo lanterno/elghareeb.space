@@ -119,10 +119,13 @@ export default component$(() => {
   const gitHubActivity = useGitHubActivity();
   return (
     <>
-      {/* Hero */}
-      <section aria-labelledby="hero-title" class="relative pb-[150px]">
-        <div class="wrap grid items-center gap-8 pt-10 md:pt-[72px] lg:grid-cols-[7fr_5fr]">
-          <div class="flex min-w-0 flex-col gap-7">
+      {/* Hero: fills the screen below the 76/80px header, plus the 18px the skills band tucks under */}
+      <section
+        aria-labelledby="hero-title"
+        class="relative flex min-h-[calc(100svh-58px)] flex-col justify-center pb-[150px] md:min-h-[calc(100svh-62px)] lg:pb-[130px]"
+      >
+        <div class="wrap grid items-center gap-8 pt-10 lg:grid-cols-[7fr_5fr] lg:pt-3">
+          <div class="@container flex min-w-0 flex-col gap-7 lg:gap-[clamp(16px,2.4svh,28px)]">
             <p class="inline-flex items-center gap-2.5 self-start rounded-full bg-panel/94 py-2 pl-3 pr-4 text-sm font-bold text-leaf-ink shadow-hair">
               <span
                 aria-hidden="true"
@@ -132,7 +135,7 @@ export default component$(() => {
             </p>
             <h1
               id="hero-title"
-              class="text-[clamp(52px,7.4vw,104px)] leading-[0.98] tracking-[-0.025em]"
+              class="text-[clamp(52px,min(7.4vw,9.5svh,12.8cqi),104px)] leading-[0.98] tracking-[-0.025em]"
             >
               I build software people can{" "}
               <span class="inline-block -rotate-[2.5deg] rounded-[0.28em] bg-panel px-[0.18em] pb-[0.06em] shadow-raised">
@@ -183,7 +186,7 @@ export default component$(() => {
             </div>
           </div>
 
-          <div class="relative order-first grid min-h-[290px] place-items-center lg:order-none lg:min-h-[520px]">
+          <div class="relative order-first grid min-h-[290px] place-items-center lg:order-none lg:min-h-[min(520px,62svh)]">
             <div
               aria-hidden="true"
               class="sun-glow absolute h-[340px] w-[340px] rounded-full lg:h-[560px] lg:w-[560px]"
@@ -192,7 +195,7 @@ export default component$(() => {
               alt="Ahmed Elghareeb, smiling, in green glasses and a white shirt"
               loading="eager"
               sizes="(min-width: 1024px) 400px, 230px"
-              class="relative aspect-square w-[230px] rounded-full border-8 border-panel object-cover shadow-raised lg:w-[400px] lg:border-[10px]"
+              class="relative aspect-square w-[230px] rounded-full border-8 border-panel object-cover shadow-raised lg:w-[min(400px,46svh)] lg:border-[10px]"
             />
             {floatingChips.map((chip) => (
               <span
