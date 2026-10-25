@@ -34,9 +34,10 @@ const Arm = ({ y, class: className }: ArmProps): JSXOutput => (
 
 /**
  * Starship coming back from space: it falls belly-first, flips upright, burns to slow down and is
- * caught by the launch tower's arms. It sits behind the hero's text, portrait and hills, so it
- * passes behind them on the way down and the hill hides the tower's footing. Phones show it already
- * caught: their hero runs past the first screen, so the catch would play out of sight.
+ * caught by the launch tower's arms, then relaunches for the next catch. It sits behind the hero's
+ * text, portrait and hills, so it passes behind them on the way down and the hill hides the tower's
+ * footing. Phones show it already caught: their hero runs past the first screen, so the catch would
+ * play out of sight.
  */
 export const StarshipCatch = component$(() => (
   <div aria-hidden="true" class={[hillsBox, "-z-10"]}>
@@ -92,14 +93,19 @@ export const StarshipCatch = component$(() => (
 interface TurbineProps {
   x: number;
   y: number;
+  /** Seconds per turn, different for each turbine so they don't turn in step */
+  period: number;
   class: string;
 }
 
-const Turbine = ({ x, y, class: className }: TurbineProps): JSXOutput => (
+const Turbine = ({ x, y, period, class: className }: TurbineProps): JSXOutput => (
   <svg viewBox="-15 -15 30 39" class={["absolute -translate-x-1/2", className]} style={at(x, y)}>
     <path class="stroke-ink-sky" d="M0 0V24" stroke-width="1.8" stroke-linecap="round" />
     {/* The invisible circle centres the box on the hub, so the blades turn about it */}
-    <g class="origin-center [transform-box:fill-box] motion-safe:animate-turbine">
+    <g
+      class="origin-center [transform-box:fill-box] motion-safe:animate-turbine"
+      style={{ animationDuration: `${String(period)}s` }}
+    >
       <circle r="14" fill="none" />
       {[14, 134, 254].map((angle) => (
         <ellipse
@@ -207,6 +213,18 @@ export const HillsScene = component$(() => (
         d="M148 205C156 191 170 182.5 188 182.5C205 182.5 214 192 222 205Z"
       />
       <path class="fill-ink opacity-90" d="M182 202V193.5a7 7 0 0 1 14 0V202Z" />
+      <radialGradient id="headlight">
+        <stop offset="0" class="[stop-color:var(--color-dusk-sun)]" />
+        <stop offset="1" class="[stop-color:var(--color-dusk-sun)]" stop-opacity="0" />
+      </radialGradient>
+      <ellipse
+        class="opacity-0 motion-safe:animate-headlight"
+        cx="189.5"
+        cy="197"
+        rx="6.5"
+        ry="4.8"
+        fill="url(#headlight)"
+      />
       <clipPath id="tunnel-exit">
         <rect x="189" y="170" width="540" height="40" />
       </clipPath>
@@ -242,8 +260,8 @@ export const HillsScene = component$(() => (
       />
     </svg>
 
-    <Turbine x={1120} y={68.4} class="w-[max(28px,3.75vw)] opacity-60" />
-    <Turbine x={1395} y={64.9} class="hidden w-[6.25vw] md:block" />
+    <Turbine x={1120} y={68.4} period={10} class="w-[max(28px,3.75vw)] opacity-60" />
+    <Turbine x={1395} y={64.9} period={6} class="hidden w-[6.25vw] md:block" />
   </div>
 ));
 
@@ -269,7 +287,7 @@ export const SatelliteOrbit = component$(() => (
       <path class="stroke-ink" d="M211 19v-2.2" stroke-width="0.8" />
       <path class="fill-ink" d="M208.4 16.6a2.6 2.6 0 0 1 5.2 0z" />
       <rect class="fill-ink" x="207.5" y="19" width="7" height="8" rx="1.5" />
-      <circle class="fill-blue" cx="211" cy="23" r="1" />
+      <circle class="fill-blue motion-safe:animate-blink" cx="211" cy="23" r="1" />
     </svg>
   </div>
 ));
