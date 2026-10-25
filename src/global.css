@@ -63,6 +63,7 @@
 
   --shadow-hair: 0 1px 2px rgb(43 58 68 / 0.06);
   --shadow-raised: 0 1px 2px rgb(43 58 68 / 0.06), 0 12px 32px rgb(43 58 68 / 0.08);
+  --shadow-lifted: 0 1px 2px rgb(43 58 68 / 0.08), 0 16px 36px rgb(43 58 68 / 0.16);
   --shadow-sun: 0 10px 30px rgb(242 178 51 / 0.45);
   --shadow-dusk-sun: 0 10px 40px rgb(245 196 90 / 0.45);
 

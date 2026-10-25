@@ -247,16 +247,16 @@ export const HillsScene = component$(() => (
   </div>
 ));
 
-/** A satellite circling the portrait on a dotted orbit. */
+/** A satellite circling the portrait on a dotted orbit. Phones' small portrait goes without. */
 export const SatelliteOrbit = component$(() => (
   <div
     aria-hidden="true"
-    class="pointer-events-none absolute h-[300px] w-[300px] motion-safe:animate-orbit lg:h-[min(450px,54svh)] lg:w-[min(450px,54svh)] xl:h-[min(480px,57svh)] xl:w-[min(480px,57svh)]"
+    class="pointer-events-none absolute hidden h-[min(450px,54svh)] w-[min(450px,54svh)] motion-safe:animate-orbit lg:block xl:h-[min(480px,57svh)] xl:w-[min(480px,57svh)]"
   >
     <span class="absolute inset-0 rounded-full border-2 border-dotted border-panel/70" />
     <svg
       viewBox="193.5 13.5 35 14.5"
-      class="absolute left-1/2 top-0 w-[50px] -translate-x-1/2 -translate-y-1/2 lg:w-[70px]"
+      class="absolute left-1/2 top-0 w-[70px] -translate-x-1/2 -translate-y-1/2"
     >
       <rect class="fill-blue" x="194" y="20.5" width="12" height="5" rx="0.8" />
       <rect class="fill-blue" x="216" y="20.5" width="12" height="5" rx="0.8" />
