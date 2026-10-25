@@ -3,7 +3,8 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
-  # Rebuild daily so the years of experience, the current role's length and the GitHub card stay current
+  # Rebuild daily so the years of experience, the current role's length, the conferences and the
+  # GitHub card stay current
   schedule:
     - cron: "17 3 * * *"
   workflow_dispatch:

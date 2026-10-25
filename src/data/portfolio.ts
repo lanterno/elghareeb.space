@@ -462,6 +462,15 @@ export function formatDay(value: IsoDate): string {
   return `${String(day.day)} ${monthName(day)} ${String(day.year)}`;
 }
 
+/** "25–29 Oct", "30 Oct – 2 Nov" or "4 Dec" */
+export function formatDays(first: IsoDate, last: IsoDate): string {
+  const from = toCalendarDay(first);
+  const to = toCalendarDay(last);
+  if (first === last) return `${String(to.day)} ${monthName(to)}`;
+  if (from.month === to.month) return `${String(from.day)}–${String(to.day)} ${monthName(to)}`;
+  return `${String(from.day)} ${monthName(from)} – ${String(to.day)} ${monthName(to)}`;
+}
+
 /** Whether the role is still going */
 export function isCurrent(span: Span): boolean {
   return span.end === null;

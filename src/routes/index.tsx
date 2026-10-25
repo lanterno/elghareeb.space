@@ -10,9 +10,17 @@ import { pageHead } from "~/components/router-head/page-head";
 import { SkillsMarquee } from "~/components/skills-marquee/SkillsMarquee";
 import { TalkCard } from "~/components/talk-card/TalkCard";
 import { loadGitHubActivity } from "~/data/github";
-import { githubLogin, projects, yearsOfExperience } from "~/data/portfolio";
+import {
+  formatDays,
+  githubLogin,
+  type IsoDate,
+  projects,
+  yearsOfExperience,
+} from "~/data/portfolio";
 import { type Tone, toneClasses } from "~/data/tones";
+import ImgCairoWaterWeek from "~/media/cairo-water-week.png?jsx";
 import ImgHero from "~/media/hero.jpg?aspect=1:1&jsx";
+import ImgWebSummit from "~/media/web-summit.png?jsx";
 
 import type { DocumentHead } from "@builder.io/qwik-city";
 
@@ -99,6 +107,35 @@ const orgRows = [
   orgs: readonly { name: string; href: string; org: Org; tone: Tone; mark: string }[];
 }[];
 
+interface Conference {
+  name: string;
+  href: string;
+  place: string;
+  first: IsoDate;
+  last: IsoDate;
+  Logo: typeof ImgCairoWaterWeek;
+}
+
+/** Each drops off the page the day after it ends, when the daily rebuild runs */
+const conferences: readonly Conference[] = [
+  {
+    name: "Cairo Water Week",
+    href: "https://www.cairowaterweek.eg/",
+    place: "Cairo",
+    first: "2026-10-25" as IsoDate,
+    last: "2026-10-29" as IsoDate,
+    Logo: ImgCairoWaterWeek,
+  },
+  {
+    name: "Web Summit",
+    href: "https://websummit.com/",
+    place: "Lisbon",
+    first: "2026-11-09" as IsoDate,
+    last: "2026-11-12" as IsoDate,
+    Logo: ImgWebSummit,
+  },
+];
+
 interface Tile {
   href: string;
   /** `null` for a plain panel that isn't tied to one organisation */
@@ -156,6 +193,8 @@ export const useGitHubActivity = routeLoader$(({ env }) =>
 
 export default component$(() => {
   const gitHubActivity = useGitHubActivity();
+  const today = new Date().toISOString().slice(0, 10);
+  const conferencesAhead = conferences.filter((conference) => conference.last >= today);
   return (
     <>
       {/* Hero: fills the screen below the 76/80px header, plus the 18px the skills band tucks under */}
@@ -266,6 +305,43 @@ export default component$(() => {
           </div>
         </div>
 
+        {/* Phones: a row under the logos. Desktop: in the sky, top right */}
+        {conferencesAhead.length > 0 && (
+          <div class="wrap flex flex-wrap items-center gap-x-3.5 gap-y-2.5 pt-[22px] lg:absolute lg:right-6 lg:top-2 lg:z-10 lg:m-0 lg:w-auto lg:max-w-none lg:flex-nowrap lg:items-start lg:gap-[18px] lg:p-0">
+            <span class="basis-full text-sm text-ink-sky lg:-mt-5 lg:basis-auto lg:self-center lg:text-[13px] lg:font-bold lg:text-ink">
+              Meet me at
+            </span>
+            {conferencesAhead.map(({ Logo, ...conference }, i) => (
+              <a
+                key={conference.name}
+                href={conference.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                class={[
+                  "group inline-flex items-center gap-2.5 text-ink lg:flex-col lg:gap-0 lg:text-center",
+                  i % 2 === 1 && "lg:mt-[30px]",
+                ]}
+              >
+                <span class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-panel shadow-raised transition-[translate,box-shadow] duration-200 group-hover:-translate-y-[3px] group-hover:shadow-lifted lg:h-[60px] lg:w-[60px]">
+                  <Logo alt="" sizes="40px" class="block h-auto w-[62%]" />
+                </span>
+                <span class="flex flex-col text-[13px] leading-[1.3] lg:relative lg:-mt-1.5 lg:items-center lg:rounded-[14px] lg:bg-panel/94 lg:px-3 lg:pb-[7px] lg:pt-1.5 lg:text-xs lg:shadow-hair">
+                  <strong class="font-bold">{conference.name}</strong>
+                  <span class="inline-flex items-center gap-1.5 text-ink-sky">
+                    {conference.first <= today && (
+                      <span
+                        aria-hidden="true"
+                        class="h-2 w-2 shrink-0 rounded-full bg-leaf shadow-[0_0_0_3px_rgb(62_141_83/0.18)]"
+                      />
+                    )}
+                    {conference.first <= today ? "Now" : conference.place} ·{" "}
+                    {formatDays(conference.first, conference.last)}
+                  </span>
+                </span>
+              </a>
+            ))}
+          </div>
+        )}
         <StarshipCatch />
         <Hills class="h-[110px] md:h-[190px]" />
         <HillsScene />
