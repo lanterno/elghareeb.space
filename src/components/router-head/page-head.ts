@@ -15,7 +15,8 @@ interface PageHeadOptions {
  */
 export function pageHead({ title, description, path }: PageHeadOptions): DocumentHead {
   const url = new URL(path, siteUrl).href;
-  const image = `${siteUrl}/hero.jpg`;
+  const image = `${siteUrl}/og.jpg`;
+  const imageAlt = "Ahmed Elghareeb beside the line “I build software people can trust.”";
 
   return {
     title,
@@ -32,6 +33,9 @@ export function pageHead({ title, description, path }: PageHeadOptions): Documen
       { property: "og:type", content: "website" },
       { property: "og:url", content: url },
       { property: "og:image", content: image },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { property: "og:image:alt", content: imageAlt },
       { property: "og:locale", content: "en_US" },
       { property: "og:site_name", content: "Ahmed Elghareeb" },
       // Twitter Card
@@ -39,6 +43,7 @@ export function pageHead({ title, description, path }: PageHeadOptions): Documen
       { name: "twitter:title", content: title },
       { name: "twitter:description", content: description },
       { name: "twitter:image", content: image },
+      { name: "twitter:image:alt", content: imageAlt },
     ],
   };
 }
