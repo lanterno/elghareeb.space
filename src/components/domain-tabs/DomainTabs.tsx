@@ -10,7 +10,7 @@ const domainIds = domains.map((domain) => domain.id);
 /**
  * "Three worlds, one habit": one tab per domain, each with a promise, the
  * story behind it and where to look. Arrow keys, Home and End move between
- * tabs. Every panel is rendered, so the content is there without JavaScript.
+ * tabs.
  */
 export const DomainTabs = component$(() => {
   const selected = useSignal<DomainId>("identity");
