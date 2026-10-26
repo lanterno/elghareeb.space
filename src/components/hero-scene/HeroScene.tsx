@@ -265,11 +265,14 @@ export const HillsScene = component$(() => (
   </div>
 ));
 
-/** A satellite circling the portrait on a dotted orbit. Phones' small portrait goes without. */
+/**
+ * A satellite circling the portrait on a dotted orbit. Phones' small portrait goes without. It
+ * starts at 9 o'clock, so it never rests under the conferences at the hero's top right.
+ */
 export const SatelliteOrbit = component$(() => (
   <div
     aria-hidden="true"
-    class="pointer-events-none absolute hidden h-[min(450px,54svh)] w-[min(450px,54svh)] motion-safe:animate-orbit lg:block xl:h-[min(480px,57svh)] xl:w-[min(480px,57svh)]"
+    class="pointer-events-none absolute hidden h-[min(450px,54svh)] w-[min(450px,54svh)] -rotate-90 motion-safe:animate-orbit lg:block xl:h-[min(480px,57svh)] xl:w-[min(480px,57svh)]"
   >
     <span class="absolute inset-0 rounded-full border-2 border-dotted border-panel/70" />
     <svg

@@ -328,7 +328,7 @@ export default component$(() => {
         {/* Phones: a row under the logos. Desktop: floating like balloons in the sky, top right */}
         {conferencesAhead.length > 0 && (
           <div class="wrap flex flex-wrap items-center gap-x-3.5 gap-y-2.5 pt-[22px] lg:absolute lg:right-6 lg:top-2 lg:z-10 lg:m-0 lg:w-auto lg:max-w-none lg:flex-nowrap lg:items-start lg:gap-[18px] lg:p-0">
-            <span class="basis-full text-sm text-ink-sky lg:-mt-5 lg:basis-auto lg:self-center lg:text-[13px] lg:font-bold lg:text-ink">
+            <span class="basis-full text-sm text-ink-sky lg:-mt-5 lg:basis-auto lg:self-center lg:rounded-full lg:bg-panel/94 lg:px-3 lg:py-1.5 lg:text-[13px] lg:font-bold lg:text-ink lg:shadow-hair">
               Meet me at
             </span>
             {conferencesAhead.map(({ Logo, ...conference }, i) => (
