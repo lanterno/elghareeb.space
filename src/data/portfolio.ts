@@ -1,8 +1,11 @@
 /**
- * Portfolio data with Valibot schemas for runtime validation
- * and advanced TypeScript patterns for compile-time safety.
+ * The site's content. The Valibot schemas give each kind of record its type, and the build checks
+ * the data against them.
  */
 import * as v from "valibot";
+
+import ImgCairoWaterWeek from "~/media/cairo-water-week.png?jsx";
+import ImgWebSummit from "~/media/web-summit.png?jsx";
 
 import { type Tone, tones } from "./tones";
 
@@ -35,20 +38,18 @@ const UrlSchema = v.pipe(
 
 const YearMonthSchema = v.pipe(
   v.string(),
-  v.regex(/^\d{4}-(0[1-9]|1[0-2])$/, "Must be a YYYY-MM month"),
+  v.regex(/^\d{4}-(0[1-9]|1[0-2])$/),
   v.transform((val): YearMonth => val as YearMonth)
 );
 
 const IsoDateSchema = v.pipe(
   v.string(),
-  v.isoDate("Must be a YYYY-MM-DD day"),
+  v.isoDate(),
   v.transform((val): IsoDate => val as IsoDate)
 );
 
 const ToneSchema = v.picklist(tones);
 
-// Schemas are used for type inference via v.InferOutput<typeof Schema>
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ExperienceSchema = v.object({
   title: v.string(),
   company: v.string(),
@@ -64,7 +65,6 @@ const ExperienceSchema = v.object({
   tone: ToneSchema,
 });
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ProjectSchema = v.object({
   name: v.string(),
   description: v.string(),
@@ -78,7 +78,6 @@ const ProjectSchema = v.object({
   featured: v.boolean(),
 });
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const DomainSchema = v.object({
   id: v.picklist(["identity", "climate", "scale"]),
   label: v.string(),
@@ -96,14 +95,12 @@ const DomainSchema = v.object({
   ),
 });
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const SkillSchema = v.object({
   category: v.string(),
   items: v.array(v.string()),
   tone: ToneSchema,
 });
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const EducationSchema = v.object({
   institution: v.string(),
   degree: v.string(),
@@ -112,12 +109,22 @@ const EducationSchema = v.object({
   description: v.string(),
 });
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const CertificationSchema = v.object({
   name: v.string(),
   org: v.string(),
-  year: v.pipe(v.string(), v.regex(/^\d{4}$/, "Must be a 4-digit year")),
+  year: v.pipe(v.string(), v.regex(/^\d{4}$/)),
 });
+
+const ConferenceSchema = v.pipe(
+  v.object({
+    name: v.string(),
+    href: UrlSchema,
+    place: v.string(),
+    first: IsoDateSchema,
+    last: IsoDateSchema,
+  }),
+  v.check(({ first, last }) => first <= last, "A conference can't end before it starts")
+);
 
 // ============================================================================
 // Inferred Types from Schemas
@@ -130,6 +137,9 @@ export type DomainId = Domain["id"];
 export type Skill = v.InferOutput<typeof SkillSchema>;
 export type Education = v.InferOutput<typeof EducationSchema>;
 export type Certification = v.InferOutput<typeof CertificationSchema>;
+export type Conference = v.InferOutput<typeof ConferenceSchema> & {
+  Logo: typeof ImgCairoWaterWeek;
+};
 
 // ============================================================================
 // Portfolio Data with `satisfies` for Type-Safe Validation
@@ -393,6 +403,47 @@ export const certifications = [
   { name: "AI Safety, Ethics and Society", org: "Center for AI Safety", year: "2023" },
   { name: "Introduction to Aerospace Engineering", org: "MIT edX", year: "2022" },
 ] as const satisfies readonly Certification[];
+
+/** Each drops off the page the day after it ends */
+export const conferences = [
+  {
+    name: "Cairo Water Week",
+    href: "https://www.cairowaterweek.eg/" as Url,
+    place: "Cairo",
+    first: "2026-10-25" as IsoDate,
+    last: "2026-10-29" as IsoDate,
+    Logo: ImgCairoWaterWeek,
+  },
+  {
+    name: "Web Summit",
+    href: "https://websummit.com/" as Url,
+    place: "Lisbon",
+    first: "2026-11-09" as IsoDate,
+    last: "2026-11-12" as IsoDate,
+    Logo: ImgWebSummit,
+  },
+] as const satisfies readonly Conference[];
+
+// A mistyped date or link fails the build rather than the page. The browser skips the check, as
+// it only ever gets data that passed.
+if (import.meta.env.SSR) {
+  const result = v.safeParse(
+    v.object({
+      careerStart: IsoDateSchema,
+      experiences: v.array(ExperienceSchema),
+      projects: v.array(ProjectSchema),
+      domains: v.array(DomainSchema),
+      skills: v.array(SkillSchema),
+      education: v.array(EducationSchema),
+      certifications: v.array(CertificationSchema),
+      conferences: v.array(ConferenceSchema),
+    }),
+    { careerStart, experiences, projects, domains, skills, education, certifications, conferences }
+  );
+  if (!result.success) {
+    throw new Error(`The portfolio data has a mistake:\n${v.summarize(result.issues)}`);
+  }
+}
 
 // ============================================================================
 // Date Formatting

@@ -11,16 +11,14 @@ import { SkillsMarquee } from "~/components/skills-marquee/SkillsMarquee";
 import { TalkCard } from "~/components/talk-card/TalkCard";
 import { loadGitHubActivity } from "~/data/github";
 import {
+  conferences,
   formatDays,
   githubLogin,
-  type IsoDate,
   projects,
   yearsOfExperience,
 } from "~/data/portfolio";
 import { type Tone, toneClasses } from "~/data/tones";
-import ImgCairoWaterWeek from "~/media/cairo-water-week.png?jsx";
 import ImgHero from "~/media/hero.jpg?aspect=1:1&jsx";
-import ImgWebSummit from "~/media/web-summit.png?jsx";
 
 import type { DocumentHead } from "@builder.io/qwik-city";
 
@@ -114,35 +112,6 @@ const orgRows = [
   label: string;
   orgs: readonly { name: string; href: string; org: Org; tone: Tone; mark: string }[];
 }[];
-
-interface Conference {
-  name: string;
-  href: string;
-  place: string;
-  first: IsoDate;
-  last: IsoDate;
-  Logo: typeof ImgCairoWaterWeek;
-}
-
-/** Each drops off the page the day after it ends, when the daily rebuild runs */
-const conferences: readonly Conference[] = [
-  {
-    name: "Cairo Water Week",
-    href: "https://www.cairowaterweek.eg/",
-    place: "Cairo",
-    first: "2026-10-25" as IsoDate,
-    last: "2026-10-29" as IsoDate,
-    Logo: ImgCairoWaterWeek,
-  },
-  {
-    name: "Web Summit",
-    href: "https://websummit.com/",
-    place: "Lisbon",
-    first: "2026-11-09" as IsoDate,
-    last: "2026-11-12" as IsoDate,
-    Logo: ImgWebSummit,
-  },
-];
 
 interface Tile {
   href: string;
