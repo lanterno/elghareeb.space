@@ -1,6 +1,76 @@
 @import "tailwindcss";
 
 /*
+  The four faces the site uses, served from this site. Each is its Latin subset, plus the subset
+  that has the arrow (→) for that one character.
+*/
+@font-face {
+  font-family: "M PLUS Rounded 1c";
+  font-weight: 700;
+  font-display: swap;
+  src: url("@fontsource/m-plus-rounded-1c/files/m-plus-rounded-1c-latin-700-normal.woff2")
+    format("woff2");
+}
+
+@font-face {
+  font-family: "M PLUS Rounded 1c";
+  font-weight: 800;
+  font-display: swap;
+  src: url("@fontsource/m-plus-rounded-1c/files/m-plus-rounded-1c-latin-800-normal.woff2")
+    format("woff2");
+}
+
+@font-face {
+  font-family: "Zen Maru Gothic";
+  font-weight: 400;
+  font-display: swap;
+  src: url("@fontsource/zen-maru-gothic/files/zen-maru-gothic-latin-400-normal.woff2")
+    format("woff2");
+}
+
+@font-face {
+  font-family: "Zen Maru Gothic";
+  font-weight: 700;
+  font-display: swap;
+  src: url("@fontsource/zen-maru-gothic/files/zen-maru-gothic-latin-700-normal.woff2")
+    format("woff2");
+}
+
+@font-face {
+  font-family: "M PLUS Rounded 1c";
+  font-weight: 700;
+  font-display: swap;
+  src: url("@fontsource/m-plus-rounded-1c/files/m-plus-rounded-1c-107-700-normal.woff2")
+    format("woff2");
+  unicode-range: U+2192;
+}
+
+@font-face {
+  font-family: "M PLUS Rounded 1c";
+  font-weight: 800;
+  font-display: swap;
+  src: url("@fontsource/m-plus-rounded-1c/files/m-plus-rounded-1c-107-800-normal.woff2")
+    format("woff2");
+  unicode-range: U+2192;
+}
+
+@font-face {
+  font-family: "Zen Maru Gothic";
+  font-weight: 400;
+  font-display: swap;
+  src: url("@fontsource/zen-maru-gothic/files/zen-maru-gothic-107-400-normal.woff2") format("woff2");
+  unicode-range: U+2192;
+}
+
+@font-face {
+  font-family: "Zen Maru Gothic";
+  font-weight: 700;
+  font-display: swap;
+  src: url("@fontsource/zen-maru-gothic/files/zen-maru-gothic-107-700-normal.woff2") format("woff2");
+  unicode-range: U+2192;
+}
+
+/*
   Bright design style: the sky is the ground, content sits on cloud-white
   panels, sunlight falls on the one thing that matters, and every face is
   rounded. Each page walks from afternoon into a dusk scene at the bottom.
