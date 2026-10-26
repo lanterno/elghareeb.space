@@ -337,6 +337,7 @@ export default component$(() => {
                 href={conference.href}
                 target="_blank"
                 rel="noopener noreferrer"
+                data-last={conference.last}
                 class={[
                   "group inline-flex items-center gap-2.5 text-ink motion-safe:animate-pop lg:flex-col lg:gap-0 lg:text-center lg:motion-safe:animate-pop-float",
                   i % 2 === 1 && "lg:mt-[30px]",
@@ -364,6 +365,16 @@ export default component$(() => {
                 </span>
               </a>
             ))}
+            {/* If the daily rebuild stops running, conferences that have ended since still disappear */}
+            <script
+              dangerouslySetInnerHTML={`(() => {
+                const today = new Date().toISOString().slice(0, 10);
+                const list = document.currentScript.parentElement;
+                const links = [...list.querySelectorAll("[data-last]")];
+                links.forEach((link) => { link.hidden = link.dataset.last < today; });
+                list.hidden = links.every((link) => link.hidden);
+              })()`}
+            />
           </div>
         )}
         <StarshipCatch />
