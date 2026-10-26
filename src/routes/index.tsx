@@ -23,95 +23,73 @@ import ImgHero from "~/media/hero.jpg?aspect=1:1&jsx";
 import type { DocumentHead } from "@builder.io/qwik-city";
 
 /**
+ * Every organisation the hero links to. `mark` is the logo's height beside the name, which evens
+ * out their shapes. EPFL's logo is its name, so its entry names only the lab.
+ */
+const orgs = {
+  archetype: {
+    name: "Archetype",
+    href: "https://github.com/archetype-pal",
+    tone: "coral",
+    mark: "h-[1.05em]",
+  },
+  backMarket: {
+    name: "Back Market",
+    href: "https://www.backmarket.com",
+    tone: "orange",
+    mark: "h-[1em]",
+  },
+  climatebase: {
+    name: "Climatebase",
+    href: "https://climatebase.org",
+    tone: "lavender",
+    mark: "h-[1em]",
+  },
+  epfl: { name: "C4DT", href: "https://c4dt.epfl.ch", tone: "blue", mark: "h-[0.8em]" },
+  lifePete: { name: "LifePete", href: "https://lifepete.com", tone: "orange", mark: "h-[1em]" },
+  resilio: { name: "Resilio", href: "https://resilio.tech", tone: "teal", mark: "h-[1em]" },
+  transparium: {
+    name: "Transparium",
+    href: "https://transparium.com",
+    tone: "blue",
+    mark: "h-[0.8em]",
+  },
+} as const satisfies Record<Org, { name: string; href: string; tone: Tone; mark: string }>;
+
+/**
  * The three facts around the portrait. On a desktop each pops in, then bobs at its own pace so they
  * never move in step: the second delay and duration are the bob's.
  */
 const facts = [
   {
     label: "Staff engineer · Resilio",
-    href: "https://resilio.tech",
     org: "resilio",
-    tone: "teal",
     place: "lg:left-[-10px] lg:top-[70px]",
     motion: { animationDelay: "0.75s, 0s" },
   },
   {
     label: "Founder at lifepete.com",
-    href: "https://lifepete.com",
     org: "lifePete",
-    tone: "orange",
     place: "lg:right-[-28px] lg:top-[63%]",
     motion: { animationDelay: "0.9s, -2.4s", animationDuration: "0.6s, 8.5s" },
   },
   {
     label: "Climatebase Fellow",
-    href: "https://climatebase.org",
     org: "climatebase",
-    tone: "lavender",
     place: "lg:bottom-[60px] lg:left-[10px]",
     motion: { animationDelay: "1.05s, -4.8s", animationDuration: "0.6s, 10s" },
   },
 ] as const satisfies readonly {
   label: string;
-  href: string;
   org: Org;
-  tone: Tone;
   place: string;
   motion: { animationDelay: string; animationDuration?: string };
 }[];
 
-/** EPFL's logo is its name, so its entry names only the lab */
 const orgRows = [
-  {
-    label: "Also building at:",
-    orgs: [
-      {
-        name: "Resilio",
-        href: "https://resilio.tech",
-        org: "resilio",
-        tone: "teal",
-        mark: "h-[1em]",
-      },
-      {
-        name: "Transparium",
-        href: "https://transparium.com",
-        org: "transparium",
-        tone: "blue",
-        mark: "h-[0.8em]",
-      },
-      {
-        name: "LifePete",
-        href: "https://lifepete.com",
-        org: "lifePete",
-        tone: "orange",
-        mark: "h-[1em]",
-      },
-      {
-        name: "Archetype",
-        href: "https://github.com/archetype-pal",
-        org: "archetype",
-        tone: "coral",
-        mark: "h-[1.05em]",
-      },
-    ],
-  },
-  {
-    label: "Built before:",
-    orgs: [
-      { name: "C4DT", href: "https://c4dt.epfl.ch", org: "epfl", tone: "blue", mark: "h-[0.8em]" },
-      {
-        name: "Back Market",
-        href: "https://www.backmarket.com",
-        org: "backMarket",
-        tone: "orange",
-        mark: "h-[1em]",
-      },
-    ],
-  },
-] as const satisfies readonly {
-  label: string;
-  orgs: readonly { name: string; href: string; org: Org; tone: Tone; mark: string }[];
-}[];
+  { label: "Also building at:", orgs: ["resilio", "transparium", "lifePete", "archetype"] },
+  { label: "Built before:", orgs: ["epfl", "backMarket"] },
+] as const satisfies readonly { label: string; orgs: readonly Org[] }[];
 
 interface Tile {
   href: string;
@@ -205,7 +183,7 @@ export default component$(() => {
             >
               Staff Software Engineer at{" "}
               <a
-                href="https://resilio.tech"
+                href={orgs.resilio.href}
                 target="_blank"
                 rel="noopener noreferrer"
                 class="font-bold text-ink underline decoration-ink/30 underline-offset-4 hover:decoration-ink"
@@ -241,19 +219,22 @@ export default component$(() => {
                 <Fragment key={row.label}>
                   <span class="mt-1.5 text-sm text-ink-sky lg:mt-0">{row.label}</span>
                   <ul class="-ml-2.5 flex flex-wrap gap-x-0.5">
-                    {row.orgs.map((org) => (
-                      <li key={org.name}>
-                        <a
-                          href={org.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          class="inline-flex items-center gap-[7px] rounded-full px-2.5 py-[5px] font-display text-[15px] font-bold text-ink transition-colors hover:bg-panel/80 lg:text-[17px]"
-                        >
-                          <OrgMark org={org.org} class={[org.mark, toneClasses[org.tone].ink]} />
-                          {org.name}
-                        </a>
-                      </li>
-                    ))}
+                    {row.orgs.map((id) => {
+                      const org = orgs[id];
+                      return (
+                        <li key={id}>
+                          <a
+                            href={org.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="inline-flex items-center gap-[7px] rounded-full px-2.5 py-[5px] font-display text-[15px] font-bold text-ink transition-colors hover:bg-panel/80 lg:text-[17px]"
+                          >
+                            <OrgMark org={id} class={[org.mark, toneClasses[org.tone].ink]} />
+                            {org.name}
+                          </a>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </Fragment>
               ))}
@@ -277,7 +258,7 @@ export default component$(() => {
               {facts.map((fact) => (
                 <a
                   key={fact.label}
-                  href={fact.href}
+                  href={orgs[fact.org].href}
                   target="_blank"
                   rel="noopener noreferrer"
                   class={[
@@ -286,7 +267,10 @@ export default component$(() => {
                   ]}
                   style={fact.motion}
                 >
-                  <OrgMark org={fact.org} class={["h-[1.15em]", toneClasses[fact.tone].ink]} />
+                  <OrgMark
+                    org={fact.org}
+                    class={["h-[1.15em]", toneClasses[orgs[fact.org].tone].ink]}
+                  />
                   {fact.label}
                 </a>
               ))}
