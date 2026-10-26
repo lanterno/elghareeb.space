@@ -5,15 +5,6 @@ import { GitHubIcon, LinkedInIcon } from "~/components/icons";
 import { Navbar } from "~/components/navbar/Navbar";
 import { links } from "~/data/portfolio";
 
-import type { RequestHandler } from "@builder.io/qwik-city";
-
-export const onGet: RequestHandler = ({ cacheControl }) => {
-  cacheControl({
-    staleWhileRevalidate: 60 * 60 * 24 * 7,
-    maxAge: 5,
-  });
-};
-
 export default component$(() => {
   return (
     <div class="sky-afternoon relative min-h-screen overflow-x-clip">
