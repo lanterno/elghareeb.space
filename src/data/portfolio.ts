@@ -489,8 +489,9 @@ function toCalendarDay(value: IsoDate): CalendarDay {
   return { ...toCalendarMonth(value), day: Number(value.slice(8, 10)) };
 }
 
+/** In UTC, like the home page's conferences, so every date on the site turns over together */
 function fromDate(date: Date): CalendarDay {
-  return { year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate() };
+  return { year: date.getUTCFullYear(), month: date.getUTCMonth() + 1, day: date.getUTCDate() };
 }
 
 /** Whole months between two days: 7 Dec 2025 to 17 Oct 2026 is 10 */
