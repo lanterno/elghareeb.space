@@ -17,6 +17,7 @@ const pages = [
 export const Navbar = component$(() => {
   const location = useLocation();
   const menuOpen = useSignal(false);
+  const menuButton = useSignal<HTMLButtonElement>();
 
   useTask$(({ track }) => {
     track(() => location.url.pathname);
@@ -24,7 +25,15 @@ export const Navbar = component$(() => {
   });
 
   return (
-    <nav aria-label="Main" class="relative mx-auto max-w-[720px]">
+    <nav
+      aria-label="Main"
+      onKeyDown$={(event) => {
+        if (event.key !== "Escape" || !menuOpen.value) return;
+        menuOpen.value = false;
+        menuButton.value?.focus();
+      }}
+      class="relative mx-auto max-w-[720px]"
+    >
       <div class="flex items-center justify-between gap-3 rounded-full bg-panel/94 py-2 pl-3 pr-2 shadow-raised">
         <Link href="/" class="flex items-center gap-2.5 rounded-full text-ink">
           <span
@@ -66,6 +75,7 @@ export const Navbar = component$(() => {
             Let’s talk
           </a>
           <button
+            ref={menuButton}
             type="button"
             aria-expanded={menuOpen.value ? "true" : "false"}
             aria-controls="site-menu"
