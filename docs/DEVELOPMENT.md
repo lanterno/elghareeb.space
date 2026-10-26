@@ -39,13 +39,11 @@ src/
 │   └── router-head/  # Document head management
 ├── data/             # Portfolio data (experiences, projects, skills)
 ├── routes/           # File-based routing (Qwik City)
-├── env.ts            # Type-safe environment variables
 ├── global.css        # Global styles and Tailwind theme
 └── root.tsx          # Application entry point
 
 adapters/
-├── static/           # Static site generation
-└── bun/              # Bun server adapter
+└── static/           # Static site generation
 
 public/               # Static assets (images, manifest, favicon)
 ```
@@ -62,14 +60,6 @@ bun run build
 
 Output: `dist/` directory containing HTML, CSS, JS, and assets.
 
-### Bun Server
-
-For server-side rendering with Bun runtime:
-
-```bash
-bun run build.bun
-```
-
 ## Deployment
 
 ### GitHub Pages
@@ -84,25 +74,10 @@ Both platforms auto-detect the build command. Set:
 - **Build command**: `bun run build`
 - **Output directory**: `dist`
 
-### Self-Hosted (Bun)
-
-```bash
-bun run build.bun
-# Run the generated server bundle
-bun run server/entry.bun.js
-```
-
 ## Environment Variables
 
-Create a `.env` file for local development:
-
-```env
-PUBLIC_SITE_URL=https://elghareeb.space
-NODE_ENV=development
-DEBUG=false
-```
-
-See `src/env.ts` for the full schema and validation.
+`GITHUB_TOKEN` lets the build read the contribution calendar for the home page's GitHub card.
+Without it the card links to the profile and leaves out the chart.
 
 ## Troubleshooting
 

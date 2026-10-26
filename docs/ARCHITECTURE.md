@@ -112,17 +112,6 @@ Combined with [typescript-eslint v8](https://typescript-eslint.io/):
 - Strict rules enabled by default
 - Import sorting with `eslint-plugin-perfectionist`
 
-### PWA: vite-plugin-pwa
-
-**Why PWA?**
-
-Progressive Web App features provide:
-- **Offline access** — Service worker caches assets
-- **Installability** — Add to home screen on mobile
-- **Performance** — Cached fonts and images load instantly
-
-A portfolio should work anywhere, even without connectivity.
-
 ---
 
 ## What's NOT Here
