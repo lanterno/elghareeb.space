@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-- [Bun](https://bun.sh) >= 1.1.0
+- [Bun](https://bun.sh) 1.4.4 or newer (the deploy uses 1.4.4)
 
 ## Quick Start
 
@@ -45,14 +45,12 @@ src/
 adapters/
 └── static/           # Static site generation
 
-public/               # Static assets (images, manifest, favicon)
+public/               # Static assets (favicon, link preview card, robots.txt)
 ```
 
 ## Building for Production
 
-### Static Site (Recommended)
-
-Generates a fully static site, perfect for GitHub Pages, Netlify, Vercel, or any static host.
+Generates a fully static site:
 
 ```bash
 bun run build
@@ -62,17 +60,7 @@ Output: `dist/` directory containing HTML, CSS, JS, and assets.
 
 ## Deployment
 
-### GitHub Pages
-
-1. Build the site: `bun run build`
-2. Deploy the `dist/` folder to GitHub Pages
-3. Or use GitHub Actions for automatic deployment
-
-### Netlify / Vercel
-
-Both platforms auto-detect the build command. Set:
-- **Build command**: `bun run build`
-- **Output directory**: `dist`
+`.github/workflows/deploy.yml` builds the site and publishes `dist/` to GitHub Pages on every push to `main`. It also rebuilds daily, so the years of experience, the current role's length, the conferences and the GitHub card stay current.
 
 ## Environment Variables
 
@@ -98,10 +86,10 @@ bun run typecheck
 
 ### Build failures
 
-Ensure all dependencies are installed and up to date:
+Reinstall the dependencies from the lockfile, the way the deploy does:
 
 ```bash
-rm -rf node_modules bun.lock
-bun install
+rm -rf node_modules
+bun install --frozen-lockfile
 ```
 

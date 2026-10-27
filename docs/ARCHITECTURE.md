@@ -27,7 +27,7 @@ Software ages quickly. A portfolio should showcase not just who I am, but how I 
 - Script execution
 - TypeScript execution (native, no transpilation step)
 
-Bun serves as the package manager, test runner, and script executor. It's the future of JavaScript runtimes.
+Bun serves as the package manager and script runner. It's the future of JavaScript runtimes.
 
 ### Framework: Qwik
 
@@ -83,9 +83,8 @@ Tailwind v4 is utility-first CSS done right — embracing the platform instead o
 Every strict flag is enabled. TypeScript should catch errors, not just provide autocomplete.
 
 **Advanced patterns used:**
-- **Branded types** — Distinguish URLs from strings, date ranges from strings
 - **`satisfies` operator** — Validate data structures while preserving literal types
-- **Valibot schemas** — Runtime validation with compile-time type inference
+- **Valibot schemas** — Types for the portfolio data, which the build also checks against them
 
 ### Validation: Valibot
 
@@ -96,7 +95,7 @@ Every strict flag is enabled. TypeScript should catch errors, not just provide a
 - **Better TypeScript inference**
 - **Functional API** — Composable validation pipelines
 
-For a portfolio with minimal runtime validation, bundle size matters.
+The data is checked while the site builds, so Valibot never reaches the browser.
 
 ### Linting: ESLint Flat Config + typescript-eslint v8
 
@@ -123,21 +122,9 @@ Equally important is what I chose **not** to include:
 | React | Hydration overhead for a static site |
 | Next.js | Server complexity not needed |
 | CSS Modules | Tailwind is more maintainable |
-| Jest | Bun's test runner is faster |
 | Prettier plugins | Native Prettier is sufficient |
 | State management libs | Qwik signals are built-in |
 | Component libraries | Custom design, no bloat |
-
----
-
-## Performance Results
-
-The architecture delivers:
-
-- **Lighthouse Performance**: 100
-- **First Contentful Paint**: < 0.5s
-- **Time to Interactive**: < 0.5s
-- **Total JavaScript**: < 30KB (gzipped)
 
 ---
 
