@@ -10,43 +10,14 @@ import ImgWebSummit from "~/media/web-summit.png?jsx";
 import { type Tone, tones } from "./tones";
 
 // ============================================================================
-// Branded Types for Type-Safe Identifiers
-// ============================================================================
-
-declare const UrlBrand: unique symbol;
-declare const YearMonthBrand: unique symbol;
-declare const IsoDateBrand: unique symbol;
-
-/** Branded type for validated URLs */
-export type Url = string & { readonly [UrlBrand]: typeof UrlBrand };
-
-/** Branded type for a calendar month (e.g., "2025-12") */
-export type YearMonth = string & { readonly [YearMonthBrand]: typeof YearMonthBrand };
-
-/** Branded type for a calendar day (e.g., "2025-12-07") */
-export type IsoDate = string & { readonly [IsoDateBrand]: typeof IsoDateBrand };
-
-// ============================================================================
 // Valibot Schemas
 // ============================================================================
 
-const UrlSchema = v.pipe(
-  v.string(),
-  v.url(),
-  v.transform((val): Url => val as Url)
-);
+const UrlSchema = v.pipe(v.string(), v.url());
 
-const YearMonthSchema = v.pipe(
-  v.string(),
-  v.regex(/^\d{4}-(0[1-9]|1[0-2])$/),
-  v.transform((val): YearMonth => val as YearMonth)
-);
+const YearMonthSchema = v.pipe(v.string(), v.regex(/^\d{4}-(0[1-9]|1[0-2])$/));
 
-const IsoDateSchema = v.pipe(
-  v.string(),
-  v.isoDate(),
-  v.transform((val): IsoDate => val as IsoDate)
-);
+const IsoDateSchema = v.pipe(v.string(), v.isoDate());
 
 const ToneSchema = v.picklist(tones);
 
@@ -148,21 +119,21 @@ export type Conference = v.InferOutput<typeof ConferenceSchema> & {
 export const githubLogin = "lanterno";
 
 export const links = {
-  github: `https://github.com/${githubLogin}` as Url,
-  linkedin: "https://linkedin.com/in/ahmedelghareeb" as Url,
+  github: `https://github.com/${githubLogin}`,
+  linkedin: "https://linkedin.com/in/ahmedelghareeb",
 } as const;
 
 /** The day my first job started; years of experience count from here */
-export const careerStart = "2014-07-15" as IsoDate;
+export const careerStart = "2014-07-15";
 
 /** Most recent first */
 export const experiences = [
   {
     title: "Staff Software Engineer",
     company: "Resilio",
-    companyUrl: "https://resilio.tech" as Url,
+    companyUrl: "https://resilio.tech",
     type: "Full-time",
-    start: "2025-12-07" as IsoDate,
+    start: "2025-12-07",
     end: null,
     location: "Renens, Switzerland",
     description:
@@ -173,10 +144,10 @@ export const experiences = [
   {
     title: "Climate Fellow, cohort 6",
     company: "Climatebase",
-    companyUrl: "https://climatebase.org" as Url,
+    companyUrl: "https://climatebase.org",
     type: "Fellowship",
-    start: "2024-09" as YearMonth,
-    end: "2024-11" as YearMonth,
+    start: "2024-09",
+    end: "2024-11",
     location: "Remote",
     description:
       "Studied the climate side of energy, transportation and agriculture, worked with the non-profit ClimateRoboticsNetworks, and started a working group on Sustainable IT at EPFL, sponsored by its Research Software Engineering community.",
@@ -187,8 +158,8 @@ export const experiences = [
     title: "Research Software Engineer, Digital Identities",
     company: "Center for Digital Trust (C4DT), EPFL",
     type: "Full-time",
-    start: "2023-04" as YearMonth,
-    end: "2026-04" as YearMonth,
+    start: "2023-04",
+    end: "2026-04",
     location: "Lausanne, Switzerland",
     description:
       "On Switzerland’s E-ID, I experimented with the newest standards for digital wallets and verifiable credentials. On predictive maintenance, I used homomorphic encryption and decentralised learning so several parties could train one model without sharing their data. Most weeks meant reading papers and specs, then proving an idea in whatever language fit.",
@@ -206,8 +177,8 @@ export const experiences = [
     title: "Senior Software Engineer",
     company: "Back Market",
     type: "Permanent",
-    start: "2019-01" as YearMonth,
-    end: "2021-02" as YearMonth,
+    start: "2019-01",
+    end: "2021-02",
     location: "Paris, France",
     description:
       "Built cloud-based systems that scaled with one of France’s biggest startups, on AWS and platform-as-a-service infrastructure.",
@@ -221,7 +192,7 @@ export const projects = [
     name: "archetype-pal",
     description:
       "I’m leading the rewrite of an open-source palaeographic annotation platform — the software researchers use to study and annotate medieval manuscripts.",
-    link: "https://github.com/archetype-pal/backend" as Url,
+    link: "https://github.com/archetype-pal/backend",
     tags: ["Python", "Django", "Research"],
     tone: "coral",
     cover: "archetype",
@@ -232,7 +203,7 @@ export const projects = [
     name: "E-ID Workshop",
     description:
       "Switzerland’s E-ID, hands on: digital wallets, verifiable credentials and identity standards that respect privacy.",
-    link: "https://github.com/c4dt/how-2025-06-eID" as Url,
+    link: "https://github.com/c4dt/how-2025-06-eID",
     tags: ["Digital identity", "Privacy", "Switzerland"],
     tone: "blue",
     cover: "E-ID",
@@ -243,7 +214,7 @@ export const projects = [
     name: "crypto-wasm-ts",
     description:
       "TypeScript abstractions over a Rust crypto library’s WASM wrapper, for verifiable credentials.",
-    link: "https://github.com/docknetwork/crypto-wasm-ts" as Url,
+    link: "https://github.com/docknetwork/crypto-wasm-ts",
     tags: ["TypeScript", "WASM", "Cryptography"],
     tone: "lavender",
     cover: ".ts",
@@ -253,7 +224,7 @@ export const projects = [
   {
     name: "crypto-wasm",
     description: "The WASM wrapper underneath it all, over the cryptographic primitives library.",
-    link: "https://github.com/docknetwork/crypto-wasm" as Url,
+    link: "https://github.com/docknetwork/crypto-wasm",
     tags: ["Rust", "WASM", "Crypto"],
     tone: "teal",
     cover: ".wasm",
@@ -408,18 +379,18 @@ export const certifications = [
 export const conferences = [
   {
     name: "Cairo Water Week",
-    href: "https://www.cairowaterweek.eg/" as Url,
+    href: "https://www.cairowaterweek.eg/",
     place: "Cairo",
-    first: "2026-10-25" as IsoDate,
-    last: "2026-10-29" as IsoDate,
+    first: "2026-10-25",
+    last: "2026-10-29",
     Logo: ImgCairoWaterWeek,
   },
   {
     name: "Web Summit",
-    href: "https://websummit.com/" as Url,
+    href: "https://websummit.com/",
     place: "Lisbon",
-    first: "2026-11-09" as IsoDate,
-    last: "2026-11-12" as IsoDate,
+    first: "2026-11-09",
+    last: "2026-11-12",
     Logo: ImgWebSummit,
   },
 ] as const satisfies readonly Conference[];
@@ -476,16 +447,16 @@ interface CalendarDay extends CalendarMonth {
 
 type Span = Pick<Experience, "start" | "end">;
 
-function isDay(value: IsoDate | YearMonth): value is IsoDate {
+function isDay(value: string): boolean {
   return value.length === 10;
 }
 
 /** Works on a day too: "2025-12-07" is in December 2025 */
-function toCalendarMonth(value: IsoDate | YearMonth): CalendarMonth {
+function toCalendarMonth(value: string): CalendarMonth {
   return { year: Number(value.slice(0, 4)), month: Number(value.slice(5, 7)) };
 }
 
-function toCalendarDay(value: IsoDate): CalendarDay {
+function toCalendarDay(value: string): CalendarDay {
   return { ...toCalendarMonth(value), day: Number(value.slice(8, 10)) };
 }
 
@@ -509,13 +480,13 @@ export function plural(count: number, unit: string): string {
 }
 
 /** "5 Apr 2026" */
-export function formatDay(value: IsoDate): string {
+export function formatDay(value: string): string {
   const day = toCalendarDay(value);
   return `${String(day.day)} ${monthName(day)} ${String(day.year)}`;
 }
 
 /** "25–29 Oct", "30 Oct – 2 Nov" or "4 Dec" */
-export function formatDays(first: IsoDate, last: IsoDate): string {
+export function formatDays(first: string, last: string): string {
   const from = toCalendarDay(first);
   const to = toCalendarDay(last);
   if (first === last) return `${String(to.day)} ${monthName(to)}`;

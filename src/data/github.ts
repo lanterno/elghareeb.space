@@ -5,8 +5,6 @@
  */
 import * as v from "valibot";
 
-import type { IsoDate } from "./portfolio";
-
 const query = `
   query ($login: String!) {
     user(login: $login) {
@@ -33,11 +31,7 @@ const CalendarResponseSchema = v.object({
           totalContributions: v.number(),
           weeks: v.array(
             v.object({
-              firstDay: v.pipe(
-                v.string(),
-                v.isoDate(),
-                v.transform((val): IsoDate => val as IsoDate)
-              ),
+              firstDay: v.pipe(v.string(), v.isoDate()),
               contributionDays: v.array(v.object({ contributionCount: v.number() })),
             })
           ),
@@ -49,7 +43,7 @@ const CalendarResponseSchema = v.object({
 
 export interface ContributionWeek {
   /** The Sunday the week starts on */
-  readonly firstDay: IsoDate;
+  readonly firstDay: string;
   readonly count: number;
 }
 
