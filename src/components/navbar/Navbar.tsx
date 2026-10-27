@@ -1,4 +1,4 @@
-import { component$, useSignal, useTask$ } from "@builder.io/qwik";
+import { $, component$, useOnDocument, useSignal, useTask$ } from "@builder.io/qwik";
 import { Link, useLocation } from "@builder.io/qwik-city";
 
 import { CloseIcon, MenuIcon } from "~/components/icons";
@@ -18,14 +18,24 @@ export const Navbar = component$(() => {
   const location = useLocation();
   const menuOpen = useSignal(false);
   const menuButton = useSignal<HTMLButtonElement>();
+  const nav = useSignal<HTMLElement>();
 
   useTask$(({ track }) => {
     track(() => location.url.pathname);
     menuOpen.value = false;
   });
 
+  useOnDocument(
+    "click",
+    $((event: Event) => {
+      if (!menuOpen.value || !(event.target instanceof Node)) return;
+      if (nav.value?.contains(event.target) === false) menuOpen.value = false;
+    })
+  );
+
   return (
     <nav
+      ref={nav}
       aria-label="Main"
       onKeyDown$={(event) => {
         if (event.key !== "Escape" || !menuOpen.value) return;
