@@ -13,6 +13,7 @@ import {
   conferences,
   formatDays,
   githubLogin,
+  links,
   projects,
   yearsOfExperience,
 } from "~/data/portfolio";
@@ -40,13 +41,13 @@ const orgs = {
   },
   climatebase: {
     name: "Climatebase",
-    href: "https://climatebase.org",
+    href: links.climatebase,
     tone: "lavender",
     mark: "h-[1em]",
   },
   epfl: { name: "C4DT", href: "https://c4dt.epfl.ch", tone: "blue", mark: "h-[0.8em]" },
   lifePete: { name: "LifePete", href: "https://lifepete.com", tone: "orange", mark: "h-[1em]" },
-  resilio: { name: "Resilio", href: "https://resilio.tech", tone: "teal", mark: "h-[1em]" },
+  resilio: { name: "Resilio", href: links.resilio, tone: "teal", mark: "h-[1em]" },
   transparium: {
     name: "Transparium",
     href: "https://transparium.com",

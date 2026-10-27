@@ -117,9 +117,15 @@ export type Conference = v.InferOutput<typeof ConferenceSchema> & {
 
 export const githubLogin = "lanterno";
 
+/** Links more than one part of the site points at, so each is written once */
 export const links = {
   github: `https://github.com/${githubLogin}`,
   linkedin: "https://linkedin.com/in/ahmedelghareeb",
+  resilio: "https://resilio.tech",
+  climatebase: "https://climatebase.org",
+  archetypePal: "https://github.com/archetype-pal/backend",
+  eidWorkshop: "https://github.com/c4dt/how-2025-06-eID",
+  cryptoWasmTs: "https://github.com/docknetwork/crypto-wasm-ts",
 } as const;
 
 /** The day my first job started; years of experience count from here */
@@ -130,7 +136,7 @@ export const experiences = [
   {
     title: "Staff Software Engineer",
     company: "Resilio",
-    companyUrl: "https://resilio.tech",
+    companyUrl: links.resilio,
     type: "Full-time",
     start: "2025-12-07",
     end: null,
@@ -143,7 +149,7 @@ export const experiences = [
   {
     title: "Climate Fellow, cohort 6",
     company: "Climatebase",
-    companyUrl: "https://climatebase.org",
+    companyUrl: links.climatebase,
     type: "Fellowship",
     start: "2024-09",
     end: "2024-11",
@@ -191,7 +197,7 @@ export const projects = [
     name: "archetype-pal",
     description:
       "I’m leading the rewrite of an open-source palaeographic annotation platform — the software researchers use to study and annotate medieval manuscripts.",
-    link: "https://github.com/archetype-pal/backend",
+    link: links.archetypePal,
     tags: ["Python", "Django", "Research"],
     tone: "coral",
     cover: "archetype",
@@ -202,7 +208,7 @@ export const projects = [
     name: "E-ID Workshop",
     description:
       "Switzerland’s E-ID, hands on: digital wallets, verifiable credentials and identity standards that respect privacy.",
-    link: "https://github.com/c4dt/how-2025-06-eID",
+    link: links.eidWorkshop,
     tags: ["Digital identity", "Privacy", "Switzerland"],
     tone: "blue",
     cover: "E-ID",
@@ -213,7 +219,7 @@ export const projects = [
     name: "crypto-wasm-ts",
     description:
       "TypeScript abstractions over a Rust crypto library’s WASM wrapper, for verifiable credentials.",
-    link: "https://github.com/docknetwork/crypto-wasm-ts",
+    link: links.cryptoWasmTs,
     tags: ["TypeScript", "WASM", "Cryptography"],
     tone: "lavender",
     cover: ".ts",
@@ -244,12 +250,12 @@ export const domains = [
       {
         label: "E-ID Workshop",
         note: "Wallets and credentials, hands on",
-        href: "https://github.com/c4dt/how-2025-06-eID",
+        href: links.eidWorkshop,
       },
       {
         label: "crypto-wasm-ts",
         note: "TypeScript over Rust crypto, for credentials",
-        href: "https://github.com/docknetwork/crypto-wasm-ts",
+        href: links.cryptoWasmTs,
       },
       {
         label: "All projects",
@@ -269,12 +275,12 @@ export const domains = [
       {
         label: "Resilio",
         note: "Staff Software Engineer, since Dec 2025",
-        href: "https://resilio.tech",
+        href: links.resilio,
       },
       {
         label: "Climatebase Fellowship",
         note: "Cohort 6, autumn 2024",
-        href: "https://climatebase.org",
+        href: links.climatebase,
       },
     ],
   },
@@ -289,12 +295,12 @@ export const domains = [
       {
         label: "archetype-pal",
         note: "The rewrite I’m leading",
-        href: "https://github.com/archetype-pal/backend",
+        href: links.archetypePal,
       },
       {
         label: "github.com/lanterno",
         note: "Everything else I’ve shipped in the open",
-        href: "https://github.com/lanterno",
+        href: links.github,
       },
     ],
   },
