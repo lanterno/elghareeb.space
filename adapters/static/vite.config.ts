@@ -3,8 +3,7 @@ import { extendConfig } from "@builder.io/qwik-city/vite";
 
 import baseConfig from "../../vite.config";
 
-// Type assertion needed due to Vite version mismatch between qwik-city's bundled vite and project vite
-export default extendConfig(baseConfig as Parameters<typeof extendConfig>[0], () => {
+export default extendConfig(baseConfig, () => {
   return {
     build: {
       ssr: true,
