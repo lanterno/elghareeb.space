@@ -1,4 +1,4 @@
-import { $, component$, useSignal } from "@builder.io/qwik";
+import { $, component$, sync$, useSignal } from "@builder.io/qwik";
 import { Link } from "@builder.io/qwik-city";
 
 import { ArrowRightIcon, ArrowUpRightIcon } from "~/components/icons";
@@ -43,7 +43,15 @@ export const DomainTabs = component$(() => {
         <div
           role="tablist"
           aria-label="Domains"
-          onKeyDown$={onKeyDown}
+          onKeyDown$={[
+            // Home and End would also scroll the page; only a sync$ handler runs in time to stop it
+            sync$((event: KeyboardEvent) => {
+              if (["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) {
+                event.preventDefault();
+              }
+            }),
+            onKeyDown,
+          ]}
           class="flex flex-wrap gap-1.5 rounded-[30px] bg-panel/94 p-1.5 shadow-hair"
         >
           {domains.map((domain) => {
