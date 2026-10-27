@@ -20,7 +20,6 @@
     "lint": "eslint \"src/**/*.ts*\"",
     "lint:fix": "eslint \"src/**/*.ts*\" --fix",
     "preview": "qwik build preview && vite preview --open",
-    "start": "vite --open --mode ssr",
     "qwik": "qwik",
     "clean": "rm -rf dist server tmp .qwik node_modules/.vite",
     "update": "bun outdated"
