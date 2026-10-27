@@ -118,20 +118,21 @@ export const DomainTabs = component$(() => {
               <p class="text-sm font-bold text-ink-muted">Where to look</p>
               <ul class="flex flex-col gap-3">
                 {domain.links.map((item) => {
+                  const external = !item.href.startsWith("/");
                   const content = (
                     <>
                       <span class="flex flex-1 flex-col gap-0.5">
                         <span class="text-base font-bold">{item.label}</span>
                         <span class="text-sm text-ink-muted">{item.note}</span>
                       </span>
-                      {item.external ? <ArrowUpRightIcon /> : <ArrowRightIcon />}
+                      {external ? <ArrowUpRightIcon /> : <ArrowRightIcon />}
                     </>
                   );
                   const rowClass =
                     "flex items-center gap-4 rounded-tile bg-wash/16 px-5 py-[18px] text-ink transition-colors hover:bg-wash/28";
                   return (
                     <li key={item.href}>
-                      {item.external ? (
+                      {external ? (
                         <a
                           href={item.href}
                           target="_blank"

@@ -60,8 +60,7 @@ const DomainSchema = v.object({
     v.object({
       label: v.string(),
       note: v.string(),
-      href: v.string(),
-      external: v.boolean(),
+      href: v.union([v.pipe(v.string(), v.startsWith("/")), UrlSchema]),
     })
   ),
 });
@@ -246,19 +245,16 @@ export const domains = [
         label: "E-ID Workshop",
         note: "Wallets and credentials, hands on",
         href: "https://github.com/c4dt/how-2025-06-eID",
-        external: true,
       },
       {
         label: "crypto-wasm-ts",
         note: "TypeScript over Rust crypto, for credentials",
         href: "https://github.com/docknetwork/crypto-wasm-ts",
-        external: true,
       },
       {
         label: "All projects",
         note: "Everything I’ve built in the open",
         href: "/projects/",
-        external: false,
       },
     ],
   },
@@ -274,13 +270,11 @@ export const domains = [
         label: "Resilio",
         note: "Staff Software Engineer, since Dec 2025",
         href: "https://resilio.tech",
-        external: true,
       },
       {
         label: "Climatebase Fellowship",
         note: "Cohort 6, autumn 2024",
         href: "https://climatebase.org",
-        external: true,
       },
     ],
   },
@@ -296,13 +290,11 @@ export const domains = [
         label: "archetype-pal",
         note: "The rewrite I’m leading",
         href: "https://github.com/archetype-pal/backend",
-        external: true,
       },
       {
         label: "github.com/lanterno",
         note: "Everything else I’ve shipped in the open",
         href: "https://github.com/lanterno",
-        external: true,
       },
     ],
   },
