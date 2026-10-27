@@ -2,8 +2,7 @@ import { component$, Fragment } from "@builder.io/qwik";
 import { Link, routeLoader$ } from "@builder.io/qwik-city";
 
 import { GitHubCard } from "~/components/github-card/GitHubCard";
-import { HillsScene, SatelliteOrbit, StarshipCatch } from "~/components/hero-scene/HeroScene";
-import { Hills } from "~/components/hills/Hills";
+import { HeroGround, SatelliteOrbit } from "~/components/hero-scene/HeroScene";
 import { ArrowRightIcon } from "~/components/icons";
 import { type Org, OrgMark } from "~/components/org-mark/OrgMark";
 import { pageHead } from "~/components/router-head/page-head";
@@ -330,9 +329,7 @@ export default component$(() => {
             />
           </div>
         )}
-        <StarshipCatch />
-        <Hills class="h-[110px] md:h-[190px]" />
-        <HillsScene />
+        <HeroGround />
       </section>
 
       <SkillsMarquee />

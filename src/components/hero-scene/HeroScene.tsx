@@ -1,6 +1,6 @@
 import { component$, type JSXOutput } from "@builder.io/qwik";
 
-import { nearHill } from "~/components/hills/Hills";
+import { Hills, nearHill } from "~/components/hills/Hills";
 
 /**
  * Places a drawing on the hero's hills. `x` and `y` are in the 1440 × 200
@@ -12,8 +12,9 @@ const at = (x: number, y: number): { left: string; bottom: string } => ({
   bottom: `${((200 - y) / 2).toFixed(2)}%`,
 });
 
-/** Must match the height given to the hero's Hills */
-const hillsBox = "pointer-events-none absolute inset-x-0 bottom-0 h-[110px] md:h-[190px]";
+const groundHeight = "h-[110px] md:h-[190px]";
+
+const hillsBox = `pointer-events-none absolute inset-x-0 bottom-0 ${groundHeight}`;
 
 const catchFrame = "absolute bottom-0 left-0 w-full overflow-visible";
 
@@ -39,7 +40,7 @@ const Arm = ({ y, class: className }: ArmProps): JSXOutput => (
  * footing. Phones show it already caught: their hero runs past the first screen, so the catch would
  * play out of sight.
  */
-export const StarshipCatch = component$(() => (
+const StarshipCatch = component$(() => (
   <div aria-hidden="true" class={[hillsBox, "-z-10"]}>
     {/* Centred on the ship, which hangs at x = 0 with the tower to its right */}
     <div class="absolute w-[max(29px,3.5vw)] -translate-x-[34.78%]" style={at(1290, 59.5)}>
@@ -180,7 +181,7 @@ const viaduct = `M560 153.5H1440V200H560Z${Array.from({ length: 15 }, (_, i) => 
  * Solar panels, an electric train running from a tunnel across a viaduct and two wind turbines,
  * standing on the hills.
  */
-export const HillsScene = component$(() => (
+const HillsScene = component$(() => (
   <div aria-hidden="true" class={hillsBox}>
     <svg viewBox="0 0 1440 200" preserveAspectRatio="none" class="absolute inset-0 h-full w-full">
       <path class="fill-panel" fill-rule="evenodd" d={viaduct} />
@@ -263,6 +264,15 @@ export const HillsScene = component$(() => (
     <Turbine x={1120} y={68.4} period={10} class="w-[max(28px,3.75vw)] opacity-60" />
     <Turbine x={1395} y={64.9} period={6} class="hidden w-[6.25vw] md:block" />
   </div>
+));
+
+/** The hero's ground: the Starship behind the hills, the hills, and what stands on them */
+export const HeroGround = component$(() => (
+  <>
+    <StarshipCatch />
+    <Hills class={groundHeight} />
+    <HillsScene />
+  </>
 ));
 
 /**
