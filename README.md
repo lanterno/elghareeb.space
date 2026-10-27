@@ -1,20 +1,20 @@
 # Ahmed Elghareeb
 
-**Senior Software Engineer** · **ClimateBase Fellow** · **Digital Identity Specialist**
+**Staff Software Engineer at Resilio** · **Climatebase Fellow**
 
-Building Switzerland's digital identity infrastructure at [EPFL's Center for Digital Trust (C4DT)](https://c4dt.epfl.ch).
+I build software people can trust. At [Resilio](https://resilio.tech) I build climate accountability software. Before that, I spent three years on Switzerland's digital identity at [EPFL's Center for Digital Trust (C4DT)](https://c4dt.epfl.ch).
 
 ## About
 
-I'm a software engineer based in Lausanne, Switzerland, working at the intersection of **cryptography**, **digital identity**, and **climate technology**.
+I'm a software engineer in Renens, Switzerland, drawn to problems where the software has to be right: digital identity, climate and IoT.
 
-At C4DT, I experiment with cutting-edge standards for digital wallets, verifiable credentials, and privacy-preserving technologies. Beyond code, I'm passionate about sustainable IT — currently leading a Sustainable IT working group at EPFL and contributing to ClimateRoboticsNetworks.
+At Resilio I lead the platform's architecture. At C4DT I worked on the technology behind Switzerland's E-ID: digital wallets, verifiable credentials and selective disclosure. Beyond code, I care about climate tech and sustainable IT. As a Climatebase Fellow I worked with ClimateRoboticsNetworks and started a working group on Sustainable IT at EPFL.
 
-## Current Focus
+## Also building
 
-- 🪪 **E-ID Infrastructure** — Digital wallets, verifiable credentials, zero-knowledge proofs
-- 🌿 **Sustainable IT** — Research Software Engineering, climate-conscious development
-- 📜 **Archetype Project** — Open-source palaeographic annotation platform
+- **[archetype-pal](https://github.com/archetype-pal/backend)**: I'm leading the rewrite of this open-source platform researchers use to annotate medieval manuscripts
+- **[LifePete](https://lifepete.com)**, which I founded
+- **[Transparium](https://transparium.com)**
 
 ## Connect
 
