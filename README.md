@@ -28,7 +28,18 @@ At Resilio I lead the platform's architecture. At C4DT I worked on the technolog
 
 This is the source code for my personal portfolio website.
 
-- 📖 **[Development Guide](docs/DEVELOPMENT.md)** — How to run, build, and deploy
+### Running locally
+
+You need [Bun](https://bun.sh) 1.4.4 or newer.
+
+```bash
+bun install
+bun run dev
+```
+
+The site is then available at `http://localhost:5173`. To build the static site into `dist/`, run `bun run build`.
+
+- 📖 **[Development Guide](docs/DEVELOPMENT.md)** — Every script, the project layout and how deploys work
 - 🏗️ **[Architecture & Design](docs/ARCHITECTURE.md)** — Technology choices and philosophy
 
 ## License
