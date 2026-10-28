@@ -60,7 +60,9 @@ Output: `dist/` directory containing HTML, CSS, JS, and assets.
 
 ## Deployment
 
-`.github/workflows/deploy.yml` builds the site and publishes `dist/` to GitHub Pages on every push to `main`. It also rebuilds daily, so the years of experience, the current role's length, the conferences and the GitHub card stay current.
+`.github/workflows/deploy.yml` builds the site and publishes `dist/` to GitHub Pages on every push to `main`. It also rebuilds daily, so the years of experience, the current role's length, the conferences and the GitHub card stay current. The domain points at GitHub Pages.
+
+The repository is also connected to a Cloudflare Worker named `personal-site` through Workers Builds. On every push to `main` it runs `bun run build` and then `bunx wrangler deploy`, which uploads `dist/` as the Worker's static assets as described in `wrangler.jsonc`. That build needs a build token selected in the Worker's build settings on the Cloudflare dashboard.
 
 ## Environment Variables
 
