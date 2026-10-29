@@ -1,141 +1,198 @@
-# Architecture & Design Philosophy
+# Architecture
 
-This document explains the technology choices behind this portfolio. Every tool was selected because it represents the **state of the art** in its category — not out of familiarity or convenience.
+A fully static site: every page is rendered while the site is built, and a daily rebuild keeps the
+dates, the conferences and the GitHub card current. The code is organised around **what the site is
+about** (its subdomains), not around file types, so that anything about one subject changes in one
+folder — and a new subject, such as the blog, is one new folder plus two registration lines.
 
-## Core Philosophy
+## The three layers
 
-> **Use the best tool for the job, not the most popular one.**
-
-Software ages quickly. A portfolio should showcase not just who I am, but how I think about technology. This project prioritizes:
-
-1. **Performance** — Users shouldn't wait
-2. **Type Safety** — Catch errors before runtime
-3. **Modern Standards** — Native web features over polyfills
-4. **Developer Experience** — Fast feedback loops
-5. **Simplicity** — Minimal dependencies, maximal capability
-
----
-
-## Technology Choices
-
-### Runtime: Bun
-
-**Why not Node.js?**
-
-[Bun](https://bun.sh) is a drop-in replacement for Node.js, written in Zig, that's significantly faster for:
-- Package installation (10-100x faster than npm)
-- Script execution
-- TypeScript execution (native, no transpilation step)
-
-Bun serves as the package manager and script runner. It's the future of JavaScript runtimes.
-
-### Framework: Qwik
-
-**Why not React, Vue, or Svelte?**
-
-[Qwik](https://qwik.dev) introduces **resumability** — a paradigm shift from hydration.
-
-Traditional frameworks ship JavaScript to the browser, then re-execute it to make the page interactive (hydration). Qwik serializes the application state into HTML, allowing instant interactivity without re-execution.
-
-For a portfolio site, this means:
-- **Instant loading** — No JavaScript execution blocking interaction
-- **Fine-grained lazy loading** — Only load code when needed
-- **Optimal Core Web Vitals** — Near-perfect Lighthouse scores
-
-Qwik is what React would be if built today with modern constraints.
-
-### Build Tool: Vite
-
-**Why not Webpack, Parcel, or Bun's bundler?**
-
-[Vite](https://vitejs.dev) is the standard for modern frontend tooling:
-- Native ES modules in development (no bundling during dev)
-- Rollup-based production builds (optimal chunking)
-- Extensive plugin ecosystem
-
-Qwik's optimizer is a Vite plugin, making Vite the only viable choice. Bun's bundler lacks the plugin architecture needed for Qwik's transformations.
-
-### Styling: Tailwind CSS v4
-
-**Why not vanilla CSS, Sass, or CSS-in-JS?**
-
-[Tailwind CSS v4](https://tailwindcss.com) represents a complete rewrite:
-- **Native CSS** — Uses CSS custom properties, not JavaScript
-- **No configuration file** — Theme defined in CSS with `@theme`
-- **Smaller output** — Only generates classes you use
-- **Lightning CSS** — Rust-based compiler for speed
-
-Tailwind v4 is utility-first CSS done right — embracing the platform instead of fighting it.
-
-### Type Safety: TypeScript (Strict)
-
-**Configuration philosophy:**
-
-```json
-{
-  "strict": true,
-  "noUncheckedIndexedAccess": true,
-  "exactOptionalPropertyTypes": true,
-  "noPropertyAccessFromIndexSignature": true
-}
+```
+src/
+  app/        the composition root — the only place where modules meet
+  modules/    one vertical slice per subdomain: model, content, queries, UI, page, tests
+  platform/   stable shared ground with zero domain knowledge
 ```
 
-Every strict flag is enabled. TypeScript should catch errors, not just provide autocomplete.
+| Layer       | Contains                                                                                                                                                                                                                                                                                               | May import                                             |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------ |
+| `platform/` | `kernel` (value objects and pure functions: dates, `Period`, `Tone`, Valibot building blocks), `design` (tokens, the tone context, motion, utilities), `ui` (Button, Chip, PageHeader, ClosingScene, icons…), `scenery` (hills, clouds, the hero drawings), `seo` (site identity, `pageHead`), `build` | only itself                                            |
+| `modules/`  | `career`, `showcase`, `activity` — and later `blog`                                                                                                                                                                                                                                                    | `platform`; other modules **only** via `~/modules/<x>` |
+| `app/`      | `routes` (a manifest of one-line re-exports), `pages` (home, about, 404: compositions of several modules), `shell` (layout, navbar, footer, head)                                                                                                                                                      | everything, through public APIs                        |
 
-**Advanced patterns used:**
-- **`satisfies` operator** — Validate data structures while preserving literal types
-- **Valibot schemas** — Types for the portfolio data, which the build also checks against them
+These rules are enforced by ESLint (`no-restricted-imports` in `eslint.config.js`), not by discipline.
+`src/root.tsx` and `src/entry.ssr.tsx` stay at the top level because Qwik looks for them there.
 
-### Validation: Valibot
+```mermaid
+flowchart TB
+  subgraph App["app · composition root"]
+    Manifest["routes — one-line re-exports"]
+    Pages["pages — home · about · 404"]
+    Shell["shell — layout · Navbar · Footer · RouterHead"]
+  end
+  subgraph Mods["modules · one slice per subdomain"]
+    Career["career<br/>organisations · experiences · fields · conferences · Work page"]
+    Showcase["showcase<br/>projects · groups · Projects page"]
+    Activity["activity<br/>GitHub adapter · loader · card"]
+    Blog["blog<br/>posts/*.md · list, post pages · RSS"]
+  end
+  subgraph Platform["platform · zero domain knowledge"]
+    Kernel["kernel"]
+    Design[("design")]
+    UI["ui + scenery"]
+    Seo["seo + site"]
+  end
+  Manifest --> Career & Showcase & Blog & Pages
+  Pages --> Career & Showcase & Activity & Blog
+  Shell --> UI & Seo
+  Career & Showcase & Activity & Blog --> Kernel & UI & Seo
+  Mods -.-> Design
+  Showcase -- "OrgId" --> Career
+  Activity -- "anti-corruption layer" --> GH[["GitHub GraphQL API"]]
+```
 
-**Why not Zod?**
+## Anatomy of a module
 
-[Valibot](https://valibot.dev) is the next generation of validation libraries:
-- **10x smaller** than Zod (tree-shakeable by design)
-- **Better TypeScript inference**
-- **Functional API** — Composable validation pipelines
+Every module follows the same template, so you always know where to look:
 
-The data is checked while the site builds, so Valibot never reaches the browser.
+```
+modules/<name>/
+  index.ts        public API — the only path other code may import
+  model.ts        Valibot schemas + inferred types. The domain's rules live here
+  content/        the records themselves, checked against the model during the build
+  queries.ts      pure functions over the content (tested)
+  adapter.ts      only when the outside world is involved (activity: GitHub)
+  loader.ts       only when a page needs build-time data (re-exported by the route)
+  ui/             the module's components, built from platform primitives
+  pages/          the page(s) the module owns, with their `head`
+  <name>.test.ts
+```
 
-### Linting: ESLint Flat Config + typescript-eslint v8
+**Content is validated while the site is built.** Each `content/index.ts` runs its schemas under
+`import.meta.env.SSR`, so a mistyped date or link fails the build rather than the page. The browser
+never sees Valibot.
 
-**Why the newest ESLint?**
+**Routes are a manifest.** `src/app/routes/work/index.tsx` is one line:
+`export { WorkPage as default, workHead as head } from "~/modules/career";`. Qwik City runs a
+`routeLoader$` declared in a module as long as the route re-exports it (see `modules/activity/loader.ts`).
+The same works for `onGet`, `onStaticGenerate` and a function `head` (see `modules/blog/pages`).
 
-[ESLint's flat config](https://eslint.org/docs/latest/use/configure/configuration-files-new) is the future:
-- Single configuration file (no `.eslintrc` maze)
-- Explicit dependency management
-- Better TypeScript integration
+## The domain model
 
-Combined with [typescript-eslint v8](https://typescript-eslint.io/):
-- Type-aware linting (catch bugs ESLint alone misses)
-- Strict rules enabled by default
-- Import sorting with `eslint-plugin-perfectionist`
+```mermaid
+classDiagram
+  direction LR
+  class Organization {
+    <<aggregate root>>
+    +OrgId id
+    +string name
+    +Url url
+    +Tone tone
+  }
+  class Experience {
+    +OrgId org
+    +string title
+    +Period period
+    +string[] skills
+  }
+  class FieldOfWork {
+    +FieldId id
+    +Tone tone
+    +Pointer[] links
+  }
+  class Conference {
+    +DateRange days
+    +Image logo
+  }
+  class Project {
+    <<aggregate root>>
+    +Slug slug
+    +ProjectGroup group
+    +Tone tone
+    +Url link
+  }
+  class ContributionCalendar {
+    <<aggregate root>>
+    +int total
+    +ContributionWeek[] weeks
+    +busiestWeek()
+  }
+  class Period {
+    <<value object>>
+    +CalendarPoint start
+    +YearMonth end
+    +isCurrent()
+    +formatDuration()
+  }
+  Experience --> Organization : org
+  Experience *-- Period
+  Organization --> Tone
+  Project --> Tone
+  FieldOfWork --> Tone
+```
 
----
+`Organization` is the registry everything else points at by id: an experience, a hero fact or an
+affiliation row carries an `OrgId`, and its name, URL and tone are looked up. Anything that can be
+derived is derived — the "Right now" tile and the climate field's "since Dec 2025" come from the
+current role, the project count from the projects.
 
-## What's NOT Here
+## Where do I change…?
 
-Equally important is what I chose **not** to include:
+| Change                                  | Touch                                                |
+| --------------------------------------- | ---------------------------------------------------- |
+| A job, a conference, an organisation    | `modules/career/content/`                            |
+| A project                               | `modules/showcase/content/projects.ts`               |
+| The GitHub card's text or chart         | `modules/activity/ui/`                               |
+| The hero or the home page's tiles       | `app/pages/home/`                                    |
+| Colours, radii, shadows, motion         | `platform/design/`                                   |
+| A shared button, chip or heading        | `platform/ui/`                                       |
+| The site's URL, name, nav, social links | `platform/seo/site.ts`                               |
+| Meta tags and the link-preview card     | `platform/seo/page-head.ts`                          |
+| A new subdomain (the blog, talks, …)    | new `modules/<x>/` + its route lines + one nav entry |
 
-| Avoided | Reason |
-|---------|--------|
-| React | Hydration overhead for a static site |
-| Next.js | Server complexity not needed |
-| CSS Modules | Tailwind is more maintainable |
-| Prettier plugins | Native Prettier is sufficient |
-| State management libs | Qwik signals are built-in |
-| Component libraries | Custom design, no bloat |
+## Design system
 
----
+The visual language lives in `platform/design`:
 
-## Future Considerations
+- **Tokens** (`theme.css`): the only palette, fonts, radii and shadows. `--color-*: initial` makes
+  sure nothing off-brand slips in.
+- **Tones**: each organisation, field and project carries one of five tones so it reads as the same
+  thing everywhere. A tone is applied once with `data-tone="teal"`; everything inside then uses
+  `bg-tone`, `text-tone-ink` and `bg-tone-tint`. Without a tone they fall back to ink on a panel.
+- **Motion** (`motion.css`): every animation token and its keyframes, always used through
+  `motion-safe:`.
+- **Utilities** (`utilities.css`): the page column (`wrap`), the skies, the sun glows and the
+  `live-dot`.
 
-Technologies I'm watching:
+Components in `platform/ui` are plain functions when they have no state (icons, Button, Chip) and
+`component$` only when they need state, tasks or a `Slot` (PageHeader, ClosingScene, Navbar).
 
-- **Bun bundler** — When plugin support matures, could replace Vite
-- **Qwik 2.0** — Further resumability improvements
-- **CSS native nesting** — Reduce Tailwind reliance
-- **Import maps** — Native browser module resolution
+## Build and deploy
 
-The stack will evolve. The philosophy won't.
+- `bun run build` runs the client build, the type check, the lint and the static build, in that
+  order. The static adapter renders every route to `dist/`, with a sitemap and a `404.html`.
+- `platform/build/fresh-image-cache.ts` clears vite-imagetools' cache before each build: restored
+  images re-encode with a different hash, which would leave the SSR HTML pointing at files the
+  client build never emitted.
+- The GitHub card is fetched during the build with `GITHUB_TOKEN`; without it the card links to the
+  profile and leaves out the chart.
+- Dates are formatted by hand (`platform/kernel/dates.ts`) rather than with `Intl`, so the output
+  doesn't depend on the ICU data of whichever runtime builds the site.
 
+## Decisions
+
+| Decision                                              | Why                                                                                                                                                 |
+| ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Stay on Qwik City                                     | MDX, frontmatter, headings and SSG are built in; routes-as-manifest and module-owned MDX were verified to work. A migration buys nothing structural |
+| Routes are re-exports                                 | File-based routing wants to own pages; the manifest keeps each page's code with its module                                                          |
+| Tones as a CSS context (`data-tone`)                  | Removes the class lookup table and prop threading; class names stay static for Tailwind; the blog can tone tags and series the same way             |
+| Global CSS inlined into each page                     | One fewer render-blocking request; revisit if the blog multiplies entry pages and measurements favour a cached stylesheet                           |
+| Hand-written date formatting                          | Deterministic across runtimes (`Intl` gives "Sept" on some)                                                                                         |
+| Valibot at build time, `satisfies` at type-check time | Types come from the schemas; the build catches what types can't (URL and date formats, date order)                                                  |
+
+## Tooling
+
+Bun runs scripts and installs packages; Vite builds (Qwik's optimizer is a Vite plugin); Tailwind
+CSS v4 styles with tokens in CSS; TypeScript runs in strict mode with every extra check on;
+ESLint's flat config with typed rules and `eslint-plugin-perfectionist` for import order; Prettier
+formats; `bun test` runs the unit tests.

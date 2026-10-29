@@ -40,7 +40,8 @@ bun run dev
 The site is then available at `http://localhost:5173`. To build the static site into `dist/`, run `bun run build`.
 
 - 📖 **[Development Guide](docs/DEVELOPMENT.md)** — Every script, the project layout and how deploys work
-- 🏗️ **[Architecture & Design](docs/ARCHITECTURE.md)** — Technology choices and philosophy
+- ✍️ **[Writing a post](docs/WRITING.md)** — How to add a blog post
+- 🏗️ **[Architecture](docs/ARCHITECTURE.md)** — The layers, the module template, the design system and the decisions behind them
 
 ## License
 
