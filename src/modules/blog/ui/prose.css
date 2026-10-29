@@ -1,0 +1,198 @@
+/*
+  Long-form typography for a post, built only from the design tokens. Loaded by PostArticle with
+  useStyles$, so it ships with post pages alone. The panel carries the post's tone, so markers,
+  quotes and anchors pick it up.
+*/
+@reference "../../../platform/design/global.css";
+
+.prose {
+  @apply text-ink;
+  font-size: 17px;
+  line-height: 1.75;
+}
+
+@media (width >= 48rem) {
+  .prose {
+    font-size: 18px;
+  }
+}
+
+/* Flow: one rhythm for everything, headings get more room above */
+.prose > * + * {
+  margin-top: 1em;
+}
+
+.prose > h2 {
+  @apply text-[clamp(26px,2.6vw,34px)] leading-[1.15] tracking-[-0.02em];
+  margin-top: 1.6em;
+}
+
+.prose > h3 {
+  @apply text-[clamp(21px,2vw,25px)] leading-[1.25] tracking-[-0.015em];
+  margin-top: 1.4em;
+}
+
+.prose > h4 {
+  @apply font-sans text-lg font-bold;
+  margin-top: 1.5em;
+}
+
+.prose > h2 + *,
+.prose > h3 + *,
+.prose > h4 + * {
+  margin-top: 0.6em;
+}
+
+/* Heading anchors: the compiler puts an empty link before each heading; show a quiet # on hover */
+.prose :is(h2, h3, h4) {
+  position: relative;
+}
+
+.prose :is(h2, h3, h4) > a[href^="#"] {
+  @apply absolute -left-[0.9em] w-[0.9em] text-tone-ink no-underline opacity-0 transition-opacity;
+}
+
+.prose :is(h2, h3, h4):hover > a[href^="#"],
+.prose :is(h2, h3, h4) > a[href^="#"]:focus-visible {
+  opacity: 1;
+}
+
+.prose .icon-link::before {
+  content: "#";
+}
+
+/* Links read like the rest of the site */
+.prose p a,
+.prose li a,
+.prose td a {
+  @apply text-link;
+}
+
+.prose strong {
+  @apply font-bold;
+}
+
+/* Lists: markers in the post's tone, a hanging indent */
+.prose ul,
+.prose ol {
+  padding-inline-start: 1.5em;
+}
+
+.prose ul {
+  list-style: disc;
+}
+
+.prose ol {
+  list-style: decimal;
+}
+
+.prose li + li {
+  margin-top: 0.4em;
+}
+
+.prose li::marker {
+  @apply font-bold text-tone;
+}
+
+.prose blockquote {
+  @apply rounded-tile border-s-4 border-tone bg-wash/16 px-6 py-5 text-ink-sky;
+}
+
+.prose blockquote > * + * {
+  margin-top: 0.75em;
+}
+
+/* Code: inline as a quiet chip; blocks on the dusk palette, highlighted at build time */
+.prose :not(pre) > code {
+  @apply rounded-[0.4em] bg-wash/16 px-[0.4em] py-[0.15em] font-mono text-[0.9em];
+}
+
+.prose pre {
+  @apply overflow-x-auto rounded-tile bg-ink p-5 font-mono text-[14px] leading-relaxed text-dusk-ink md:p-6 md:text-[15px];
+}
+
+.prose pre code {
+  font-family: inherit;
+}
+
+.prose .token.comment,
+.prose .token.prolog,
+.prose .token.doctype,
+.prose .token.cdata {
+  @apply text-dusk-muted italic;
+}
+
+.prose .token.punctuation,
+.prose .token.operator {
+  @apply text-dusk-muted;
+}
+
+.prose .token.keyword,
+.prose .token.atrule,
+.prose .token.important,
+.prose .token.tag {
+  @apply text-coral;
+}
+
+.prose .token.string,
+.prose .token.char,
+.prose .token.attr-value,
+.prose .token.template-string,
+.prose .token.regex {
+  @apply text-dusk-sun;
+}
+
+.prose .token.function,
+.prose .token.class-name,
+.prose .token.selector,
+.prose .token.attr-name {
+  @apply text-wash;
+}
+
+.prose .token.number,
+.prose .token.boolean,
+.prose .token.constant,
+.prose .token.builtin,
+.prose .token.symbol,
+.prose .token.property {
+  @apply text-lavender;
+}
+
+/* Images sit like the site's cards; a title becomes the caption */
+.prose img {
+  @apply h-auto w-full rounded-card shadow-hair;
+}
+
+.prose p > img {
+  @apply inline-block h-[1.6em] w-auto rounded-[0.3em] align-middle shadow-none;
+}
+
+.prose figure {
+  margin-inline: 0;
+}
+
+.prose figcaption {
+  @apply mt-3 text-center text-sm text-ink-muted;
+}
+
+/* Tables */
+.prose table {
+  @apply w-full border-collapse text-[0.95em];
+}
+
+.prose th,
+.prose td {
+  @apply border-b border-ink/9 px-3 py-2.5 text-left align-top;
+}
+
+.prose th {
+  @apply font-bold text-ink-sky;
+}
+
+.prose tr:last-child td {
+  border-bottom: 0;
+}
+
+.prose hr {
+  @apply my-12 border-0 border-t border-ink/9;
+}
