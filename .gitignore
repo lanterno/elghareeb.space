@@ -7,6 +7,9 @@ tmp
 # Wrangler state
 .wrangler
 
+# Browser-agent session logs
+.playwright-mcp
+
 # Node dependencies
 node_modules
 

@@ -1,6 +1,7 @@
 // Cloudflare Workers Builds runs `bun run build` and then `bunx wrangler deploy`
 // on every push to main. This serves the static site in dist/ as Worker assets.
 {
+  "$schema": "node_modules/wrangler/config-schema.json",
   "name": "personal-site",
   "compatibility_date": "2025-12-07",
   "assets": {
