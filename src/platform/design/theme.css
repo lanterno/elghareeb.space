@@ -1,0 +1,107 @@
+/* Design tokens: fonts, the palette, shape and shadow. Motion lives in motion.css. */
+@theme {
+  /* Fonts */
+  --font-sans: "Zen Maru Gothic", system-ui, sans-serif;
+  --font-display: "M PLUS Rounded 1c", "Zen Maru Gothic", system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Only the palette below exists, so nothing off-brand slips in */
+  --color-*: initial;
+
+  /* Afternoon */
+  --color-ink: #2b3a44;
+  --color-ink-muted: #5c6770;
+  --color-ink-sky: #3d5160;
+  --color-sky: #e4f0f1;
+  /* Top of the afternoon sky gradient, also the browser's theme colour */
+  --color-sky-top: #8cc1e2;
+  --color-panel: #fffdf7;
+  --color-sun: #f2b233;
+  --color-wash: #72b0d6;
+  --color-leaf: #3e8d53;
+  --color-leaf-ink: #2a6f3d;
+  --color-hill-far: #b9d9a8;
+  --color-hill-mid: #8ac07c;
+  --color-hill-near: #5c9f5e;
+
+  /* Data colours: one per organisation or domain, with an ink for text and a tint for fills */
+  --color-blue: #4f8fd6;
+  --color-blue-ink: #2c65a3;
+  --color-blue-tint: color-mix(in srgb, #4f8fd6 16%, #fffdf7);
+  --color-teal: #2e9c94;
+  --color-teal-ink: #1c6e67;
+  --color-teal-tint: color-mix(in srgb, #2e9c94 15%, #fffdf7);
+  --color-orange: #fb923c;
+  --color-orange-ink: #a8521a;
+  --color-orange-tint: color-mix(in srgb, #fb923c 17%, #fffdf7);
+  --color-lavender: #8e7cc3;
+  --color-lavender-ink: #5e4f9c;
+  --color-lavender-tint: color-mix(in srgb, #8e7cc3 18%, #fffdf7);
+  --color-coral: #e07a5f;
+  --color-coral-ink: #a9472d;
+  --color-coral-tint: color-mix(in srgb, #e07a5f 18%, #fffdf7);
+
+  /* Dusk, for the closing scene */
+  --color-dusk-ink: #eef2f7;
+  --color-dusk-muted: #c9d3e0;
+  --color-dusk-sun: #f5c45a;
+  --color-dusk-hill-far: #3b5470;
+  --color-dusk-hill-mid: #2c4a44;
+  --color-dusk-hill-near: #1f3a31;
+
+  /* Shape */
+  --radius-tile: 22px;
+  --radius-card: 32px;
+  --radius-panel: 40px;
+  --radius-scene: 44px;
+
+  --shadow-hair: 0 1px 2px rgb(43 58 68 / 0.06);
+  --shadow-raised: 0 1px 2px rgb(43 58 68 / 0.06), 0 12px 32px rgb(43 58 68 / 0.08);
+  --shadow-lifted: 0 1px 2px rgb(43 58 68 / 0.08), 0 16px 36px rgb(43 58 68 / 0.16);
+  --shadow-sun: 0 10px 30px rgb(242 178 51 / 0.45);
+  --shadow-dusk-sun: 0 10px 40px rgb(245 196 90 / 0.45);
+}
+
+/*
+  Tone context. Set `data-tone` on an element and everything inside it can use the tone colours
+  below (`bg-tone`, `text-tone-ink`, `bg-tone-tint`). Without a tone they fall back to ink on a
+  panel, so a component works toned or not.
+*/
+@layer base {
+  :root {
+    --tone: var(--color-ink);
+    --tone-ink: var(--color-ink);
+    --tone-tint: var(--color-panel);
+  }
+  [data-tone="blue"] {
+    --tone: var(--color-blue);
+    --tone-ink: var(--color-blue-ink);
+    --tone-tint: var(--color-blue-tint);
+  }
+  [data-tone="teal"] {
+    --tone: var(--color-teal);
+    --tone-ink: var(--color-teal-ink);
+    --tone-tint: var(--color-teal-tint);
+  }
+  [data-tone="orange"] {
+    --tone: var(--color-orange);
+    --tone-ink: var(--color-orange-ink);
+    --tone-tint: var(--color-orange-tint);
+  }
+  [data-tone="lavender"] {
+    --tone: var(--color-lavender);
+    --tone-ink: var(--color-lavender-ink);
+    --tone-tint: var(--color-lavender-tint);
+  }
+  [data-tone="coral"] {
+    --tone: var(--color-coral);
+    --tone-ink: var(--color-coral-ink);
+    --tone-tint: var(--color-coral-tint);
+  }
+}
+
+@theme inline {
+  --color-tone: var(--tone);
+  --color-tone-ink: var(--tone-ink);
+  --color-tone-tint: var(--tone-tint);
+}

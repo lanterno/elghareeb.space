@@ -1,6 +1,7 @@
 import { staticAdapter } from "@builder.io/qwik-city/adapters/static/vite";
 import { extendConfig } from "@builder.io/qwik-city/vite";
 
+import { site } from "../../src/platform/seo/site";
 import baseConfig from "../../vite.config";
 
 export default extendConfig(baseConfig, () => {
@@ -13,7 +14,7 @@ export default extendConfig(baseConfig, () => {
     },
     plugins: [
       staticAdapter({
-        origin: "https://elghareeb.space",
+        origin: site.url,
       }),
     ],
   };

@@ -1,0 +1,10 @@
+/*
+  Bright design style: the sky is the ground, content sits on cloud-white panels, sunlight falls on
+  the one thing that matters, and every face is rounded. Each page walks from afternoon into a dusk
+  scene at the bottom.
+*/
+@import "tailwindcss";
+@import "./fonts.css";
+@import "./theme.css";
+@import "./motion.css";
+@import "./utilities.css";
