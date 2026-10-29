@@ -39,12 +39,13 @@ export default tseslint.config(
     },
     rules: {
       ...qwik.configs.recommended.rules,
+      "qwik/loader-location": ["warn", { routesDir: "src/app/routes" }],
     },
   },
 
   // Main TypeScript configuration
   {
-    files: ["src/**/*.ts", "src/**/*.tsx", "adapters/**/*.ts"],
+    files: ["src/**/*.ts", "src/**/*.tsx"],
     languageOptions: {
       parserOptions: {
         projectService: true,
@@ -95,6 +96,67 @@ export default tseslint.config(
       // Disable base rules that are covered by TypeScript
       "no-unused-vars": "off",
       "no-undef": "off",
+    },
+  },
+
+  /*
+   * Architecture boundaries (see docs/ARCHITECTURE.md):
+   *   platform  → nothing above it
+   *   modules   → platform, and other modules only through their public API (~/modules/<name>)
+   *   app       → everything, through public APIs
+   *   routes    → re-export lines only
+   */
+  {
+    files: ["src/platform/**/*.ts", "src/platform/**/*.tsx"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              regex: "^~/(modules|app)(/|$)",
+              message: "platform/ must not know about modules/ or app/.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ["src/modules/**/*.ts", "src/modules/**/*.tsx"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              regex: "^~/app(/|$)",
+              message: "modules/ must not depend on app/.",
+            },
+            {
+              regex: "^~/modules/[^/]+/.+",
+              message:
+                "Import another module through its public API (~/modules/<name>); use relative paths inside your own.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ["src/app/**/*.ts", "src/app/**/*.tsx", "src/root.tsx", "src/entry.ssr.tsx"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              regex: "^~/modules/[^/]+/.+",
+              message: "Import a module through its public API (~/modules/<name>).",
+            },
+          ],
+        },
+      ],
     },
   },
 
