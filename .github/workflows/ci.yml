@@ -1,0 +1,42 @@
+name: Checks
+
+on:
+  pull_request:
+  push:
+    branches-ignore: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Formatting
+        run: bun run fmt.check
+
+      - name: Lint
+        run: bun run lint
+
+      - name: Types
+        run: bun run build.types
+
+      - name: Tests
+        run: bun test
+
+      # Also catches content validation errors, which only run during the static build
+      - name: Build
+        run: bun run build
