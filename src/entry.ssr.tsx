@@ -13,8 +13,5 @@ export default function (opts: RenderToStreamOptions): Promise<RenderToStreamRes
       lang: "en",
       ...opts.containerAttributes,
     },
-    serverData: {
-      ...opts.serverData,
-    },
   });
 }
