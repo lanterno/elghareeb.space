@@ -7,7 +7,6 @@ history (`git log --all -- docs/history`).
 
 - **CSS delivery.** The global stylesheet is inlined into every page; once the blog multiplies
   them, measure whether a cached `<link>` wins.
-- **`@types/bun`** to replace `src/types/bun-test.d.ts`, the next time the lockfile is updated.
 
 ## Blog, on demand
 
