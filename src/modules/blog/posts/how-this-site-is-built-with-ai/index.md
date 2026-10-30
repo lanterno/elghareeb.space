@@ -58,8 +58,8 @@ what we named.
 
 The same session rebuilt the home page as a short walk from the hero into four tiles, and the
 first few things the site now does for itself: counting my years of experience from the day I
-started my first job in July 2014 instead of a hand-typed number, and rebuilding every morning
-so that number, and the length of my current role, stay true without anyone touching them.
+started my first job in July 2014 instead of a hand-typed number, so that number, and the
+length of my current role, are recomputed on every build without anyone touching them.
 
 ## The drawings are code
 
@@ -106,9 +106,8 @@ for visitors who allow motion.
 A static site goes stale. The answer here was to make the build do the remembering, and most of
 late October went into that.
 
-- The conferences I'm attending sit in the hero with a live dot while they run, and the daily
-  rebuild drops each one the morning after it ends. Adding the next event is the only manual
-  step.
+- The conferences I'm attending sit in the hero with a live dot while they run, and each one
+  disappears once it has ended. Adding the next event is the only manual step.
 - A card on the home page shows my GitHub contributions for the year, read from GitHub's API
   while the site builds, so no visitor ever waits on GitHub. Without a token the card degrades
   to a link and the build says why.
