@@ -14,17 +14,18 @@ interface ClosingSceneProps {
 }
 
 /**
- * The dusk scene that closes every page: one invitation and the one sunlit button on that part
- * of the page. The nav's "Let’s talk" jumps here.
+ * The dusk that ends every page: one invitation and the one sunlit button on that part of the
+ * page. It reaches both edges of the screen, and the footer's ground continues below its hills.
+ * The nav's "Let’s talk" jumps here.
  */
 export const ClosingScene = component$<ClosingSceneProps>(({ eyebrow, title, body }) => (
-  <section id="talk" aria-labelledby="talk-title" class="wrap scroll-mt-6 pt-24 md:pt-[110px]">
-    <div class="sky-dusk relative overflow-hidden rounded-scene px-6 pb-[160px] pt-12 text-dusk-ink md:px-14 md:pb-[170px] md:pt-16">
+  <section id="talk" aria-labelledby="talk-title" class="scroll-mt-6 pt-24 md:pt-[110px]">
+    <div class="sky-dusk relative overflow-hidden rounded-t-scene pb-[160px] pt-12 text-dusk-ink md:pb-[170px] md:pt-16">
       <div
         aria-hidden="true"
-        class="sun-glow-dusk absolute -bottom-[240px] -right-[120px] h-[480px] w-[680px] rounded-full"
+        class="sun-glow-dusk absolute -bottom-[240px] right-[calc(50%-820px)] h-[480px] w-[680px] rounded-full"
       />
-      <div class="relative grid items-center gap-8 md:grid-cols-[1.3fr_1fr]">
+      <div class="wrap relative grid items-center gap-8 md:grid-cols-[1.3fr_1fr]">
         <div class="flex flex-col gap-4">
           {eyebrow !== undefined && <p class="text-[15px] font-bold text-dusk-muted">{eyebrow}</p>}
           <h2
