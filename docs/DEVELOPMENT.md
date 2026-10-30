@@ -1,130 +1,37 @@
-# Development Guide
+# Development
 
-## Prerequisites
+Scripts are in `package.json`. Two are not what they look like: `bun run build` also type-checks and
+lints (Qwik's build does), and `bun run preview` serves the built `dist/` statically rather than
+rendering on the fly, so 404s and trailing slashes behave as deployed.
 
-- [Bun](https://bun.sh) 1.4.4 or newer (the deploy uses 1.4.4)
+The deploy pins Bun 1.4.4; use that or newer.
 
-## Quick Start
+## Checks
 
-```bash
-# Install dependencies
-bun install
-
-# Start development server
-bun run dev
-```
-
-The site will be available at `http://localhost:5173`.
-
-## Available Scripts
-
-| Command             | Description                              |
-| ------------------- | ---------------------------------------- |
-| `bun run dev`       | Start development server with hot reload |
-| `bun run build`     | Build for production (static site)       |
-| `bun run preview`   | Preview production build locally         |
-| `bun run typecheck` | Run TypeScript type checking             |
-| `bun run lint`      | Lint code with ESLint                    |
-| `bun run lint:fix`  | Lint and auto-fix issues                 |
-| `bun run fmt`       | Format code with Prettier                |
-| `bun run clean`     | Remove build artifacts                   |
-| `bun run update`    | Check for outdated packages              |
-
-## Project Structure
-
-The code is organised by subdomain — see [ARCHITECTURE.md](ARCHITECTURE.md) for the rules.
-
-```
-src/
-├── app/               # Composition root: the only place where modules meet
-│   ├── routes/        #   Qwik City routes — one-line re-exports, nothing else
-│   ├── pages/         #   Home, About and 404, composed from the modules' public APIs
-│   └── shell/         #   Site layout, Navbar, Footer, RouterHead
-├── modules/           # One folder per subdomain: model, content, queries, ui, pages, tests
-│   ├── career/        #   Organisations, experiences, fields of work, conferences — /work/
-│   ├── showcase/      #   Open-source projects — /projects/
-│   ├── activity/      #   GitHub contributions — the card on the home page
-│   └── blog/          #   Markdown posts in posts/<slug>/ — /blog/, /blog/<slug>/, rss.xml
-├── platform/          # Shared ground with no domain knowledge
-│   ├── kernel/        #   Dates, Period, Tone, Valibot building blocks (tested)
-│   ├── design/        #   Tokens, tone context, motion, utilities (CSS)
-│   ├── ui/            #   Button, Chip, PageHeader, ClosingScene, icons…
-│   ├── scenery/       #   Hills, clouds and the hero drawings
-│   ├── seo/           #   Site identity and pageHead()
-│   └── build/         #   Vite build helpers
-├── media/             # Source images (served through Qwik's ?jsx imports)
-├── root.tsx           # Qwik entry points — the framework expects them here
-└── entry.ssr.tsx
-
-adapters/static/       # Static site generation
-public/                # Static assets (favicon, link preview card, robots.txt)
-```
-
-### Adding content
-
-- A new job or organisation: `src/modules/career/content/`. Organisations are a registry; every
-  other record points at one by id.
-- A new project: `src/modules/showcase/content/projects.ts`.
-- A blog post: copy `src/modules/blog/posts/_template` — see [WRITING.md](WRITING.md).
-- Content is checked against its model during the build, so a mistyped date or URL fails
-  `bun run build` with a message naming the field.
-
-### Adding a subdomain
-
-Copy the shape of an existing module (`index.ts`, `model.ts`, `content/`, `queries.ts`, `ui/`,
-`pages/`, a test), add its route files under `src/app/routes/` as one-line re-exports, and add a
-nav entry in `src/platform/seo/site.ts` if it gets a page.
-
-## Tests
+CI (`.github/workflows/ci.yml`) runs on every pull request. The same, locally:
 
 ```bash
-bun test
+bun run fmt.check && bun run lint && bun run typecheck && bun test && bun run build
 ```
 
-Tests sit beside the code they cover (`*.test.ts`): the kernel's date maths, each module's
-content rules and queries, and the GitHub adapter's mapping.
+The build is also where the content validation runs, so a bad date in a job or a post only fails
+there. Tests sit beside the code they cover as `*.test.ts`.
 
-## Building for Production
-
-Generates a fully static site:
-
-```bash
-bun run build
-```
-
-Output: `dist/` directory containing HTML, CSS, JS, and assets.
-
-## Deployment
-
-`.github/workflows/deploy.yml` builds the site and publishes `dist/` to GitHub Pages on every push to `main`. It also rebuilds daily, so the years of experience, the current role's length, the conferences and the GitHub card stay current.
-
-## Environment Variables
+## Environment
 
 `GITHUB_TOKEN` lets the build read the contribution calendar for the home page's GitHub card.
 Without it the card links to the profile and leaves out the chart.
 
-## Troubleshooting
+## Deployment
 
-### CSS not loading in development
+Two pipelines deploy on every push to `main`:
 
-The global stylesheet (`src/platform/design/global.css`) is injected with Qwik's `useStyles$`. If styles don't appear:
+- **GitHub Pages** (`.github/workflows/deploy.yml`) publishes `dist/` and also rebuilds daily, which
+  is what keeps the dates, the conferences, scheduled posts and the GitHub card current. **The
+  domain points here.**
+- **Cloudflare Workers.** The repository is connected to the Worker `personal-site` through Workers
+  Builds, which runs `bun run build` then `bunx wrangler deploy`, uploading `dist/` as static assets
+  per `wrangler.jsonc`. It needs a build token selected in the Worker's build settings on the
+  Cloudflare dashboard, and it has no daily rebuild.
 
-1. Clear Vite cache: `bun run clean`
-2. Restart dev server: `bun run dev`
-
-### TypeScript errors
-
-Run type checking to identify issues:
-
-```bash
-bun run typecheck
-```
-
-### Build failures
-
-Reinstall the dependencies from the lockfile, the way the deploy does:
-
-```bash
-rm -rf node_modules
-bun install --frozen-lockfile
-```
+Keeping one is an open decision; see [ROADMAP.md](ROADMAP.md).
