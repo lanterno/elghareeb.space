@@ -7,6 +7,9 @@
   "main": "worker/index.ts",
   "account_id": "f8bc153fe7e73b012806460d95005a5a",
   "compatibility_date": "2025-12-07",
+  // The custom domains below are the only addresses; no workers.dev or preview URLs
+  "workers_dev": false,
+  "preview_urls": false,
   // Both hostnames are custom domains of the Worker: the deploy creates and keeps their DNS
   // records. A Redirect Rule on the zone sends www to the bare domain.
   "routes": [
