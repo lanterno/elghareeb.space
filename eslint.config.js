@@ -45,7 +45,7 @@ export default tseslint.config(
 
   // Main TypeScript configuration
   {
-    files: ["src/**/*.ts", "src/**/*.tsx"],
+    files: ["src/**/*.ts", "src/**/*.tsx", "worker/**/*.ts"],
     languageOptions: {
       parserOptions: {
         projectService: true,

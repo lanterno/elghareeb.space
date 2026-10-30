@@ -39,5 +39,11 @@
       "~/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "adapters/**/*.ts", "adapters/**/*.tsx"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "adapters/**/*.ts",
+    "adapters/**/*.tsx",
+    "worker/**/*.ts"
+  ]
 }
