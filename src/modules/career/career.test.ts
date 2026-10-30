@@ -11,7 +11,7 @@ const conference = (first: string, last: string): Conference => ({
   place: "Somewhere",
   first,
   last,
-  Logo: (() => null) as unknown as Conference["Logo"],
+  Logo: () => null,
 });
 
 describe("career content", () => {

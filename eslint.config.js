@@ -23,7 +23,7 @@ export default tseslint.config(
           type: "natural",
           order: "asc",
           groups: ["builtin", "external", "internal", ["parent", "sibling", "index"], "type"],
-          newlinesBetween: "always",
+          newlinesBetween: 1,
         },
       ],
       "perfectionist/sort-named-imports": ["error", { type: "natural" }],
