@@ -1,33 +1,35 @@
 /**
- * `GET /stats`: what visitors did, for the site's owner. It sits behind HTTP Basic auth whose
- * password is the Worker secret `STATS_PASSWORD`, and reads the `site_events` dataset through
- * the Analytics Engine SQL API with the Worker secret `CF_ANALYTICS_TOKEN` (Account Analytics:
- * Read). Page views are not here: Cloudflare Web Analytics shows those.
+ * `GET /stats`: the site's numbers in one place, for its owner. It sits behind HTTP Basic auth
+ * whose password is the Worker secret `STATS_PASSWORD`. Traffic, devices and speed come from
+ * Cloudflare Web Analytics (`traffic.ts`); what visitors did comes from the `site_events`
+ * dataset the page beacon fills, read through the Analytics Engine SQL API. Both use the Worker
+ * secret `CF_ANALYTICS_TOKEN` (Account Analytics: Read).
  */
+import { type Count, loadTraffic, type Traffic, type TrafficEnv } from "./traffic";
 
-export interface StatsEnv {
-  ACCOUNT_ID: string;
+export interface StatsEnv extends TrafficEnv {
   STATS_PASSWORD?: string;
-  CF_ANALYTICS_TOKEN?: string;
 }
 
 export interface StatsData {
   days: number;
+  /** Absent when Cloudflare could not be asked; `trafficError` then says why */
+  traffic?: Traffic;
+  trafficError?: string;
   /** Events by name */
-  totals: { name: string; n: number }[];
+  totals: Count[];
   /** Links to other sites that were followed, and from which page */
   outbound: { target: string; page: string; n: number }[];
   /** The closing scene's button, by page */
   talk: { page: string; n: number }[];
   /** Posts: how many readers passed the middle, how many reached the end */
   reading: { page: string; half: number; full: number }[];
-  countries: { country: string; n: number }[];
 }
 
 /** The SQL API sends sums as numbers, but nothing promises it never sends a string */
 type Num = number | string;
 
-const PERIODS = [7, 30, 90] as const;
+const PERIODS = [1, 7, 30] as const;
 const DATASET = "site_events";
 
 /** The response for `/stats`: a challenge, the page, or why there is no page. */
@@ -54,10 +56,12 @@ export async function statsResponse(request: Request, env: StatsEnv): Promise<Re
       },
     });
   } catch (error) {
-    const reason = error instanceof Error ? error.message : "unknown error";
-    return new Response(`Could not read the events: ${reason}`, { status: 502 });
+    return new Response(`Could not read the events: ${reason(error)}`, { status: 502 });
   }
 }
+
+const reason = (error: unknown): string =>
+  error instanceof Error ? error.message : "unknown error";
 
 /** True when the Basic auth header carries the password, whatever the user name */
 export function authorized(header: string | null, password: string): boolean {
@@ -90,7 +94,11 @@ async function load(env: StatsEnv, days: number): Promise<StatsData> {
   const since = `timestamp > NOW() - INTERVAL '${String(days)}' DAY AND blob1 <> 'smoke-test'`;
   const run = <T>(select: string, where: string, tail: string): Promise<T[]> =>
     sql<T>(env, `SELECT ${select} FROM ${DATASET} WHERE ${since} ${where} ${tail}`);
-  const [totals, outbound, talk, depths, countries] = await Promise.all([
+  const [traffic, totals, outbound, talk, depths] = await Promise.all([
+    loadTraffic(env, days).then(
+      (t) => ({ traffic: t }),
+      (error: unknown) => ({ trafficError: reason(error) })
+    ),
     run<{ name: string; n: Num }>(
       "blob1 AS name, SUM(_sample_interval) AS n",
       "",
@@ -111,19 +119,14 @@ async function load(env: StatsEnv, days: number): Promise<StatsData> {
       "AND blob1 = 'read'",
       "GROUP BY page, depth"
     ),
-    run<{ country: string; n: Num }>(
-      "blob4 AS country, SUM(_sample_interval) AS n",
-      "",
-      "GROUP BY country ORDER BY n DESC LIMIT 12"
-    ),
   ]);
   return {
     days,
+    ...traffic,
     totals: totals.map((r) => ({ name: r.name, n: Number(r.n) })),
     outbound: outbound.map((r) => ({ target: r.target, page: r.page, n: Number(r.n) })),
     talk: talk.map((r) => ({ page: r.page, n: Number(r.n) })),
     reading: foldReading(depths),
-    countries: countries.map((r) => ({ country: r.country, n: Number(r.n) })),
   };
 }
 
@@ -161,22 +164,114 @@ const escape = (text: string): string =>
 /** Links are shown without the scheme and the trailing slash */
 const short = (url: string): string => url.replace(/^https?:\/\//, "").replace(/\/$/, "");
 
+/** Web Analytics' names for a few browsers and systems, as people say them */
+const NAMES: Record<string, string> = {
+  MacOSX: "macOS",
+  ChromeMobile: "Chrome (mobile)",
+  ChromeMobileiOS: "Chrome (iOS)",
+  MobileSafari: "Safari (mobile)",
+  MobileSafariUIWebView: "Safari (in an app)",
+  FirefoxMobile: "Firefox (mobile)",
+  SamsungInternet: "Samsung Internet",
+};
+export const name = (raw: string, empty: string): string =>
+  raw === "" ? empty : (NAMES[raw] ?? raw.replace(/([a-z]{2})([A-Z])/g, "$1 $2"));
+
+const label = (days: number): string => (days === 1 ? "24 hours" : `${String(days)} days`);
+
+/** A timing in the unit that reads best: "702 ms", "3.2 s"; layout shift as a bare ratio */
+export const measure = (p75: number, unitless: boolean): string =>
+  unitless
+    ? p75.toFixed(2)
+    : p75 >= 1000
+      ? `${(p75 / 1000).toFixed(1)} s`
+      : `${String(Math.round(p75))} ms`;
+
 const table = (head: string[], rows: string[][], empty: string): string =>
   rows.length === 0
     ? `<p class="empty">${escape(empty)}</p>`
-    : `<table><thead><tr>${head.map((h) => `<th>${escape(h)}</th>`).join("")}</tr></thead><tbody>${rows
+    : `<table><thead><tr>${head.map((h, i) => `<th${i > 0 ? ' class="n"' : ""}>${escape(h)}</th>`).join("")}</tr></thead><tbody>${rows
         .map(
-          (r) =>
-            `<tr>${r.map((c, i) => `<td${i === r.length - 1 ? ' class="n"' : ""}>${c}</td>`).join("")}</tr>`
+          (r) => `<tr>${r.map((c, i) => `<td${i > 0 ? ' class="n"' : ""}>${c}</td>`).join("")}</tr>`
         )
         .join("")}</tbody></table>`;
+
+const counts = (title: string, rows: Count[], empty: string, nameOf = (n: string) => n): string =>
+  `<div><h3>${escape(title)}</h3>${table(
+    ["", "Visits"],
+    rows.map((r) => [escape(nameOf(r.name)), String(r.n)]),
+    empty
+  )}</div>`;
+
+function renderTraffic(data: StatsData): string {
+  const t = data.traffic;
+  if (t === undefined) {
+    return `<section><h2>Traffic</h2><p class="empty">Cloudflare could not be asked: ${escape(data.trafficError ?? "unknown error")}.</p></section>`;
+  }
+  const peak = Math.max(1, ...t.byDay.map((d) => d.views));
+  const bars =
+    t.byDay.length < 2
+      ? ""
+      : `<div class="bars" role="img" aria-label="Page views per day">${t.byDay
+          .map(
+            (d) =>
+              `<i style="--h:${String(Math.round((d.views / peak) * 100))}%" title="${d.date}: ${String(d.views)} views, ${String(d.visits)} visits"></i>`
+          )
+          .join("")}</div>`;
+  const vitals = t.vitals
+    .map(
+      (v) =>
+        `<div class="tile ${v.rating === undefined ? "" : v.rating.replace(" ", "-")}"><b>${
+          v.p75 === undefined ? "–" : measure(v.p75, v.unitless)
+        }</b><span>${escape(v.name)}</span><em>${escape(v.rating ?? "not measured yet")}</em></div>`
+    )
+    .join("");
+  const answered = t.answered.reduce((sum, a) => sum + a.n, 0);
+  const notFound = t.answered.filter((a) => a.status === 404).reduce((sum, a) => sum + a.n, 0);
+  return `<section>
+    <h2>Traffic</h2>
+    <div class="tiles"><div class="tile sun"><b>${String(t.views)}</b><span>page views</span></div><div class="tile"><b>${String(t.visits)}</b><span>visits</span></div></div>
+    ${bars}
+  </section>
+  <section>
+    <h2>Pages</h2>
+    ${table(
+      ["Page", "Views", "Visits"],
+      t.pages.map((p) => [escape(p.path), String(p.views), String(p.visits)]),
+      "No page has been viewed yet."
+    )}
+  </section>
+  <section class="pair">
+    ${counts("Came from", t.referrers, "No visits yet.", (n) => name(n, "typed the address, or no referrer"))}
+    ${counts("Country", t.countries, "No visits yet.", (n) => name(n, "unknown"))}
+  </section>
+  <section class="trio">
+    ${counts("Device", t.devices, "No visits yet.", (n) => name(n, "unknown"))}
+    ${counts("Browser", t.browsers, "No visits yet.", (n) => name(n, "unknown"))}
+    ${counts("System", t.systems, "No visits yet.", (n) => name(n, "unknown"))}
+  </section>
+  <section>
+    <h2>Speed</h2>
+    <p class="lead">What three quarters of visitors got or better. Google wants the first three green.</p>
+    <div class="tiles">${vitals}</div>
+  </section>
+  <section>
+    <h2>Behind the scenes</h2>
+    <p class="lead">The Worker answered <b>${String(answered)}</b> requests, crawlers and scanners included; <b>${String(notFound)}</b> of them asked for a page that does not exist.</p>
+    ${table(
+      ["Status", "Requests"],
+      t.answered.map((a) => [String(a.status), String(a.n)]),
+      "Nothing yet."
+    )}
+  </section>`;
+}
 
 export function renderStats(data: StatsData): string {
   const all = data.totals.reduce((sum, t) => sum + t.n, 0);
   const periods = PERIODS.map((d) =>
     d === data.days
-      ? `<strong>${String(d)} days</strong>`
-      : `<a href="/stats?days=${String(d)}">${String(d)} days</a>`
+      ? `<strong>${label(d)}</strong>`
+      : `<a href="/stats?days=${String(d)}">${label(d)}</a>`
   ).join(" · ");
   const totals = data.totals
     .map((t) => `<div class="tile"><b>${String(t.n)}</b><span>${escape(t.name)}</span></div>`)
@@ -187,38 +282,51 @@ export function renderStats(data: StatsData): string {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>What visitors did</title>
+<title>How the site is doing</title>
 <style>
-  :root { --ink: #2b3a44; --muted: #5c6770; --panel: #fffdf7; --sun: #f2b233; --line: rgb(43 58 68 / 0.1); }
+  :root { --ink: #2b3a44; --muted: #5c6770; --panel: #fffdf7; --sun: #f2b233; --line: rgb(43 58 68 / 0.1);
+    --good: #cfe9c9; --needs: #fbe1a6; --poor: #f6c7bd; }
   * { box-sizing: border-box; }
   body { margin: 0; min-height: 100vh; padding: 40px 16px 80px; color: var(--ink);
     font: 16px/1.6 system-ui, sans-serif; background: linear-gradient(#8cc1e2, #e4f0f1 60%); }
   main { max-width: 860px; margin: 0 auto; display: grid; gap: 20px; }
   h1 { margin: 0; font-size: clamp(30px, 5vw, 44px); line-height: 1.05; letter-spacing: -0.02em; }
-  .lead { margin: 6px 0 0; color: var(--muted); }
+  .lead { margin: 6px 0 12px; color: var(--muted); }
   .lead a { color: var(--ink); }
+  .lead b { color: var(--ink); }
   section { background: var(--panel); border-radius: 28px; padding: 22px 24px;
     box-shadow: 0 1px 2px rgb(0 0 0 / .06), 0 14px 36px rgb(43 58 68 / .12); }
   h2 { margin: 0 0 12px; font-size: 20px; }
-  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+  h3 { margin: 0 0 8px; font-size: 16px; }
+  .pair, .trio { display: grid; gap: 24px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
   .tile { border-radius: 18px; padding: 14px 16px; background: rgb(43 58 68 / 0.05); }
   .tile b { display: block; font-size: 30px; line-height: 1.1; }
   .tile span { color: var(--muted); font-size: 14px; }
+  .tile em { display: block; font-style: normal; font-size: 13px; font-weight: 600; margin-top: 4px; }
   .tile.sun { background: var(--sun); }
+  .tile.good { background: var(--good); }
+  .tile.needs-work { background: var(--needs); }
+  .tile.poor { background: var(--poor); }
+  .bars { display: flex; align-items: flex-end; gap: 3px; height: 72px; margin-top: 16px; }
+  .bars i { flex: 1; display: block; height: max(3px, var(--h)); background: var(--sun); border-radius: 3px 3px 0 0; }
   table { width: 100%; border-collapse: collapse; font-size: 15px; }
   th { text-align: left; color: var(--muted); font-weight: 600; font-size: 13px; padding: 0 0 8px; }
   td { padding: 8px 0; border-top: 1px solid var(--line); word-break: break-all; }
-  td.n, th:last-child { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; padding-left: 12px; }
   .empty { margin: 0; color: var(--muted); }
+  footer { color: var(--muted); font-size: 14px; }
 </style>
 </head>
 <body>
 <main>
   <header>
-    <h1>What visitors did</h1>
-    <p class="lead">Interactions on elghareeb.space over the last ${periods}. Page views and visitors are in Cloudflare Web Analytics.</p>
+    <h1>How the site is doing</h1>
+    <p class="lead">elghareeb.space over the last ${periods}.</p>
   </header>
+  ${renderTraffic(data)}
   <section>
+    <h2>What visitors did</h2>
     <div class="tiles"><div class="tile sun"><b>${String(all)}</b><span>interactions</span></div>${totals}</div>
   </section>
   <section>
@@ -245,14 +353,7 @@ export function renderStats(data: StatsData): string {
       "No post has been read yet."
     )}
   </section>
-  <section>
-    <h2>Countries</h2>
-    ${table(
-      ["Country", "Interactions"],
-      data.countries.map((r) => [escape(r.country === "" ? "unknown" : r.country), String(r.n)]),
-      "Nothing yet."
-    )}
-  </section>
+  <footer>Traffic and speed are measured by Cloudflare Web Analytics in visitors' browsers; interactions by this site's own beacon. Neither counts people who block scripts or ask not to be tracked.</footer>
 </main>
 </body>
 </html>`;
