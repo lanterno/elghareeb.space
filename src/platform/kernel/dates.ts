@@ -1,7 +1,7 @@
 /**
  * Calendar dates as plain strings: an ISO day ("2025-12-07") or a year-month ("2025-12"). The
- * site is rebuilt daily, so "today" is the day of the build, in UTC, and every date on the site
- * turns over together.
+ * site is static, so "today" is the day of the last build, in UTC, and every date on the site
+ * turns over together when it is rebuilt.
  *
  * Formatting is hand-written rather than `Intl`: its output must not depend on the ICU data of
  * whichever runtime builds the site ("Sep" here, "Sept" there).

@@ -51,7 +51,7 @@ export const ConferenceBalloons = ({ today }: ConferenceBalloonsProps): JSXOutpu
           </ExternalLink>
         );
       })}
-      {/* If the daily rebuild stops running, conferences that have ended since still disappear */}
+      {/* The site is only rebuilt on push, so conferences that end in between are hidden here */}
       <script
         dangerouslySetInnerHTML={`(() => {
           const today = new Date().toISOString().slice(0, 10);

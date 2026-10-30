@@ -1,7 +1,7 @@
 /**
  * Reads the contribution calendar from GitHub's GraphQL API while the site is built, and maps
  * the response to the module's own model so the API's shape stops here. The deploy workflow
- * passes its GITHUB_TOKEN and rebuilds daily, so the numbers are at most a day old.
+ * passes its GITHUB_TOKEN, so the numbers are as old as the last push to main.
  */
 import * as v from "valibot";
 
