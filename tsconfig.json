@@ -34,7 +34,7 @@
     /* Other */
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    "types": ["vite/client"],
+    "types": ["vite/client", "bun"],
     "paths": {
       "~/*": ["./src/*"]
     }
