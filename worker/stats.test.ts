@@ -71,6 +71,7 @@ const traffic: Traffic = {
     { status: 404, n: 1412 },
     { status: 200, n: 658 },
   ],
+  warnings: [],
 };
 
 describe("renderStats", () => {
@@ -112,6 +113,11 @@ describe("renderStats", () => {
     expect(html).toContain("not measured yet");
     expect(html).toContain("<b>2070</b> requests");
     expect(html).toContain("<b>1412</b> of them");
+  });
+
+  test("passes on what Cloudflare complained about", () => {
+    const html = renderStats({ ...data, traffic: { ...traffic, warnings: ["quota <exceeded>"] } });
+    expect(html).toContain("Cloudflare also said: quota &#60;exceeded&#62;");
   });
 
   test("says why when Cloudflare could not be asked", () => {
