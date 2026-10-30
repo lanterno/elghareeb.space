@@ -41,16 +41,13 @@ Without it the card links to the profile and leaves out the chart.
 
 ### Deployment
 
-Two pipelines deploy on every push to `main`:
-
-- **GitHub Pages** (`.github/workflows/deploy.yml`) serves the domain. Nothing rebuilds between
-  pushes, so the computed dates, the conferences, scheduled posts and the GitHub card are as current
-  as the last push; run the workflow by hand from the Actions tab to refresh them.
-- **Cloudflare Workers.** The repository is connected to the Worker `personal-site` through Workers
-  Builds (`bun run build`, then `bunx wrangler deploy`, per `wrangler.jsonc`). It needs a build
-  token selected in the Worker's build settings on the Cloudflare dashboard.
-
-Keeping one is an open decision; see the roadmap.
+`.github/workflows/deploy.yml` builds on every push to `main` and uploads `dist/` to the Cloudflare
+Worker `personal-site` (`wrangler.jsonc`), which serves the domain. It needs the repository secret
+`CLOUDFLARE_API_TOKEN`, a token with Workers Scripts, Workers Routes and DNS edit on this account
+and zone. Nothing rebuilds between pushes, so the computed dates, the conferences, scheduled posts
+and the GitHub card are as current as the last push; run the workflow by hand from the Actions tab
+to refresh them. After a local `bun run build`, `bunx wrangler deploy` does the same from a machine
+that has run `wrangler login`.
 
 - [Architecture](docs/ARCHITECTURE.md): the layers, the module template and the decisions behind them
 - [Writing a post](docs/WRITING.md)

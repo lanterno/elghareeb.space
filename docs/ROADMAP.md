@@ -5,10 +5,7 @@ history (`git log --all -- docs/history`).
 
 ## Decisions waiting
 
-1. **One deploy target.** GitHub Pages serves the domain and gets a GitHub token for the
-   contribution card for free; the Cloudflare Worker `personal-site` also deploys on every push.
-   Pick one and delete the other's config (`deploy.yml` + `public/CNAME`, or `wrangler.jsonc`).
-2. **A content check.** The C4DT role is full-time until April 2026 and the Resilio role full-time
+1. **A content check.** The C4DT role is full-time until April 2026 and the Resilio role full-time
    from December 2025: five months of overlap on the Work page.
 
 ## When there is a reason
