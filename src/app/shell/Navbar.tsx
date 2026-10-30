@@ -1,12 +1,6 @@
-import {
-  $,
-  component$,
-  type JSXOutput,
-  useOnDocument,
-  useSignal,
-  useTask$,
-} from "@builder.io/qwik";
+import { component$, type JSXOutput, useSignal, useTask$ } from "@builder.io/qwik";
 import { Link, useLocation } from "@builder.io/qwik-city";
+import { isBrowser } from "@builder.io/qwik/build";
 
 import { type NavItem, site } from "~/platform/seo";
 import { Button, CloseIcon, MenuIcon } from "~/platform/ui";
@@ -35,38 +29,22 @@ const NavLink = ({ page, current, variant }: NavLinkProps): JSXOutput => (
 
 /**
  * The floating nav pill. On a phone the page links fold into a menu, while "Let’s talk" stays in
- * reach. The menu closes on navigation, on Escape and on a click elsewhere.
+ * reach. The menu is a popover: the browser opens and closes it, closes it on Escape and on a
+ * click elsewhere, and swaps the button's icon through CSS, so no script runs until a page
+ * changes under an open menu. It hangs below the pill through CSS anchor positioning; where that
+ * is missing it still opens, centred on the screen.
  */
 export const Navbar = component$(() => {
   const location = useLocation();
-  const menuOpen = useSignal(false);
-  const menuButton = useSignal<HTMLButtonElement>();
-  const nav = useSignal<HTMLElement>();
+  const menu = useSignal<HTMLElement>();
 
   useTask$(({ track }) => {
     track(() => location.url.pathname);
-    menuOpen.value = false;
+    if (isBrowser && menu.value?.matches(":popover-open") === true) menu.value.hidePopover();
   });
 
-  useOnDocument(
-    "click",
-    $((event: Event) => {
-      if (!menuOpen.value || !(event.target instanceof Node)) return;
-      if (nav.value?.contains(event.target) === false) menuOpen.value = false;
-    })
-  );
-
   return (
-    <nav
-      ref={nav}
-      aria-label="Main"
-      onKeyDown$={(event) => {
-        if (event.key !== "Escape" || !menuOpen.value) return;
-        menuOpen.value = false;
-        menuButton.value?.focus();
-      }}
-      class="relative mx-auto max-w-[720px]"
-    >
+    <nav aria-label="Main" class="relative mx-auto max-w-[720px] [anchor-name:--site-nav]">
       <div class="flex items-center justify-between gap-3 rounded-full bg-panel/94 py-2 pl-3 pr-2 shadow-raised">
         <Link href="/" class="flex items-center gap-2.5 rounded-full text-ink">
           <span
@@ -93,25 +71,27 @@ export const Navbar = component$(() => {
             Let’s talk
           </Button>
           <button
-            ref={menuButton}
             type="button"
-            aria-expanded={menuOpen.value ? "true" : "false"}
-            aria-controls="site-menu"
-            aria-label={menuOpen.value ? "Close menu" : "Open menu"}
-            onClick$={() => {
-              menuOpen.value = !menuOpen.value;
-            }}
+            popovertarget="site-menu"
+            aria-label="Menu"
             class="grid h-11 w-11 place-items-center rounded-full bg-wash/16 text-ink md:hidden"
           >
-            {menuOpen.value ? <CloseIcon /> : <MenuIcon />}
+            <span class="[nav:has(:popover-open)_&]:hidden">
+              <MenuIcon />
+            </span>
+            <span class="hidden [nav:has(:popover-open)_&]:block">
+              <CloseIcon />
+            </span>
           </button>
         </div>
       </div>
 
+      {/* A popover sits in the top layer, so it is placed against the pill by anchor, not by flow */}
       <ul
         id="site-menu"
-        hidden={!menuOpen.value}
-        class="absolute inset-x-0 top-full mt-2 flex flex-col gap-1 rounded-card bg-panel p-2 shadow-raised md:hidden"
+        ref={menu}
+        popover="auto"
+        class="m-0 flex-col gap-1 rounded-card border-0 bg-panel p-2 text-ink shadow-raised [position-anchor:--site-nav] open:flex md:hidden [&:popover-open]:flex [@supports(anchor-name:--a)]:[inset:auto] [@supports(anchor-name:--a)]:left-[anchor(left)] [@supports(anchor-name:--a)]:top-[calc(anchor(bottom)+8px)] [@supports(anchor-name:--a)]:w-[anchor-size(width)]"
       >
         {site.nav.map((page) => (
           <li key={page.href}>
