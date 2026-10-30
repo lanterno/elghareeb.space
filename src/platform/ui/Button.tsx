@@ -9,13 +9,7 @@ import type { ClassList, JSXChildren, JSXOutput } from "@builder.io/qwik";
  * closing scene; the others are quiet.
  */
 export type ButtonVariant =
-  | "sun"
-  | "panel"
-  | "panel-compact"
-  | "ink"
-  | "ink-compact"
-  | "dusk"
-  | "wash";
+  "sun" | "panel" | "panel-compact" | "ink" | "ink-compact" | "dusk" | "wash";
 
 const variants: Record<ButtonVariant, string> = {
   sun: "min-h-14 gap-2.5 bg-sun px-7 text-base text-ink shadow-sun transition-transform hover:-translate-y-0.5",
