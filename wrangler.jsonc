@@ -6,7 +6,7 @@
   "account_id": "f8bc153fe7e73b012806460d95005a5a",
   "compatibility_date": "2025-12-07",
   // Both hostnames are custom domains of the Worker: the deploy creates and keeps their DNS
-  // records. public/_redirects sends www to the bare domain.
+  // records. A Redirect Rule on the zone sends www to the bare domain.
   "routes": [
     { "pattern": "elghareeb.space", "custom_domain": true },
     { "pattern": "www.elghareeb.space", "custom_domain": true },
