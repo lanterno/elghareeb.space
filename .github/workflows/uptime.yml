@@ -1,0 +1,33 @@
+# Four times a day, asks the live site the questions a visitor would. A failure emails the person
+# who last touched this file, which is the only alert the site has. (GitHub pauses schedules after
+# 60 days without a push; the Actions tab says so, and a manual run resumes them.)
+name: Uptime
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: The pages answer
+        run: |
+          set -euo pipefail
+          for path in / /work/ /projects/ /about/ /blog/ /blog/rss.xml /sitemap.xml; do
+            code=$(curl -sS -o /dev/null -w '%{http_code}' "https://elghareeb.space$path")
+            [ "$code" = 200 ] || { echo "$path answered $code"; exit 1; }
+          done
+
+      - name: The Worker is in front, recounting the dates
+        run: |
+          set -euo pipefail
+          curl -sS https://elghareeb.space/ | grep -q "data-live-year=\"\">$(date -u +%Y)<" \
+            || { echo "the copyright year was not recounted for today"; exit 1; }
+
+      - name: The stats page asks for a password
+        run: |
+          set -euo pipefail
+          code=$(curl -sS -o /dev/null -w '%{http_code}' https://elghareeb.space/stats)
+          [ "$code" = 401 ] || { echo "/stats answered $code instead of 401"; exit 1; }
