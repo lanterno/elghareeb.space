@@ -1,9 +1,11 @@
 /**
- * The Worker in front of the static site. Every request is served from the built assets, except
- * two: `POST /api/event` stores one interaction in Analytics Engine (`event.ts` says what), and
- * `GET /stats` shows them to the owner (`stats.ts`).
+ * The Worker in front of the static site. Every request is served from the built assets, with
+ * the dates a page marked as live recounted for today (`live.ts`), except two: `POST /api/event`
+ * stores one interaction in Analytics Engine (`event.ts` says what), and `GET /stats` shows them
+ * to the owner (`stats.ts`).
  */
 import { parseEvent } from "./event";
+import { recounted } from "./live";
 import { type StatsEnv, statsResponse } from "./stats";
 
 interface Env extends StatsEnv {
@@ -22,7 +24,7 @@ export default {
   async fetch(request: EdgeRequest, env: Env): Promise<Response> {
     const { pathname } = new URL(request.url);
     if (pathname === "/stats") return statsResponse(request, env);
-    if (pathname !== "/api/event") return env.ASSETS.fetch(request);
+    if (pathname !== "/api/event") return recounted(await env.ASSETS.fetch(request));
     if (request.method !== "POST") {
       return new Response(null, { status: 405, headers: { allow: "POST" } });
     }
