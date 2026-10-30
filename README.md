@@ -49,6 +49,22 @@ and the GitHub card are as current as the last push; run the workflow by hand fr
 to refresh them. After a local `bun run build`, `bunx wrangler deploy` does the same from a machine
 that has run `wrangler login`.
 
+### Analytics
+
+Page views come from Cloudflare Web Analytics, injected at the edge, nothing in the code. A few
+interactions (clicks on links to other sites, the closing call, how far a post is read) are
+reported by `src/platform/analytics/EventBeacon.tsx` to `worker/index.ts`, which stores them in the
+Analytics Engine dataset `site_events` without anything that identifies a visitor. Read them with
+the SQL API and a token that has Account Analytics read:
+
+```bash
+curl -s https://api.cloudflare.com/client/v4/accounts/f8bc153fe7e73b012806460d95005a5a/analytics_engine/sql \
+  -H "Authorization: Bearer $CF_ANALYTICS_TOKEN" \
+  -d "SELECT blob1 AS name, blob2 AS page, blob3 AS target, SUM(_sample_interval) AS n
+      FROM site_events WHERE timestamp > NOW() - INTERVAL '30' DAY
+      GROUP BY name, page, target ORDER BY n DESC"
+```
+
 - [Architecture](docs/ARCHITECTURE.md): the layers, the module template and the decisions behind them
 - [Writing a post](docs/WRITING.md)
 - [Roadmap](docs/ROADMAP.md): what is still open
