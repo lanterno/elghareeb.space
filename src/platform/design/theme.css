@@ -1,4 +1,4 @@
-/* Design tokens: fonts, the palette, shape and shadow. Motion lives in motion.css. */
+/* Design tokens: fonts, the palette at both hours, shape and shadow. Motion lives in motion.css. */
 @theme {
   /* Fonts */
   --font-sans: "Zen Maru Gothic", system-ui, sans-serif;
@@ -8,46 +8,56 @@
   /* Only the palette below exists, so nothing off-brand slips in */
   --color-*: initial;
 
-  /* Afternoon */
-  --color-ink: #2b3a44;
-  --color-ink-muted: #5c6770;
-  --color-ink-sky: #3d5160;
-  --color-sky: #e4f0f1;
-  /* Top of the afternoon sky gradient, also the browser's theme colour */
-  --color-sky-top: #8cc1e2;
-  --color-panel: #fffdf7;
-  --color-sun: #f2b233;
-  --color-wash: #72b0d6;
-  --color-leaf: #3e8d53;
-  --color-leaf-ink: #2a6f3d;
-  --color-hill-far: #b9d9a8;
-  --color-hill-mid: #8ac07c;
-  --color-hill-near: #5c9f5e;
+  /*
+    Two hours from one palette: afternoon by day, dusk when the system (or the nav's switch, which
+    sets data-theme on <html>) asks for dark. Each token names both, and the closing scene, which
+    is dusk by day, deepens into night.
+  */
+  --color-ink: light-dark(#2b3a44, #eef2f7);
+  --color-ink-muted: light-dark(#5c6770, #a9b4c2);
+  --color-ink-sky: light-dark(#3d5160, #c9d3e0);
+  --color-sky: light-dark(#e4f0f1, #1a2446);
+  /* Top of the sky gradient, also the browser's theme colour (root.tsx keeps the two in step) */
+  --color-sky-top: light-dark(#8cc1e2, #1a2446);
+  --color-panel: light-dark(#fffdf7, #232f48);
+  --color-sun: light-dark(#f2b233, #f5c45a);
+  /* Text on a sun fill, at either hour */
+  --color-on-sun: #2b3a44;
+  --color-wash: light-dark(#72b0d6, #8dbde6);
+  --color-leaf: light-dark(#3e8d53, #8dd5a0);
+  --color-leaf-ink: light-dark(#2a6f3d, #8dd5a0);
+  --color-hill-far: light-dark(#b9d9a8, #3b5470);
+  --color-hill-mid: light-dark(#8ac07c, #2c4a44);
+  --color-hill-near: light-dark(#5c9f5e, #1f3a31);
+  /* A dark well for code, dark at both hours */
+  --color-well: light-dark(#2b3a44, #121a30);
+  /* What catches the light in the scenery: white by day, lit windows at dusk */
+  --color-glow: light-dark(#fffdf7, #f5c45a);
 
   /* Data colours: one per organisation or domain, with an ink for text and a tint for fills */
   --color-blue: #4f8fd6;
-  --color-blue-ink: #2c65a3;
-  --color-blue-tint: color-mix(in srgb, #4f8fd6 16%, #fffdf7);
+  --color-blue-ink: light-dark(#2c65a3, #8fbbea);
+  --color-blue-tint: color-mix(in srgb, #4f8fd6 16%, var(--color-panel));
   --color-teal: #2e9c94;
-  --color-teal-ink: #1c6e67;
-  --color-teal-tint: color-mix(in srgb, #2e9c94 15%, #fffdf7);
+  --color-teal-ink: light-dark(#1c6e67, #6fcfc6);
+  --color-teal-tint: color-mix(in srgb, #2e9c94 15%, var(--color-panel));
   --color-orange: #fb923c;
-  --color-orange-ink: #a8521a;
-  --color-orange-tint: color-mix(in srgb, #fb923c 17%, #fffdf7);
+  --color-orange-ink: light-dark(#a8521a, #fbb37a);
+  --color-orange-tint: color-mix(in srgb, #fb923c 17%, var(--color-panel));
   --color-lavender: #8e7cc3;
-  --color-lavender-ink: #5e4f9c;
-  --color-lavender-tint: color-mix(in srgb, #8e7cc3 18%, #fffdf7);
+  --color-lavender-ink: light-dark(#5e4f9c, #b9ace0);
+  --color-lavender-tint: color-mix(in srgb, #8e7cc3 18%, var(--color-panel));
   --color-coral: #e07a5f;
-  --color-coral-ink: #a9472d;
-  --color-coral-tint: color-mix(in srgb, #e07a5f 18%, #fffdf7);
+  --color-coral-ink: light-dark(#a9472d, #f0a08c);
+  --color-coral-tint: color-mix(in srgb, #e07a5f 18%, var(--color-panel));
 
-  /* Dusk, for the closing scene */
+  /* Dusk, for the closing scene; night when the rest of the page is dusk */
   --color-dusk-ink: #eef2f7;
   --color-dusk-muted: #c9d3e0;
   --color-dusk-sun: #f5c45a;
-  --color-dusk-hill-far: #3b5470;
-  --color-dusk-hill-mid: #2c4a44;
-  --color-dusk-hill-near: #1f3a31;
+  --color-dusk-hill-far: light-dark(#3b5470, #1c2a44);
+  --color-dusk-hill-mid: light-dark(#2c4a44, #15262a);
+  --color-dusk-hill-near: light-dark(#1f3a31, #0f1c1a);
 
   /* Shape */
   --radius-tile: 22px;
@@ -55,9 +65,13 @@
   --radius-panel: 40px;
   --radius-scene: 44px;
 
-  --shadow-hair: 0 1px 2px rgb(43 58 68 / 0.06);
-  --shadow-raised: 0 1px 2px rgb(43 58 68 / 0.06), 0 12px 32px rgb(43 58 68 / 0.08);
-  --shadow-lifted: 0 1px 2px rgb(43 58 68 / 0.08), 0 16px 36px rgb(43 58 68 / 0.16);
+  /* Shadows: a breath of ink by day, deeper at dusk */
+  --shade-hair: light-dark(rgb(43 58 68 / 0.06), rgb(0 0 0 / 0.25));
+  --shade-raised: light-dark(rgb(43 58 68 / 0.08), rgb(0 0 0 / 0.35));
+  --shade-lifted: light-dark(rgb(43 58 68 / 0.16), rgb(0 0 0 / 0.5));
+  --shadow-hair: 0 1px 2px var(--shade-hair);
+  --shadow-raised: 0 1px 2px var(--shade-hair), 0 12px 32px var(--shade-raised);
+  --shadow-lifted: 0 1px 2px var(--shade-hair), 0 16px 36px var(--shade-lifted);
   --shadow-sun: 0 10px 30px rgb(242 178 51 / 0.45);
   --shadow-dusk-sun: 0 10px 40px rgb(245 196 90 / 0.45);
 }
@@ -68,6 +82,17 @@
   panel, so a component works toned or not.
 */
 @layer base {
+  :root {
+    /* Afternoon or dusk follows the system until the nav's switch chooses */
+    color-scheme: light dark;
+  }
+  :root[data-theme="afternoon"] {
+    color-scheme: light;
+  }
+  :root[data-theme="dusk"] {
+    color-scheme: dark;
+  }
+
   :root {
     --tone: var(--color-ink);
     --tone-ink: var(--color-ink);
@@ -104,4 +129,16 @@
   --color-tone: var(--tone);
   --color-tone-ink: var(--tone-ink);
   --color-tone-tint: var(--tone-tint);
+}
+
+/* `dusk:` styles apply when the page is dusk: chosen, or following a system set to dark */
+@custom-variant dusk {
+  &:where([data-theme="dusk"], [data-theme="dusk"] *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme]), :root:not([data-theme]) *) {
+      @slot;
+    }
+  }
 }

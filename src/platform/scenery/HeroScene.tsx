@@ -153,7 +153,7 @@ const Panel = ({ i, y, glint = false }: PanelProps): JSXOutput => (
     />
     {glint && (
       <path
-        class="fill-panel"
+        class="fill-glow"
         d="M43.5 177.6L44.1 179.6L46.1 180.2L44.1 180.8L43.5 182.8L42.9 180.8L40.9 180.2L42.9 179.6Z"
       />
     )}
@@ -162,7 +162,7 @@ const Panel = ({ i, y, glint = false }: PanelProps): JSXOutput => (
 
 const windows = (left: number, count: number): JSXOutput[] =>
   Array.from({ length: count }, (_, i) => (
-    <rect key={i} class="fill-panel" x={left + i * 4.5} y="193" width="2.9" height="2.6" rx="0.7" />
+    <rect key={i} class="fill-glow" x={left + i * 4.5} y="193" width="2.9" height="2.6" rx="0.7" />
   ));
 
 /** Catenary poles along the line, from the tunnel to past the right edge of the screen */

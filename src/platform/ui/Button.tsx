@@ -12,13 +12,13 @@ export type ButtonVariant =
   "sun" | "panel" | "panel-compact" | "ink" | "ink-compact" | "dusk" | "wash";
 
 const variants: Record<ButtonVariant, string> = {
-  sun: "min-h-14 gap-2.5 bg-sun px-7 text-base text-ink shadow-sun transition-transform hover:-translate-y-0.5",
+  sun: "min-h-14 gap-2.5 bg-sun px-7 text-base text-on-sun shadow-sun transition-transform hover:-translate-y-0.5",
   panel: "min-h-14 bg-panel/94 px-[26px] text-base text-ink transition-colors hover:bg-panel",
   "panel-compact":
     "min-h-[52px] gap-2.5 bg-panel/94 px-6 text-[15px] text-ink transition-colors hover:bg-panel",
   ink: "min-h-[52px] gap-2.5 bg-ink px-6 text-[15px] text-panel",
   "ink-compact": "min-h-10 bg-ink px-[18px] text-sm text-panel",
-  dusk: "min-h-[58px] gap-2.5 bg-dusk-sun px-[30px] text-base text-ink shadow-dusk-sun transition-transform hover:-translate-y-0.5",
+  dusk: "min-h-[58px] gap-2.5 bg-dusk-sun px-[30px] text-base text-on-sun shadow-dusk-sun transition-transform hover:-translate-y-0.5",
   wash: "min-h-11 gap-2 bg-wash/16 px-5 text-sm transition-colors hover:bg-wash/28",
 };
 

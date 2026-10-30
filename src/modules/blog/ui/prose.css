@@ -108,7 +108,7 @@
 }
 
 .prose pre {
-  @apply overflow-x-auto rounded-tile bg-ink p-5 font-mono text-[14px] leading-relaxed text-dusk-ink md:p-6 md:text-[15px];
+  @apply overflow-x-auto rounded-tile bg-well p-5 font-mono text-[14px] leading-relaxed text-dusk-ink md:p-6 md:text-[15px];
 }
 
 .prose pre code {

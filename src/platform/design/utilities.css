@@ -18,7 +18,7 @@
 
   ::selection {
     background-color: var(--color-sun);
-    color: var(--color-ink);
+    color: var(--color-on-sun);
   }
 
   :focus-visible {
@@ -53,19 +53,29 @@
   }
 }
 
-/* The sky is the only gradient, plus the low sun glowing behind a horizon */
+/*
+  The sky is the only gradient, plus the low sun glowing behind a horizon. By day the page's sky
+  is the afternoon and the closing scene is dusk; at dusk the page takes the dusk sky, toned down
+  towards the horizon so the panels stay calm over several screens, and the closing scene is night.
+*/
 @utility sky-afternoon {
   background-image: linear-gradient(
     180deg,
     var(--color-sky-top) 0%,
-    #bcddee 30%,
-    var(--color-sky) 70%,
-    #e9f2e6 100%
+    light-dark(#bcddee, #2e3e6e) 30%,
+    light-dark(#e4f0f1, #5a5178) 70%,
+    light-dark(#e9f2e6, #8a6a66) 100%
   );
 }
 
 @utility sky-dusk {
-  background-image: linear-gradient(180deg, #1a2446 0%, #2e3e6e 34%, #6a5a82 78%, #c98a63 100%);
+  background-image: linear-gradient(
+    180deg,
+    light-dark(#1a2446, #070b1a) 0%,
+    light-dark(#2e3e6e, #0f1733) 34%,
+    light-dark(#6a5a82, #22254a) 78%,
+    light-dark(#c98a63, #3a3050) 100%
+  );
 }
 
 @utility sun-glow {

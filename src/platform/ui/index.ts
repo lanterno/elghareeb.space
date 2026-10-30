@@ -10,7 +10,11 @@ export {
   GitHubIcon,
   LinkedInIcon,
   MenuIcon,
+  MoonIcon,
+  SunIcon,
 } from "./icons";
 export { LiveDot } from "./LiveDot";
 export { PageHeader } from "./PageHeader";
 export { SectionHeading } from "./SectionHeading";
+export { ThemeSwitch } from "./ThemeSwitch";
+export { THEME_KEY, themeColors } from "./theme";

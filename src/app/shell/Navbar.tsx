@@ -3,7 +3,7 @@ import { Link, useLocation } from "@builder.io/qwik-city";
 import { isBrowser } from "@builder.io/qwik/build";
 
 import { type NavItem, site } from "~/platform/seo";
-import { Button, CloseIcon, MenuIcon } from "~/platform/ui";
+import { Button, CloseIcon, MenuIcon, ThemeSwitch } from "~/platform/ui";
 
 interface NavLinkProps {
   page: NavItem;
@@ -70,6 +70,7 @@ export const Navbar = component$(() => {
           <Button href="#talk" variant="ink-compact">
             Let’s talk
           </Button>
+          <ThemeSwitch />
           <button
             type="button"
             popovertarget="site-menu"
