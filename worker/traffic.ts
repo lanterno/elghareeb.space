@@ -39,6 +39,8 @@ export interface Traffic {
   vitals: Vital[];
   /** Everything the Worker answered, by status code, crawlers and scanners included */
   answered: { status: number; n: number }[];
+  /** What the GraphQL API complained about while still answering the rest */
+  warnings: string[];
 }
 
 /** Google's thresholds for the 75th percentile; timings in milliseconds */
@@ -121,10 +123,9 @@ export async function loadTraffic(env: TrafficEnv, days: number): Promise<Traffi
     errors?: { message: string }[] | null;
   };
   const account = body.data?.viewer?.accounts?.[0];
-  if (account === undefined) {
-    throw new Error(body.errors?.[0]?.message ?? "the GraphQL API sent no data");
-  }
-  return foldTraffic(account, from, new Date());
+  const warnings = (body.errors ?? []).map((e) => e.message);
+  if (account === undefined) throw new Error(warnings[0] ?? "the GraphQL API sent no data");
+  return { ...foldTraffic(account, from, new Date()), warnings };
 }
 
 /** The page's numbers from the GraphQL groups; every day of the period gets a bar, empty or not */
@@ -161,6 +162,7 @@ export function foldTraffic(account: Account, from: Date, to: Date): Traffic {
     answered: (account.answered ?? [])
       .map((g) => ({ status: Number(dim(g, "statusCode")), n: g.sum?.requests ?? 0 }))
       .sort((a, b) => b.n - a.n),
+    warnings: [],
   };
 }
 

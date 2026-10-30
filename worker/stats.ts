@@ -226,12 +226,17 @@ function renderTraffic(data: StatsData): string {
         }</b><span>${escape(v.name)}</span><em>${escape(v.rating ?? "not measured yet")}</em></div>`
     )
     .join("");
+  const warnings =
+    t.warnings.length === 0
+      ? ""
+      : `<p class="empty">Cloudflare also said: ${t.warnings.map(escape).join(" ")}</p>`;
   const answered = t.answered.reduce((sum, a) => sum + a.n, 0);
   const notFound = t.answered.filter((a) => a.status === 404).reduce((sum, a) => sum + a.n, 0);
   return `<section>
     <h2>Traffic</h2>
     <div class="tiles"><div class="tile sun"><b>${String(t.views)}</b><span>page views</span></div><div class="tile"><b>${String(t.visits)}</b><span>visits</span></div></div>
     ${bars}
+    ${warnings}
   </section>
   <section>
     <h2>Pages</h2>
