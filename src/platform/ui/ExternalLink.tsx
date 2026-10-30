@@ -5,6 +5,8 @@ interface ExternalLinkProps {
   class?: ClassList;
   /** Lets a handful of elements be found by a script, e.g. the conference links */
   "data-last"?: string;
+  /** Names the interaction the event beacon reports for a click on this link */
+  "data-track"?: string;
   style?: Record<string, string>;
   children?: JSXChildren;
 }

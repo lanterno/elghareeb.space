@@ -33,10 +33,18 @@ interface ButtonProps {
   href: string;
   variant: ButtonVariant;
   class?: ClassList;
+  /** Names the interaction the event beacon reports for a click on this button */
+  "data-track"?: string;
   children?: JSXChildren;
 }
 
-export const Button = ({ href, variant, class: className, children }: ButtonProps): JSXOutput => {
+export const Button = ({
+  href,
+  variant,
+  class: className,
+  children,
+  ...rest
+}: ButtonProps): JSXOutput => {
   const classes: ClassList = [
     "inline-flex items-center rounded-full font-bold",
     variants[variant],
@@ -44,20 +52,20 @@ export const Button = ({ href, variant, class: className, children }: ButtonProp
   ];
   if (href.startsWith("#")) {
     return (
-      <a href={href} class={classes}>
+      <a href={href} class={classes} {...rest}>
         {children}
       </a>
     );
   }
   if (href.startsWith("/")) {
     return (
-      <Link href={href} class={classes}>
+      <Link href={href} class={classes} {...rest}>
         {children}
       </Link>
     );
   }
   return (
-    <ExternalLink href={href} class={classes}>
+    <ExternalLink href={href} class={classes} {...rest}>
       {children}
     </ExternalLink>
   );

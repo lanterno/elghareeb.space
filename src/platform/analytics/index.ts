@@ -1,0 +1,1 @@
+export { EventBeacon } from "./EventBeacon";

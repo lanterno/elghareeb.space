@@ -1,5 +1,6 @@
 import { component$, Slot } from "@builder.io/qwik";
 
+import { EventBeacon } from "~/platform/analytics";
 import { Clouds } from "~/platform/scenery";
 
 import { Footer } from "./Footer";
@@ -27,6 +28,7 @@ export default component$(() => {
       </main>
 
       <Footer />
+      <EventBeacon />
     </div>
   );
 });

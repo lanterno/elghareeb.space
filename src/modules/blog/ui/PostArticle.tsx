@@ -19,7 +19,7 @@ export const PostArticle = component$<{ slug: string }>(({ slug }) => {
   const post = postBySlug(visiblePosts, slug);
   if (post === undefined) return null;
   return (
-    <article class="wrap pt-6 md:pt-8">
+    <article class="wrap pt-6 md:pt-8" data-track-read>
       <div
         data-tone={post.tone}
         class="grid gap-x-12 rounded-panel bg-panel px-5 py-7 shadow-raised sm:px-8 md:px-12 md:py-10 lg:grid-cols-[minmax(0,1fr)_200px] xl:px-14"

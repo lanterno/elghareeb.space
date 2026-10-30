@@ -37,7 +37,7 @@ export const ClosingScene = component$<ClosingSceneProps>(({ eyebrow, title, bod
         </div>
         <div class="flex flex-col items-start gap-4">
           <p class="text-[17px] leading-relaxed text-dusk-muted">{body}</p>
-          <Button href={site.social.linkedin.url} variant="dusk">
+          <Button href={site.social.linkedin.url} variant="dusk" data-track="talk">
             Write to me on LinkedIn
             <ArrowRightIcon />
           </Button>
