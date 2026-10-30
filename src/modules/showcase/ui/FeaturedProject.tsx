@@ -1,9 +1,11 @@
-import { ArrowUpRightIcon, Button, Chip } from "~/platform/ui";
+import { ArrowRightIcon, Button, Chip } from "~/platform/ui";
+
+import { projectPath } from "../queries";
 
 import type { Project } from "../model";
 import type { JSXOutput } from "@builder.io/qwik";
 
-/** The big two-column card: the cover word in the project's tone, then the story. */
+/** The big two-column card: the cover word in the project's tone, then the short version, leading to its page. */
 export const FeaturedProject = ({ project }: { project: Project }): JSXOutput => (
   <section aria-labelledby={`featured-${project.slug}`} data-tone={project.tone} class="wrap pt-24">
     <article class="grid overflow-hidden rounded-panel bg-panel shadow-raised md:grid-cols-2">
@@ -30,9 +32,9 @@ export const FeaturedProject = ({ project }: { project: Project }): JSXOutput =>
             </Chip>
           ))}
         </ul>
-        <Button href={project.link} variant="ink" class="mt-1.5 self-start">
-          Open {project.name} on GitHub
-          <ArrowUpRightIcon />
+        <Button href={projectPath(project)} variant="ink" class="mt-1.5 self-start">
+          Read the story
+          <ArrowRightIcon />
         </Button>
       </div>
     </article>

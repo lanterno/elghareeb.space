@@ -1,13 +1,15 @@
-import { ExternalLink } from "~/platform/ui";
+import { Link } from "@builder.io/qwik-city";
+
+import { projectPath } from "../queries";
 
 import type { Project } from "../model";
 import type { JSXOutput } from "@builder.io/qwik";
 
-/** One project in a row: its cover on the tone's tint, then the short version. */
+/** One project in a row: its cover on the tone's tint, then the short version, leading to its page. */
 export const ProjectCard = ({ project }: { project: Project }): JSXOutput => (
   <li data-tone={project.tone}>
-    <ExternalLink
-      href={project.link}
+    <Link
+      href={projectPath(project)}
       class="flex h-full flex-col overflow-hidden rounded-card bg-panel text-ink shadow-hair transition-transform hover:-translate-y-1"
     >
       <span class="flex h-[200px] flex-col justify-between bg-tone-tint p-6">
@@ -24,9 +26,9 @@ export const ProjectCard = ({ project }: { project: Project }): JSXOutput => (
         <span class="flex-1 text-[15px] leading-[1.7] text-ink-muted">{project.description}</span>
         <span class="text-[13px] text-ink-muted">{project.tags.join(" · ")}</span>
         <span class="text-sm font-bold text-tone-ink">
-          Open on GitHub <span aria-hidden="true">→</span>
+          Read the story <span aria-hidden="true">→</span>
         </span>
       </span>
-    </ExternalLink>
+    </Link>
   </li>
 );
