@@ -15,7 +15,12 @@ history (`git log --all -- docs/history`).
 - **CSS delivery.** The global stylesheet is inlined into every page; once the blog multiplies
   them, measure whether a cached `<link>` wins.
 - **`@types/bun`** to replace `src/types/bun-test.d.ts`, the next time the lockfile is updated.
-- **Validate the feed** once with the W3C validator and a reader.
+
+## Analytics
+
+- **A stats page.** The Worker records interactions in Analytics Engine but nothing shows them;
+  a private page served by the same Worker, querying the SQL API with a read token kept as a
+  Worker secret, would.
 
 ## Blog, on demand
 
