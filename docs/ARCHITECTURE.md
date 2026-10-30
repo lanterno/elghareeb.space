@@ -4,7 +4,9 @@ A static Qwik City site, organised by subject rather than by file type. `platfor
 design, ui, scenery, seo, build plugins) imports only itself; `modules/` (career, showcase,
 activity, blog) import `platform`, and each other only through `~/modules/<x>`; `app/` (routes,
 pages, shell) imports everything through those public APIs. ESLint enforces this
-(`no-restricted-imports` in `eslint.config.js`).
+(`no-restricted-imports` in `eslint.config.js`). `worker/` is the one piece of code that runs on a
+server: the Cloudflare Worker that serves the built site and records interactions; it imports
+nothing from `src/`.
 
 ## A module
 
