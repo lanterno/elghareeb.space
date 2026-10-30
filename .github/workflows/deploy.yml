@@ -3,7 +3,7 @@ name: Deploy
 on:
   push:
     branches: [main]
-  # Run by hand to recompute the dates, the conferences, scheduled posts and the GitHub card
+  # Run by hand to publish a scheduled post or refresh the GitHub card
   workflow_dispatch:
 
 concurrency:

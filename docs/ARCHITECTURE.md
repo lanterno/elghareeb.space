@@ -5,8 +5,9 @@ design, ui, scenery, seo, build plugins) imports only itself; `modules/` (career
 activity, blog) import `platform`, and each other only through `~/modules/<x>`; `app/` (routes,
 pages, shell) imports everything through those public APIs. ESLint enforces this
 (`no-restricted-imports` in `eslint.config.js`). `worker/` is the one piece of code that runs on a
-server: the Cloudflare Worker that serves the built site and records interactions; it imports
-nothing from `src/`.
+server: the Cloudflare Worker that serves the built site, recounts its live dates and records
+interactions; from `src/` it imports only `platform/kernel/live.ts`, so it counts dates the way
+the build does.
 
 ## A module
 
@@ -32,8 +33,12 @@ tree-shaken out of the client. The blog does the same for every post's frontmatt
 re-exports it.
 
 **Anything derivable is derived.** Organisations are described once and referenced by `OrgId`. The
-"Right now" tile, "since Dec 2025", the project count, a post's slug and its colour are computed,
-as are the years of experience and which conferences still show, from the build date.
+"Right now" tile, the project count, a post's slug and its colour are computed at build time. The
+values that would go stale between pushes (the years of experience, the current role's duration,
+the copyright year, which conference balloons still show) are rendered with a `data-live-*`
+attribute (`platform/kernel/live.ts`) and recounted by the Worker on every request, so nothing
+rebuilds just to keep a date right. Scheduled posts are the exception: a post is only generated
+once a build runs on or after its date.
 
 ## Design system
 

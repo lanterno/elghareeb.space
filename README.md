@@ -44,9 +44,10 @@ Without it the card links to the profile and leaves out the chart.
 `.github/workflows/deploy.yml` builds on every push to `main` and uploads `dist/` to the Cloudflare
 Worker `personal-site` (`wrangler.jsonc`), which serves the domain. It needs the repository secret
 `CLOUDFLARE_API_TOKEN`, a token with Workers Scripts, Workers Routes and DNS edit on this account
-and zone. Nothing rebuilds between pushes, so the computed dates, the conferences, scheduled posts
-and the GitHub card are as current as the last push; run the workflow by hand from the Actions tab
-to refresh them. After a local `bun run build`, `bunx wrangler deploy` does the same from a machine
+and zone. Nothing rebuilds between pushes. The dates that would go stale (years of experience, the
+current role's duration, the conference balloons) are recounted by the Worker on each request;
+scheduled posts and the GitHub card are as current as the last push, so run the workflow by hand
+from the Actions tab to refresh them. After a local `bun run build`, `bunx wrangler deploy` does the same from a machine
 that has run `wrangler login`.
 
 ### Analytics
