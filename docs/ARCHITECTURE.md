@@ -43,7 +43,11 @@ once a build runs on or after its date.
 ## Design system
 
 - **Tokens** (`theme.css`) are the only palette; `--color-*: initial` removes Tailwind's defaults so
-  nothing off-brand can be used.
+  nothing off-brand can be used. Each token names its afternoon and its dusk value with
+  `light-dark()`, so the page follows the system's appearance; `color-scheme` on `<html>` (set by
+  `data-theme`, from the nav's switch via `localStorage`) picks one. A `dusk:` variant exists for
+  the few things that are not a colour (the switch's icons). The closing scene and the code wells
+  are dark at both hours, so their tokens (`dusk-*`, `well`) only deepen.
 - **Tones.** Each organisation, field, project and tag carries one of five tones, applied once with
   `data-tone="teal"`; everything inside uses `bg-tone`, `text-tone-ink`, `bg-tone-tint`. No lookup
   tables, and class names stay static for Tailwind to scan.
@@ -69,3 +73,4 @@ once a build runs on or after its date.
 | Global CSS inlined into each page     | One fewer render-blocking request; revisit when the blog multiplies pages, after measuring                                                                                                      |
 | Posts are `.md` folders named by slug | The folder is the URL, so renaming after publishing is deliberate; images beside the post, never in `public/`, so they go through the image pipeline                                            |
 | No pagination, no comments            | Paginate past ~20 posts; the closing card already routes conversation to LinkedIn                                                                                                               |
+| Projects are records with a story     | A project's page is rendered from `showcase/content/projects.ts`, not a markdown file: the same record feeds the card, the page and the sitemap, and the build checks that inside links resolve |

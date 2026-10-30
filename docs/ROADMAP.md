@@ -8,6 +8,12 @@ history (`git log --all -- docs/history`).
 - **CSS delivery.** The global stylesheet is inlined into every page; once the blog multiplies
   them, measure whether a cached `<link>` wins.
 
+## When there are words for it
+
+- **LifePete and Transparium.** They are named on the home page but have no page of their own;
+  the projects module can take a product once there is a story to tell about it.
+- **The stats page at dusk.** `/stats` has its own stylesheet and stays light.
+
 ## Blog, on demand
 
 Each is a small change inside `modules/blog`, for when a real post needs it: tag pages, series and
