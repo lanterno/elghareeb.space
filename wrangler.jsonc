@@ -21,7 +21,10 @@
     "binding": "ASSETS",
     "not_found_handling": "404-page",
     "html_handling": "auto-trailing-slash",
-    "run_worker_first": ["/api/*"],
+    "run_worker_first": ["/api/*", "/stats"],
   },
   "analytics_engine_datasets": [{ "binding": "EVENTS", "dataset": "site_events" }],
+  // /stats also needs two secrets, set once with `wrangler secret put`: STATS_PASSWORD and
+  // CF_ANALYTICS_TOKEN (an API token with Account Analytics: Read)
+  "vars": { "ACCOUNT_ID": "f8bc153fe7e73b012806460d95005a5a" },
 }

@@ -1,12 +1,12 @@
 /**
  * The Worker in front of the static site. Every request is served from the built assets, except
- * `POST /api/event`, which stores one interaction in Analytics Engine; see `event.ts` for what
- * is stored. Read it back with the SQL API: `SELECT blob1 AS name, blob2 AS path, blob3 AS
- * target, count() FROM site_events WHERE timestamp > NOW() - INTERVAL '30' DAY GROUP BY ALL`.
+ * two: `POST /api/event` stores one interaction in Analytics Engine (`event.ts` says what), and
+ * `GET /stats` shows them to the owner (`stats.ts`).
  */
 import { parseEvent } from "./event";
+import { type StatsEnv, statsResponse } from "./stats";
 
-interface Env {
+interface Env extends StatsEnv {
   ASSETS: { fetch(request: Request): Promise<Response> };
   EVENTS: {
     writeDataPoint(point: { indexes: string[]; blobs: string[]; doubles: number[] }): void;
@@ -21,6 +21,7 @@ interface EdgeRequest extends Request {
 export default {
   async fetch(request: EdgeRequest, env: Env): Promise<Response> {
     const { pathname } = new URL(request.url);
+    if (pathname === "/stats") return statsResponse(request, env);
     if (pathname !== "/api/event") return env.ASSETS.fetch(request);
     if (request.method !== "POST") {
       return new Response(null, { status: 405, headers: { allow: "POST" } });
