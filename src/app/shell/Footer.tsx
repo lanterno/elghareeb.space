@@ -1,3 +1,4 @@
+import { live } from "~/platform/kernel";
 import { site } from "~/platform/seo";
 import { ExternalLink, GitHubIcon, LinkedInIcon } from "~/platform/ui";
 
@@ -13,7 +14,8 @@ export const Footer = (): JSXOutput => (
   <footer class="bg-dusk-hill-near text-dusk-muted">
     <div class="wrap flex flex-wrap items-center justify-between gap-3 pb-8 pt-5 text-sm">
       <p>
-        © {String(new Date().getFullYear())} {site.author} · {site.location}
+        © <span {...live.year}>{String(new Date().getFullYear())}</span> {site.author} ·{" "}
+        {site.location}
       </p>
       <ul class="flex gap-2">
         {links.map(({ label, href, Icon }) => (

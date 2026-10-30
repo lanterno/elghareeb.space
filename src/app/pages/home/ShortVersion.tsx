@@ -1,8 +1,9 @@
 import { Link } from "@builder.io/qwik-city";
 
 import { type ContributionCalendar, GitHubCard } from "~/modules/activity";
-import { currentRole, organizations, yearsOfExperience } from "~/modules/career";
+import { careerStart, currentRole, organizations, yearsOfExperience } from "~/modules/career";
 import { projectCount } from "~/modules/showcase";
+import { live } from "~/platform/kernel";
 import { LiveDot, SectionHeading } from "~/platform/ui";
 
 import type { JSXOutput } from "@builder.io/qwik";
@@ -16,7 +17,7 @@ interface Tile {
   /** `null` for a plain panel that isn't tied to one organisation */
   tone: Tone | null;
   label: string;
-  figure: string;
+  figure: JSXOutput;
   line: string;
   cta: string;
   live: boolean;
@@ -27,7 +28,11 @@ const tiles: readonly Tile[] = [
     href: "/work/",
     tone: null,
     label: "Experience",
-    figure: `${String(yearsOfExperience())} yrs`,
+    figure: (
+      <>
+        <span {...live.years(careerStart)}>{String(yearsOfExperience())}</span> yrs
+      </>
+    ),
     line: "in backend and DevOps, from startups to research labs",
     cta: "Read the chapters",
     live: false,

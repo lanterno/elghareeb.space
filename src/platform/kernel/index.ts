@@ -1,5 +1,6 @@
 export { formatDay, formatDays, formatMonth, type IsoDate, isoToday, yearsSince } from "./dates";
 export { plural } from "./format";
+export { live } from "./live";
 export { formatDuration, formatPeriod, isCurrent, periodYears, yearSpan } from "./period";
 export {
   assertValid,

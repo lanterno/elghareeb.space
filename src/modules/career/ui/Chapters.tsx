@@ -1,4 +1,4 @@
-import { formatDuration, formatPeriod, isCurrent, periodYears } from "~/platform/kernel";
+import { formatDuration, formatPeriod, isCurrent, live, periodYears } from "~/platform/kernel";
 import { Chip, ExternalLink, SectionHeading } from "~/platform/ui";
 
 import { experiences, organizations } from "../content";
@@ -28,7 +28,10 @@ export const Chapters = (): JSXOutput => (
                 {years.to !== null && <span class="text-[22px] text-ink-muted"> → {years.to}</span>}
               </p>
               <p class="text-sm text-ink-muted">
-                {formatPeriod(experience)} · {formatDuration(experience)}
+                {formatPeriod(experience)} ·{" "}
+                <span {...(isCurrent(experience) ? live.duration(experience.start) : {})}>
+                  {formatDuration(experience)}
+                </span>
               </p>
               {isCurrent(experience) && (
                 <p class="self-start rounded-full bg-tone-tint px-3 py-1.5 text-[13px] font-bold text-tone-ink">
