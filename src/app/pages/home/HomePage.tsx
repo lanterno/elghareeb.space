@@ -2,7 +2,7 @@ import { component$ } from "@builder.io/qwik";
 
 import { useGitHubActivity } from "~/modules/activity";
 import { LatestWriting } from "~/modules/blog";
-import { SkillsMarquee } from "~/modules/career";
+import { currentRole, organizations, SkillsMarquee } from "~/modules/career";
 import { pageHead } from "~/platform/seo";
 import { ClosingScene } from "~/platform/ui";
 
@@ -13,6 +13,9 @@ import type { DocumentHead } from "@builder.io/qwik-city";
 
 /** The home page composes the career, showcase, activity and blog modules. Its loader comes from activity. */
 export { useGitHubActivity };
+
+const role = currentRole();
+const employer = organizations[role.org];
 
 export default component$(() => {
   const gitHubActivity = useGitHubActivity();
@@ -37,4 +40,5 @@ export const head: DocumentHead = pageHead({
   description:
     "Staff Software Engineer at Resilio, building climate accountability software. Before that, three years on Switzerland’s digital identity at EPFL’s Center for Digital Trust. Open to collaborate on digital identity, climate and IoT.",
   path: "/",
+  person: { jobTitle: role.title, worksFor: { name: employer.name, url: employer.url } },
 });

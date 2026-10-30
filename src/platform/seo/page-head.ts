@@ -1,4 +1,5 @@
 import { site } from "./site";
+import { structuredDataScript } from "./structured-data";
 
 import type { DocumentHeadValue } from "@builder.io/qwik-city";
 
@@ -12,11 +13,13 @@ interface PageHeadOptions {
   bare?: boolean;
   /** A blog post rather than a page */
   article?: { published: string; updated?: string };
+  /** What the author does, for the structured data of the pages that say so */
+  person?: { jobTitle: string; worksFor: { name: string; url: string } };
 }
 
 /**
- * Title, description, canonical link and the Open Graph card for one page. X (Twitter) reads the
- * Open Graph tags, so only the card type is set for it.
+ * Title, description, canonical link, the Open Graph card and the structured data for one page.
+ * X (Twitter) reads the Open Graph tags, so only the card type is set for it.
  */
 export function pageHead({
   title,
@@ -24,6 +27,7 @@ export function pageHead({
   path,
   bare,
   article,
+  person,
 }: PageHeadOptions): DocumentHeadValue {
   const url = new URL(path, site.url).href;
   const image = new URL(site.ogImage.path, site.url).href;
@@ -58,5 +62,18 @@ export function pageHead({
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "canonical", href: url }],
+    scripts: [
+      {
+        key: "structured-data",
+        props: { type: "application/ld+json" },
+        script: structuredDataScript({
+          title: fullTitle,
+          description,
+          url,
+          ...(article === undefined ? {} : { article }),
+          ...(person === undefined ? {} : { person }),
+        }),
+      },
+    ],
   };
 }
