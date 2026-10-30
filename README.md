@@ -51,12 +51,16 @@ that has run `wrangler login`.
 
 ### Analytics
 
-Page views come from Cloudflare Web Analytics, injected at the edge, nothing in the code. A few
-interactions (clicks on links to other sites, the closing call, how far a post is read) are
+Page views are measured by Cloudflare Web Analytics, injected at the edge, nothing in the code. A
+few interactions (clicks on links to other sites, the closing call, how far a post is read) are
 reported by `src/platform/analytics/EventBeacon.tsx` to `worker/index.ts`, which stores them in the
 Analytics Engine dataset `site_events` without anything that identifies a visitor.
-[elghareeb.space/stats](https://elghareeb.space/stats) shows them, behind a password. It needs two
-Worker secrets, set once from a machine that has run `wrangler login`:
+[elghareeb.space/stats](https://elghareeb.space/stats) puts both on one page, behind a password:
+traffic, pages, referrers, devices and Core Web Vitals through the GraphQL Analytics API
+(`worker/traffic.ts`, which the account's plan caps at 32 days back), and the interactions through
+the Analytics Engine SQL API. The Web Analytics site tag is `WEB_ANALYTICS_SITE` in
+`wrangler.jsonc`; the page needs two Worker secrets, set once from a machine that has run
+`wrangler login`:
 
 ```bash
 bunx wrangler secret put STATS_PASSWORD      # whatever you'll type into the browser's prompt
