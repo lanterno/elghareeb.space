@@ -20,7 +20,8 @@ export default defineConfig(() => {
           ],
         },
       }),
-      qwikVite(),
+      // RouterHead preloads the four faces a page paints with; the arrow-only subsets can wait
+      qwikVite({ disableFontPreload: true }),
       tsconfigPaths(),
     ],
     server: {
