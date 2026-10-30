@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 
 import { formatDay, formatDays, formatMonth, isoToday, yearsSince } from "./dates";
 import { plural } from "./format";
+import { live, liveShown, liveText } from "./live";
 import { formatDuration, formatPeriod, isCurrent, periodYears, yearSpan } from "./period";
 
 const on = (iso: string): Date => new Date(`${iso}T12:00:00Z`);
@@ -90,5 +91,39 @@ describe("yearSpan / periodYears / isCurrent", () => {
     });
     expect(isCurrent({ start: "2025-12-07", end: null })).toBeTrue();
     expect(isCurrent({ start: "2024-09", end: "2024-11" })).toBeFalse();
+  });
+});
+
+describe("live", () => {
+  test("recounts the texts on the given day", () => {
+    expect(liveText("data-live-years", "2014-07-15", on("2026-10-30"))).toBe("12");
+    expect(liveText("data-live-years", "2014-07-15", on("2027-07-14"))).toBe("12");
+    expect(liveText("data-live-years", "2014-07-15", on("2027-07-15"))).toBe("13");
+    expect(liveText("data-live-duration", "2025-12-07", on("2026-10-30"))).toBe("10 months");
+    expect(liveText("data-live-duration", "2025-12-07", on("2029-01-07"))).toBe("3 years 1 month");
+    expect(liveText("data-live-year", "", on("2027-01-01"))).toBe("2027");
+  });
+
+  test("keeps an element until its last day ends", () => {
+    expect(liveShown("data-live-until", "2026-11-12", on("2026-11-12"))).toBe(true);
+    expect(liveShown("data-live-until", "2026-11-12", on("2026-11-13"))).toBe(false);
+  });
+
+  test("shows 'during' only within the days, and 'outside' only beyond them", () => {
+    const days = "2026-11-09/2026-11-12";
+    expect(liveShown("data-live-during", days, on("2026-11-08"))).toBe(false);
+    expect(liveShown("data-live-during", days, on("2026-11-09"))).toBe(true);
+    expect(liveShown("data-live-during", days, on("2026-11-12"))).toBe(true);
+    expect(liveShown("data-live-during", days, on("2026-11-13"))).toBe(false);
+    expect(liveShown("data-live-outside", days, on("2026-11-08"))).toBe(true);
+    expect(liveShown("data-live-outside", days, on("2026-11-10"))).toBe(false);
+    expect(liveShown("data-live-outside", days, on("2026-11-13"))).toBe(true);
+  });
+
+  test("the attributes the pages render match what is recounted", () => {
+    expect(live.years("2014-07-15")).toEqual({ "data-live-years": "2014-07-15" });
+    expect(live.during("2026-11-09", "2026-11-12")).toEqual({
+      "data-live-during": "2026-11-09/2026-11-12",
+    });
   });
 });
