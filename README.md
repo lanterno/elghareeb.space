@@ -26,23 +26,35 @@ At Resilio I lead the platform's architecture. At C4DT I worked on the technolog
 
 ## About This Repository
 
-This is the source code for my personal portfolio website.
-
-### Running locally
-
-You need [Bun](https://bun.sh) 1.4.4 or newer.
+The source of my site: a static Qwik City build, deployed on every push to `main`.
 
 ```bash
-bun install
+bun install   # Bun 1.4.4 or newer, as the deploy pins
 bun run dev
 ```
 
-The site is then available at `http://localhost:5173`. To build the static site into `dist/`, run `bun run build`.
+`bun run build` also type-checks and lints, and it is where the content is validated: a bad date
+in a job or a post fails the build and names the field.
 
-- 📖 **[Development](docs/DEVELOPMENT.md)** — Checks, the build token and the two deploys
-- ✍️ **[Writing a post](docs/WRITING.md)** — How to add a blog post
-- 🏗️ **[Architecture](docs/ARCHITECTURE.md)** — The layers, the module template, the design system and the decisions behind them
-- 🧭 **[Roadmap](docs/ROADMAP.md)** — What is still open
+`GITHUB_TOKEN` lets the build read my contribution calendar for the home page's GitHub card.
+Without it the card links to the profile and leaves out the chart.
+
+### Deployment
+
+Two pipelines deploy on every push to `main`:
+
+- **GitHub Pages** (`.github/workflows/deploy.yml`) serves the domain. Nothing rebuilds between
+  pushes, so the computed dates, the conferences, scheduled posts and the GitHub card are as current
+  as the last push; run the workflow by hand from the Actions tab to refresh them.
+- **Cloudflare Workers.** The repository is connected to the Worker `personal-site` through Workers
+  Builds (`bun run build`, then `bunx wrangler deploy`, per `wrangler.jsonc`). It needs a build
+  token selected in the Worker's build settings on the Cloudflare dashboard.
+
+Keeping one is an open decision; see the roadmap.
+
+- [Architecture](docs/ARCHITECTURE.md): the layers, the module template and the decisions behind them
+- [Writing a post](docs/WRITING.md)
+- [Roadmap](docs/ROADMAP.md): what is still open
 
 ## License
 
