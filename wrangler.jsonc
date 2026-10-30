@@ -5,8 +5,12 @@
   "name": "personal-site",
   "account_id": "f8bc153fe7e73b012806460d95005a5a",
   "compatibility_date": "2025-12-07",
-  // The domain is a custom domain of the Worker: the deploy creates and keeps its DNS record
-  "routes": [{ "pattern": "elghareeb.space", "custom_domain": true }],
+  // Both hostnames are custom domains of the Worker: the deploy creates and keeps their DNS
+  // records. public/_redirects sends www to the bare domain.
+  "routes": [
+    { "pattern": "elghareeb.space", "custom_domain": true },
+    { "pattern": "www.elghareeb.space", "custom_domain": true },
+  ],
   "assets": {
     "directory": "./dist",
     "not_found_handling": "404-page",
