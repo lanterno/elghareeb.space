@@ -168,11 +168,13 @@ inside the same loop.
 
 The last two lines matter most, and two stories from the recent work show why.
 
-The site has two deployment configurations for one domain, GitHub Pages and Cloudflare Workers,
-because one was added while the other was still live. The agent that found this listed it as the
-first finding and refused to delete either, because it couldn't tell which one was serving the
-site and the wrong guess takes the site down. It is still waiting for me to decide. That's the
-right instinct, and it's the same one I'd want from a person.
+For a while the site had two deployment configurations for one domain, GitHub Pages and
+Cloudflare Workers, because one was added while the other was still live. The agent that found
+this listed it as the first finding and refused to delete either, because it couldn't tell which
+one was serving the site and the wrong guess takes the site down. It waited for me to decide, and
+I only did once I wanted something one of them couldn't give me: visitor statistics without a
+cookie banner. The site moved to Cloudflare at the end of October. That's the right instinct, and
+it's the same one I'd want from a person.
 
 > Lightning CSS silently emitted an empty `@keyframes live {}` when a `color-mix()` landed inside
 > the keyframes. The pulsing dot next to "Open to collaborate" would have quietly stopped
