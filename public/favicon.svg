@@ -1,4 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <rect width="100" height="100" rx="32" fill="#2b3a44"/>
-  <text x="50" y="69" font-family="'M PLUS Rounded 1c', 'Arial Rounded MT Bold', 'Helvetica Neue', Arial, sans-serif" font-size="58" font-weight="800" fill="#fffdf7" text-anchor="middle">A</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Ahmed Elghareeb">
+  <rect width="120" height="120" rx="26" fill="#2b3a44"/>
+  <g fill="#d8f03c">
+    <rect x="0" y="49" width="15" height="11"/>
+    <rect x="53" y="49" width="14" height="11"/>
+    <rect x="105" y="49" width="15" height="11"/>
+  </g>
+  <g fill="none" stroke="#d8f03c" stroke-width="5">
+    <rect x="15" y="39" width="38" height="42" rx="10"/>
+    <rect x="67" y="39" width="38" height="42" rx="10"/>
+  </g>
+  <circle cx="94" cy="51" r="4" fill="#fffdf7"/>
 </svg>
