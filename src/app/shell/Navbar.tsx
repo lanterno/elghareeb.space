@@ -3,7 +3,7 @@ import { Link, useLocation } from "@builder.io/qwik-city";
 import { isBrowser } from "@builder.io/qwik/build";
 
 import { type NavItem, site } from "~/platform/seo";
-import { Button, CloseIcon, MenuIcon, ThemeSwitch } from "~/platform/ui";
+import { Button, CloseIcon, LogoMark, MenuIcon, ThemeSwitch } from "~/platform/ui";
 
 interface NavLinkProps {
   page: NavItem;
@@ -47,12 +47,7 @@ export const Navbar = component$(() => {
     <nav aria-label="Main" class="relative mx-auto max-w-[720px] [anchor-name:--site-nav]">
       <div class="flex items-center justify-between gap-3 rounded-full bg-panel/94 py-2 pl-3 pr-2 shadow-raised">
         <Link href="/" class="flex items-center gap-2.5 rounded-full text-ink">
-          <span
-            aria-hidden="true"
-            class="grid h-9 w-9 place-items-center rounded-[12px] bg-ink font-display text-lg font-extrabold text-panel"
-          >
-            A
-          </span>
+          <LogoMark />
           <span class="text-[15px] font-bold">
             Ahmed<span class="hidden sm:inline"> Elghareeb</span>
           </span>

@@ -31,6 +31,8 @@
   --color-hill-near: light-dark(#5c9f5e, #1f3a31);
   /* A dark well for code, dark at both hours */
   --color-well: light-dark(#2b3a44, #121a30);
+  /* The logo mark's frames, the colour of the glasses. Only the mark uses it, on a well */
+  --color-lime: #d8f03c;
   /* What catches the light in the scenery: white by day, lit windows at dusk */
   --color-glow: light-dark(#fffdf7, #f5c45a);
 

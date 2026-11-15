@@ -47,7 +47,8 @@ once a build runs on or after its date.
   `light-dark()`, so the page follows the system's appearance; `color-scheme` on `<html>` (set by
   `data-theme`, from the nav's switch via `localStorage`) picks one. A `dusk:` variant exists for
   the few things that are not a colour (the switch's icons). The closing scene and the code wells
-  are dark at both hours, so their tokens (`dusk-*`, `well`) only deepen.
+  are dark at both hours, so their tokens (`dusk-*`, `well`) only deepen. `lime` belongs to the logo
+  mark alone, which sits on a well for the same reason.
 - **Tones.** Each organisation, field, project and tag carries one of five tones, applied once with
   `data-tone="teal"`; everything inside uses `bg-tone`, `text-tone-ink`, `bg-tone-tint`. No lookup
   tables, and class names stay static for Tailwind to scan.
