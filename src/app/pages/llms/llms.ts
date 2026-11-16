@@ -97,6 +97,11 @@ function llmsIndex(): string {
             url: url("/llms-full.txt"),
             description: "Every page and post on this site in full, as markdown",
           },
+          {
+            title: "resume.json",
+            url: url("/resume.json"),
+            description: "The CV in the JSON Resume format",
+          },
         ],
       },
     ],

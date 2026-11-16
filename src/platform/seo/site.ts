@@ -72,7 +72,7 @@ export const site = {
   ],
   social: {
     github: { login: "lanterno", url: "https://github.com/lanterno" },
-    linkedin: { url: "https://linkedin.com/in/ahmedelghareeb" },
+    linkedin: { username: "ahmedelghareeb", url: "https://linkedin.com/in/ahmedelghareeb" },
   },
 } as const;
 
