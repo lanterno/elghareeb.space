@@ -84,7 +84,8 @@ describe("structuredData", () => {
       containedInPlace: { name: "District de l’Ouest lausannois" },
     });
     expect(bare?.["hasOccupation"]).toMatchObject({
-      alternateName: "Software developer",
+      name: "Staff Software Engineer",
+      alternateName: ["Software engineer", "Software developer"],
       occupationLocation: [
         { "@type": "City", name: "Chavannes-près-Renens" },
         { "@type": "City", name: "Renens" },
