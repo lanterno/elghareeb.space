@@ -131,7 +131,7 @@ export default component$(() => {
 export const head: DocumentHead = pageHead({
   title: "About",
   description:
-    "Software engineer in Renens, Switzerland, drawn to problems where the software has to be right. Climatebase Fellow, MITx MicroMasters in statistics and data science.",
+    "Software engineer in Chavannes-près-Renens, Switzerland, drawn to problems where the software has to be right. Climatebase Fellow, MITx MicroMasters in statistics and data science.",
   path: "/about/",
   person: authorDetails(),
   profile: true,

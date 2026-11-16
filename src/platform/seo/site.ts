@@ -7,10 +7,24 @@ export const site = {
   author: "Ahmed Elghareeb",
   /** Appears after the page's own title: "Work | Ahmed Elghareeb" */
   titleSuffix: " | Ahmed Elghareeb",
-  location: "Renens, Switzerland",
+  /** Shown in the footer */
+  location: "Chavannes-près-Renens, Switzerland",
+  /**
+   * Where the author lives, for the structured data. `nearby` are the towns next door that people
+   * search for; they are named only to machines (the structured data and /llms.txt), never on
+   * the page.
+   */
+  home: {
+    locality: "Chavannes-près-Renens",
+    postalCode: "1022",
+    district: "District de l’Ouest lausannois",
+    region: "Vaud",
+    country: "CH",
+    nearby: ["Renens", "Lausanne"],
+  },
   locale: "en_US",
   /** One sentence on the author, for the structured data and /llms.txt */
-  bio: "Software engineer in Renens, Switzerland, drawn to problems where the software has to be right: digital identity, climate and IoT.",
+  bio: "Software engineer in Chavannes-près-Renens, next to Renens and Lausanne, Switzerland, drawn to problems where the software has to be right: digital identity, climate and IoT.",
   /** The fields the author works in, as search engines and AI assistants should know them */
   knowsAbout: [
     "Digital identity",

@@ -53,6 +53,13 @@ const websiteId = `${site.url}/#website`;
 const personId = `${site.url}/#person`;
 
 function personNode(image: string, person: PersonDetails | undefined): object {
+  const address = {
+    "@type": "PostalAddress",
+    addressLocality: site.home.locality,
+    postalCode: site.home.postalCode,
+    addressRegion: site.home.region,
+    addressCountry: site.home.country,
+  };
   return {
     "@type": "Person",
     "@id": personId,
@@ -62,7 +69,28 @@ function personNode(image: string, person: PersonDetails | undefined): object {
     description: site.bio,
     knowsAbout: site.knowsAbout,
     sameAs: [site.social.github.url, site.social.linkedin.url],
-    address: { "@type": "PostalAddress", addressLocality: "Renens", addressCountry: "CH" },
+    address,
+    homeLocation: {
+      "@type": "Place",
+      name: site.home.locality,
+      address,
+      containedInPlace: {
+        "@type": "AdministrativeArea",
+        name: site.home.district,
+        containedInPlace: { "@type": "AdministrativeArea", name: site.home.region },
+      },
+    },
+    /** "Developer" is how people search; the job title says "engineer" */
+    hasOccupation: {
+      "@type": "Occupation",
+      name: "Software engineer",
+      alternateName: "Software developer",
+      occupationLocation: [site.home.locality, ...site.home.nearby].map((name) => ({
+        "@type": "City",
+        name,
+      })),
+      skills: site.knowsAbout,
+    },
     ...(person === undefined
       ? {}
       : {

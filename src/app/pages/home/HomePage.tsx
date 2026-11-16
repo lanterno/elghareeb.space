@@ -35,7 +35,7 @@ export const head: DocumentHead = pageHead({
   title: "Ahmed Elghareeb | Staff Software Engineer",
   bare: true,
   description:
-    "Staff Software Engineer at Resilio, building climate accountability software. Before that, three years on Switzerland’s digital identity at EPFL’s Center for Digital Trust. Open to collaborate on digital identity, climate and IoT.",
+    "Software engineer in Chavannes-près-Renens, Switzerland. Staff Software Engineer at Resilio, building climate accountability software; before that, three years on Switzerland’s digital identity at EPFL’s Center for Digital Trust. Open to collaborate on digital identity, climate and IoT.",
   path: "/",
   person: authorDetails(),
 });
