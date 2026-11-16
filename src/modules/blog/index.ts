@@ -12,4 +12,5 @@ export {
   default as PostPage,
 } from "./pages/PostPage";
 export { visiblePosts } from "./repository";
+export { postSource } from "./source";
 export { LatestWriting } from "./ui/LatestWriting";

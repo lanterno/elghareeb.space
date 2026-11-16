@@ -44,3 +44,20 @@ export function renderLlms(content: LlmsContent): string {
     ...content.sections.flatMap(section),
   ].join("\n");
 }
+
+/** One page of the site as text, for /llms-full.txt */
+export interface LlmsDocument {
+  title: string;
+  /** Absolute URL of the page the text comes from */
+  url: string;
+  /** Markdown */
+  body: string;
+}
+
+/** /llms-full.txt: the index of /llms.txt, then every document in full, each under a rule */
+export function renderLlmsFull(index: string, documents: readonly LlmsDocument[]): string {
+  const parts = documents.map(
+    ({ title, url, body }) => `---\n\n# ${title}\n\nSource: ${url}\n\n${body.trim()}`
+  );
+  return `${[index.trimEnd(), ...parts].join("\n\n")}\n`;
+}

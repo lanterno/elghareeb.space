@@ -6,6 +6,7 @@ export {
   careerStart,
   certifications,
   education,
+  experiences,
   highlights,
   organizations,
   skillGroups,
