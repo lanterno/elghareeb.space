@@ -6,4 +6,5 @@ export {
   default as ProjectPage,
 } from "./pages/ProjectPage";
 export { head as projectsHead, default as ProjectsPage } from "./pages/ProjectsPage";
-export { projectCount } from "./queries";
+export { projects } from "./content";
+export { projectCount, projectPath } from "./queries";

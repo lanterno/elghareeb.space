@@ -11,4 +11,5 @@ export {
   onStaticGenerate as postOnStaticGenerate,
   default as PostPage,
 } from "./pages/PostPage";
+export { visiblePosts } from "./repository";
 export { LatestWriting } from "./ui/LatestWriting";
