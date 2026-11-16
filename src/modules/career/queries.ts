@@ -10,7 +10,7 @@ import {
   organizations,
 } from "./content";
 
-import type { Conference, Experience } from "./model";
+import type { Conference, Experience, Organization } from "./model";
 import type { PersonDetails } from "~/platform/seo";
 
 /** The role still going; the most recent one if, for a while, none is */
@@ -22,7 +22,8 @@ export function currentRole(list: readonly Experience[] = experiences): Experien
 
 /**
  * The author as the structured data names them on the pages about the work: the current role and
- * employer, the schools, and the fellowships (the certifications that are not courses).
+ * employer, the employers before it, the schools, and the fellowships (the certifications that
+ * are not courses).
  */
 export function authorDetails(list: readonly Experience[] = experiences): PersonDetails {
   const role = currentRole(list);
@@ -31,6 +32,12 @@ export function authorDetails(list: readonly Experience[] = experiences): Person
     jobTitle: role.title,
     worksFor: { name: employer.name, url: employer.url },
     alumniOf: education.map((school) => school.institution),
+    formerEmployers: list
+      .filter((experience) => experience.end !== null && experience.type !== "Fellowship")
+      .map((experience) => {
+        const org: Organization = organizations[experience.org];
+        return { name: org.fullName ?? org.name, url: org.url };
+      }),
     awards: certifications
       .filter((certification) => certification.name.includes("Fellow"))
       .map((certification) => certification.name),

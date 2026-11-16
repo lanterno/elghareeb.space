@@ -25,15 +25,36 @@ export const site = {
   locale: "en_US",
   /** One sentence on the author, for the structured data and /llms.txt */
   bio: "Staff Software Engineer in Chavannes-près-Renens, next to Renens and Lausanne, Switzerland, drawn to problems where the software has to be right: digital identity, climate and IoT.",
-  /** The fields the author works in, as search engines and AI assistants should know them */
+  /** Said wherever the author is introduced to machines, and shown on the Work with me page */
+  availability: "Available for freelance and contract work.",
+  /** The languages the author works in */
+  languages: ["English", "French", "Arabic"],
+  /**
+   * The fields the author works in, as search engines and AI assistants should know them: the
+   * words people use when they ask for someone who knows them. Each is shown on the site.
+   */
   knowsAbout: [
     "Digital identity",
+    "Swiss E-ID",
     "Verifiable credentials",
+    "Digital wallets",
     "Selective disclosure",
+    "Zero-knowledge proofs",
+    "Applied cryptography",
+    "Homomorphic encryption",
     "Climate accountability software",
+    "Climate tech",
     "Sustainable IT",
     "Internet of Things",
     "Software architecture",
+    "Domain-Driven Design",
+    "Backend development",
+    "Python",
+    "Django",
+    "TypeScript",
+    "Rust",
+    "Research software engineering",
+    "AI-assisted software development",
   ],
   /** The link-preview card, 1200 × 630, in public/ */
   ogImage: {

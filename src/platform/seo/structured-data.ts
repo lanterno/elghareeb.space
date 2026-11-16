@@ -20,6 +20,8 @@ export interface PersonDetails {
   worksFor: { name: string; url: string };
   /** Schools, by name */
   alumniOf?: readonly string[];
+  /** The organisations the author worked at before */
+  formerEmployers?: readonly { name: string; url: string }[];
   /** Fellowships and recognitions, as their names */
   awards?: readonly string[];
 }
@@ -47,12 +49,57 @@ export interface PageDescription {
   software?: SoftwareDescription;
   /** From the home page down to this page; left out for top-level pages */
   breadcrumb?: readonly Crumb[];
+  /** The services the author offers, on the page that lists them */
+  offers?: readonly Offering[];
+  /** Questions the page answers: a `FAQPage` rather than a `WebPage` */
+  faq?: readonly Question[];
+}
+
+/** One service the author offers */
+export interface Offering {
+  name: string;
+  description: string;
+}
+
+/** A question the page answers, in plain text */
+export interface Question {
+  question: string;
+  answer: string;
 }
 
 const websiteId = `${site.url}/#website`;
 const personId = `${site.url}/#person`;
 
-function personNode(image: string, person: PersonDetails | undefined): object {
+function offerNode({ name, description }: Offering): object {
+  return {
+    "@type": "Offer",
+    itemOffered: {
+      "@type": "Service",
+      name,
+      description,
+      serviceType: "Freelance software engineering",
+      provider: { "@id": personId },
+      areaServed: [
+        { "@type": "Country", name: "Switzerland" },
+        { "@type": "Place", name: "Europe" },
+      ],
+      availableLanguage: site.languages,
+    },
+  };
+}
+
+function alumni(person: PersonDetails): object[] {
+  return [
+    ...(person.alumniOf ?? []).map((name) => ({ "@type": "EducationalOrganization", name })),
+    ...(person.formerEmployers ?? []).map((org) => ({ "@type": "Organization", ...org })),
+  ];
+}
+
+function personNode(
+  image: string,
+  person: PersonDetails | undefined,
+  offers: readonly Offering[] | undefined
+): object {
   const address = {
     "@type": "PostalAddress",
     addressLocality: site.home.locality,
@@ -66,8 +113,9 @@ function personNode(image: string, person: PersonDetails | undefined): object {
     name: site.author,
     url: site.url,
     image,
-    description: site.bio,
+    description: `${site.bio} ${site.availability}`,
     knowsAbout: site.knowsAbout,
+    knowsLanguage: site.languages.map((name) => ({ "@type": "Language", name })),
     sameAs: [site.social.github.url, site.social.linkedin.url],
     address,
     homeLocation: {
@@ -96,21 +144,20 @@ function personNode(image: string, person: PersonDetails | undefined): object {
       : {
           jobTitle: person.jobTitle,
           worksFor: { "@type": "Organization", ...person.worksFor },
-          ...(person.alumniOf === undefined
-            ? {}
-            : {
-                alumniOf: person.alumniOf.map((name) => ({
-                  "@type": "EducationalOrganization",
-                  name,
-                })),
-              }),
+          ...(alumni(person).length === 0 ? {} : { alumniOf: alumni(person) }),
           ...(person.awards === undefined ? {} : { award: person.awards }),
         }),
+    ...(offers === undefined ? {} : { makesOffer: offers.map(offerNode) }),
   };
 }
 
+function pageType(profile: boolean | undefined, faq: readonly Question[] | undefined): string {
+  if (profile === true) return "ProfilePage";
+  return faq === undefined ? "WebPage" : "FAQPage";
+}
+
 function pageNode(
-  { title, description, url, article, profile, software, breadcrumb }: PageDescription,
+  { title, description, url, article, profile, software, breadcrumb, faq }: PageDescription,
   image: string
 ): object {
   const trail = breadcrumb === undefined ? {} : { breadcrumb: { "@id": `${url}#breadcrumb` } };
@@ -132,7 +179,7 @@ function pageNode(
     };
   }
   return {
-    "@type": profile === true ? "ProfilePage" : "WebPage",
+    "@type": pageType(profile, faq),
     "@id": url,
     url,
     name: title,
@@ -140,6 +187,15 @@ function pageNode(
     isPartOf: { "@id": websiteId },
     ...(profile === true ? { mainEntity: { "@id": personId } } : {}),
     about: { "@id": software === undefined ? personId : `${url}#software` },
+    ...(faq === undefined
+      ? {}
+      : {
+          mainEntity: faq.map(({ question, answer }) => ({
+            "@type": "Question",
+            name: question,
+            acceptedAnswer: { "@type": "Answer", text: answer },
+          })),
+        }),
     inLanguage: "en",
     ...trail,
   };
@@ -181,11 +237,11 @@ export function structuredData(page: PageDescription): object {
         "@id": websiteId,
         url: site.url,
         name: site.author,
-        description: site.bio,
+        description: `${site.bio} ${site.availability}`,
         publisher: { "@id": personId },
         inLanguage: "en",
       },
-      personNode(image, page.person),
+      personNode(image, page.person, page.offers),
       pageNode(page, image),
       ...(page.software === undefined
         ? []

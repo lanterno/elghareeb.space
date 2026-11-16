@@ -1,7 +1,9 @@
 import { site } from "./site";
 import {
   type Crumb,
+  type Offering,
   type PersonDetails,
+  type Question,
   type SoftwareDescription,
   structuredDataScript,
 } from "./structured-data";
@@ -24,6 +26,10 @@ interface PageHeadOptions {
   profile?: boolean;
   /** The open-source project the page is about */
   software?: Omit<SoftwareDescription, "name">;
+  /** The services the author offers (the Work with me page) */
+  offers?: readonly Offering[];
+  /** The questions the page answers, as they appear on it */
+  faq?: readonly Question[];
 }
 
 /**
@@ -56,6 +62,8 @@ export function pageHead({
   person,
   profile,
   software,
+  offers,
+  faq,
 }: PageHeadOptions): DocumentHeadValue {
   const url = new URL(path, site.url).href;
   const image = new URL(site.ogImage.path, site.url).href;
@@ -105,6 +113,8 @@ export function pageHead({
           ...(profile === undefined ? {} : { profile }),
           ...(software === undefined ? {} : { software: { name: title, ...software } }),
           ...(breadcrumb === undefined ? {} : { breadcrumb }),
+          ...(offers === undefined ? {} : { offers }),
+          ...(faq === undefined ? {} : { faq }),
         }),
       },
     ],
