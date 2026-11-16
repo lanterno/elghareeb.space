@@ -70,7 +70,7 @@ export function pageHead({
           title: fullTitle,
           description,
           url,
-          ...(article === undefined ? {} : { article }),
+          ...(article === undefined ? {} : { article: { headline: title, ...article } }),
           ...(person === undefined ? {} : { person }),
         }),
       },

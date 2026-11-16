@@ -10,7 +10,8 @@ export interface PageDescription {
   description: string;
   /** The page's absolute URL */
   url: string;
-  article?: { published: string; updated?: string };
+  /** A post's own title, without the site name */
+  article?: { headline: string; published: string; updated?: string };
   /** What the author does, when the page says so */
   person?: { jobTitle: string; worksFor: { name: string; url: string } };
 }
@@ -41,7 +42,7 @@ export function structuredData({
           "@type": "BlogPosting",
           "@id": url,
           mainEntityOfPage: url,
-          headline: title,
+          headline: article.headline,
           description,
           image,
           datePublished: article.published,
