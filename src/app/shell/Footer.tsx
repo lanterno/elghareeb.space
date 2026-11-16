@@ -1,3 +1,6 @@
+import { Link } from "@builder.io/qwik-city";
+
+import { servicesPath } from "~/modules/services";
 import { live } from "~/platform/kernel";
 import { site } from "~/platform/seo";
 import { ExternalLink, GitHubIcon, LinkedInIcon } from "~/platform/ui";
@@ -17,7 +20,15 @@ export const Footer = (): JSXOutput => (
         © <span {...live.year}>{String(new Date().getFullYear())}</span> {site.author} ·{" "}
         {site.location}
       </p>
-      <ul class="flex gap-2">
+      <ul class="flex flex-wrap gap-2">
+        <li>
+          <Link
+            href={servicesPath}
+            class="inline-flex min-h-10 items-center rounded-full px-3 text-dusk-ink hover:bg-panel/10"
+          >
+            Work with me
+          </Link>
+        </li>
         {links.map(({ label, href, Icon }) => (
           <li key={label}>
             <ExternalLink

@@ -1,7 +1,9 @@
 import { component$ } from "@builder.io/qwik";
+import { Link } from "@builder.io/qwik-city";
 
 import ImgPortrait from "~/media/hero.jpg?aspect=4:5&jsx";
 import { authorDetails, certifications, education, skillGroups } from "~/modules/career";
+import { servicesPath } from "~/modules/services";
 import { yearSpan } from "~/platform/kernel";
 import { pageHead } from "~/platform/seo";
 import { Chip, ClosingScene, LiveDot, PageHeader, SectionHeading } from "~/platform/ui";
@@ -39,10 +41,13 @@ export default component$(() => {
             sizes="(min-width: 1024px) 380px, 80vw"
             class="relative aspect-[4/5] w-[min(380px,80vw)] rotate-2 rounded-[48px] border-[10px] border-panel object-cover shadow-raised"
           />
-          <p class="absolute bottom-7 left-0 inline-flex items-center gap-2.5 rounded-full bg-panel px-[18px] py-3 text-sm font-bold text-leaf-ink shadow-raised">
+          <Link
+            href={servicesPath}
+            class="absolute bottom-7 left-0 inline-flex items-center gap-2.5 rounded-full bg-panel px-[18px] py-3 text-sm font-bold text-leaf-ink shadow-raised transition-transform hover:-translate-y-0.5"
+          >
             <LiveDot />
-            Open to collaborate
-          </p>
+            Open to freelance work
+          </Link>
         </div>
       </PageHeader>
 

@@ -1,3 +1,5 @@
+import { Link } from "@builder.io/qwik-city";
+
 import ImgHero from "~/media/hero.jpg?aspect=1:1&jsx";
 import {
   AffiliationRows,
@@ -7,6 +9,7 @@ import {
   organizations,
   OrgMark,
 } from "~/modules/career";
+import { servicesPath } from "~/modules/services";
 import { isoToday } from "~/platform/kernel";
 import { HeroGround, SatelliteOrbit } from "~/platform/scenery";
 import { ArrowRightIcon, Button, ExternalLink, LiveDot } from "~/platform/ui";
@@ -44,10 +47,13 @@ export const Hero = (): JSXOutput => {
       <div class="wrap grid items-center gap-6 pt-10 lg:grid-cols-[7fr_5fr] lg:gap-8 lg:pt-3">
         {/* Arrives in reading order; "trust." lands last */}
         <div class="@container flex min-w-0 flex-col gap-5 lg:gap-[clamp(16px,2.4svh,28px)]">
-          <p class="inline-flex items-center gap-2.5 self-start rounded-full bg-panel/94 py-2 pl-3 pr-4 text-sm font-bold text-leaf-ink shadow-hair motion-safe:animate-rise">
+          <Link
+            href={servicesPath}
+            class="inline-flex items-center gap-2.5 self-start rounded-full bg-panel/94 py-2 pl-3 pr-4 text-sm font-bold text-leaf-ink shadow-hair hover:bg-panel motion-safe:animate-rise"
+          >
             <LiveDot pulse />
-            Open to collaborate on digital identity, climate and IoT
-          </p>
+            Open to freelance work in digital identity, climate and IoT
+          </Link>
           <h1
             id="hero-title"
             class="text-[clamp(52px,min(7.4vw,9.5svh,12.8cqi),104px)] leading-[0.98] tracking-[-0.025em] motion-safe:animate-rise"
