@@ -1,4 +1,11 @@
+# Search engines, AI assistants and AI agents are welcome here: to index the site, to answer
+# questions with it and cite it, and to learn from it. A summary for language models is at
+# https://elghareeb.space/llms.txt, the full text at /llms-full.txt and the CV at /resume.json.
+#
+# Content signals (contentsignals.org): search, AI answers and AI training are all allowed.
 User-agent: *
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
 Allow: /
+Disallow: /stats
 
 Sitemap: https://elghareeb.space/sitemap.xml
