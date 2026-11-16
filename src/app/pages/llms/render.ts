@@ -11,22 +11,26 @@ export interface LlmsLink {
   description: string;
 }
 
+/** A titled list of links: "Pages", "Projects" */
+export interface LlmsSection {
+  heading: string;
+  links: readonly LlmsLink[];
+}
+
 export interface LlmsContent {
   name: string;
   /** One line under the name: what the author does now */
   summary: string;
   /** A short paragraph on the author */
   about: string;
-  pages: readonly LlmsLink[];
-  projects: readonly LlmsLink[];
-  posts: readonly LlmsLink[];
-  elsewhere: readonly LlmsLink[];
+  /** In the order they are listed; a section with no links is left out */
+  sections: readonly LlmsSection[];
 }
 
 const line = ({ title, url, description }: LlmsLink): string =>
   `- [${title}](${url}): ${description}`;
 
-const section = (heading: string, links: readonly LlmsLink[]): string[] =>
+const section = ({ heading, links }: LlmsSection): string[] =>
   links.length === 0 ? [] : [`## ${heading}`, "", ...links.map(line), ""];
 
 export function renderLlms(content: LlmsContent): string {
@@ -37,9 +41,6 @@ export function renderLlms(content: LlmsContent): string {
     "",
     content.about,
     "",
-    ...section("Pages", content.pages),
-    ...section("Projects", content.projects),
-    ...section("Writing", content.posts),
-    ...section("Elsewhere", content.elsewhere),
+    ...content.sections.flatMap(section),
   ].join("\n");
 }

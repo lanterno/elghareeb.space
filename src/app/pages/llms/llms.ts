@@ -48,21 +48,36 @@ export const onGet: RequestHandler = (event) => {
         `Currently at ${author.worksFor.name} (${author.worksFor.url}).`,
         `Works on: ${site.knowsAbout.join(", ")}.`,
       ].join(" "),
-      pages,
-      projects: projects.map((project) => ({
-        title: project.name,
-        url: url(projectPath(project)),
-        description: `${project.description} Code: ${project.link}`,
-      })),
-      posts: visiblePosts.map((post) => ({
-        title: post.title,
-        url: url(`/blog/${post.slug}/`),
-        description: `${post.description} (${post.published})`,
-      })),
-      elsewhere: [
-        { title: "GitHub", url: site.social.github.url, description: "Code and open-source work" },
-        { title: "LinkedIn", url: site.social.linkedin.url, description: "Career and contact" },
-        { title: "Blog feed", url: url(feedPath), description: "Every post, as RSS" },
+      sections: [
+        { heading: "Pages", links: pages },
+        {
+          heading: "Projects",
+          links: projects.map((project) => ({
+            title: project.name,
+            url: url(projectPath(project)),
+            description: `${project.description} Code: ${project.link}`,
+          })),
+        },
+        {
+          heading: "Writing",
+          links: visiblePosts.map((post) => ({
+            title: post.title,
+            url: url(`/blog/${post.slug}/`),
+            description: `${post.description} (${post.published})`,
+          })),
+        },
+        {
+          heading: "Elsewhere",
+          links: [
+            {
+              title: "GitHub",
+              url: site.social.github.url,
+              description: "Code and open-source work",
+            },
+            { title: "LinkedIn", url: site.social.linkedin.url, description: "Career and contact" },
+            { title: "Blog feed", url: url(feedPath), description: "Every post, as RSS" },
+          ],
+        },
       ],
     })
   );
