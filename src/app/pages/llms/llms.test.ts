@@ -6,16 +6,27 @@ const content = {
   name: "Ahmed Elghareeb",
   summary: "Staff Software Engineer at Resilio.",
   about: "Software engineer in Renens.",
-  pages: [{ title: "Work", url: "https://elghareeb.space/work/", description: "Every role." }],
-  projects: [
+  sections: [
     {
-      title: "archetype-pal",
-      url: "https://elghareeb.space/projects/archetype-pal/",
-      description: "Manuscripts.",
+      heading: "Pages",
+      links: [{ title: "Work", url: "https://elghareeb.space/work/", description: "Every role." }],
+    },
+    {
+      heading: "Projects",
+      links: [
+        {
+          title: "archetype-pal",
+          url: "https://elghareeb.space/projects/archetype-pal/",
+          description: "Manuscripts.",
+        },
+      ],
+    },
+    { heading: "Writing", links: [] },
+    {
+      heading: "Elsewhere",
+      links: [{ title: "GitHub", url: "https://github.com/lanterno", description: "Code" }],
     },
   ],
-  posts: [],
-  elsewhere: [{ title: "GitHub", url: "https://github.com/lanterno", description: "Code" }],
 };
 
 describe("renderLlms", () => {
