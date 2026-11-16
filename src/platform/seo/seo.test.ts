@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 
-import { pageHead } from "./page-head";
+import { breadcrumbFor, pageHead } from "./page-head";
 import { structuredData, structuredDataScript } from "./structured-data";
 
 interface Graph {
@@ -70,6 +70,94 @@ describe("structuredData", () => {
     });
   });
 
+  test("names the author's fields on every page, and schools and fellowships when given", () => {
+    const [, bare] = graphOf(
+      structuredData({ title: "Blog", description: "Posts.", url: "https://elghareeb.space/blog/" })
+    );
+    expect(bare?.["knowsAbout"]).toContain("Digital identity");
+    expect(bare?.["description"]).toBeString();
+    expect(bare?.["alumniOf"]).toBeUndefined();
+
+    const [, person] = graphOf(
+      structuredData({
+        title: "About",
+        description: "Me.",
+        url: "https://elghareeb.space/about/",
+        person: {
+          jobTitle: "Staff Software Engineer",
+          worksFor: { name: "Resilio", url: "https://resilio.tech" },
+          alumniOf: ["Mansoura University"],
+          awards: ["Climatebase Fellow, cohort 6"],
+        },
+      })
+    );
+    expect(person?.["alumniOf"]).toEqual([
+      { "@type": "EducationalOrganization", name: "Mansoura University" },
+    ]);
+    expect(person?.["award"]).toEqual(["Climatebase Fellow, cohort 6"]);
+  });
+
+  test("the About page is a ProfilePage whose main entity is the author", () => {
+    const [, , page] = graphOf(
+      structuredData({
+        title: "About",
+        description: "Me.",
+        url: "https://elghareeb.space/about/",
+        profile: true,
+      })
+    );
+    expect(page).toMatchObject({
+      "@type": "ProfilePage",
+      mainEntity: { "@id": "https://elghareeb.space/#person" },
+    });
+  });
+
+  test("a project's page is about its code, which the author contributes to", () => {
+    const [, , page, software] = graphOf(
+      structuredData({
+        title: "archetype-pal | Ahmed Elghareeb",
+        description: "Manuscripts.",
+        url: "https://elghareeb.space/projects/archetype-pal/",
+        software: {
+          name: "archetype-pal",
+          codeRepository: "https://github.com/archetype-pal/backend",
+          keywords: ["Django"],
+        },
+      })
+    );
+    expect(page?.["about"]).toEqual({
+      "@id": "https://elghareeb.space/projects/archetype-pal/#software",
+    });
+    expect(software).toMatchObject({
+      "@type": "SoftwareSourceCode",
+      "@id": "https://elghareeb.space/projects/archetype-pal/#software",
+      codeRepository: "https://github.com/archetype-pal/backend",
+      contributor: { "@id": "https://elghareeb.space/#person" },
+    });
+  });
+
+  test("a breadcrumb becomes a numbered list the page points to", () => {
+    const [, , page, trail] = graphOf(
+      structuredData({
+        title: "x",
+        description: "y",
+        url: "https://elghareeb.space/blog/x/",
+        breadcrumb: [
+          { name: "Home", url: "https://elghareeb.space/" },
+          { name: "Blog", url: "https://elghareeb.space/blog/" },
+          { name: "x", url: "https://elghareeb.space/blog/x/" },
+        ],
+      })
+    );
+    expect(page?.["breadcrumb"]).toEqual({ "@id": "https://elghareeb.space/blog/x/#breadcrumb" });
+    expect(trail?.["@type"]).toBe("BreadcrumbList");
+    expect(trail?.["itemListElement"]).toEqual([
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://elghareeb.space/" },
+      { "@type": "ListItem", position: 2, name: "Blog", item: "https://elghareeb.space/blog/" },
+      { "@type": "ListItem", position: 3, name: "x", item: "https://elghareeb.space/blog/x/" },
+    ]);
+  });
+
   test("the script cannot close its own tag", () => {
     const script = structuredDataScript({
       title: "</script><script>alert(1)",
@@ -91,6 +179,22 @@ describe("pageHead", () => {
   });
 });
 
+describe("breadcrumbFor", () => {
+  test("names the section by the navigation and the page by its own title", () => {
+    expect(breadcrumbFor("/projects/archetype-pal/", "archetype-pal")).toEqual([
+      { name: "Home", url: "https://elghareeb.space/" },
+      { name: "Projects", url: "https://elghareeb.space/projects/" },
+      { name: "archetype-pal", url: "https://elghareeb.space/projects/archetype-pal/" },
+    ]);
+  });
+
+  test("top-level pages and paths outside the navigation have none", () => {
+    expect(breadcrumbFor("/", "Home")).toBeUndefined();
+    expect(breadcrumbFor("/work/", "Work")).toBeUndefined();
+    expect(breadcrumbFor("/stats/x/", "x")).toBeUndefined();
+  });
+});
+
 describe("pageHead's structured data", () => {
   const graph = (head: ReturnType<typeof pageHead>): Record<string, unknown>[] =>
     graphOf(JSON.parse(head.scripts?.[0]?.script ?? "") as object);
@@ -105,5 +209,17 @@ describe("pageHead's structured data", () => {
       })
     );
     expect(post?.["headline"]).toBe("Written by AI");
+  });
+
+  test("a project's code is named by the page's title", () => {
+    const [, , , software] = graph(
+      pageHead({
+        title: "crypto-wasm",
+        description: "Crypto.",
+        path: "/projects/crypto-wasm/",
+        software: { codeRepository: "https://github.com/x/y", keywords: ["Rust"] },
+      })
+    );
+    expect(software?.["name"]).toBe("crypto-wasm");
   });
 });
