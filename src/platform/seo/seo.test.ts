@@ -77,6 +77,20 @@ describe("structuredData", () => {
     expect(bare?.["knowsAbout"]).toContain("Digital identity");
     expect(bare?.["description"]).toBeString();
     expect(bare?.["alumniOf"]).toBeUndefined();
+    expect(bare?.["address"]).toMatchObject({ addressLocality: "Chavannes-près-Renens" });
+    expect(bare?.["homeLocation"]).toMatchObject({
+      "@type": "Place",
+      name: "Chavannes-près-Renens",
+      containedInPlace: { name: "District de l’Ouest lausannois" },
+    });
+    expect(bare?.["hasOccupation"]).toMatchObject({
+      alternateName: "Software developer",
+      occupationLocation: [
+        { "@type": "City", name: "Chavannes-près-Renens" },
+        { "@type": "City", name: "Renens" },
+        { "@type": "City", name: "Lausanne" },
+      ],
+    });
 
     const [, person] = graphOf(
       structuredData({
