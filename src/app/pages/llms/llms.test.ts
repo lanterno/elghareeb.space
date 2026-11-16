@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 
-import { renderLlms } from "./render";
+import { renderLlms, renderLlmsFull } from "./render";
 
 const content = {
   name: "Ahmed Elghareeb",
@@ -47,5 +47,18 @@ describe("renderLlms", () => {
 
   test("leaves out a section with nothing in it", () => {
     expect(renderLlms(content)).not.toContain("## Writing");
+  });
+});
+
+describe("renderLlmsFull", () => {
+  const full = renderLlmsFull("# Index\n\n> Summary\n", [
+    { title: "About", url: "https://elghareeb.space/about/", body: "Who I am.\n" },
+    { title: "Work", url: "https://elghareeb.space/work/", body: "## Resilio" },
+  ]);
+
+  test("opens with the index, then each document under a rule with its source", () => {
+    expect(full).toBe(
+      "# Index\n\n> Summary\n\n---\n\n# About\n\nSource: https://elghareeb.space/about/\n\nWho I am.\n\n---\n\n# Work\n\nSource: https://elghareeb.space/work/\n\n## Resilio\n"
+    );
   });
 });
