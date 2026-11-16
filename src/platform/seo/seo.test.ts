@@ -238,3 +238,72 @@ describe("pageHead's structured data", () => {
     expect(software?.["name"]).toBe("crypto-wasm");
   });
 });
+
+describe("the author as a freelancer", () => {
+  test("every page says the author is available and which languages they work in", () => {
+    const [website, person] = graphOf(
+      structuredData({ title: "Blog", description: "Posts.", url: "https://elghareeb.space/blog/" })
+    );
+    expect(website?.["description"]).toContain("freelance");
+    expect(person?.["description"]).toContain("freelance");
+    expect(person?.["knowsLanguage"]).toEqual([
+      { "@type": "Language", name: "English" },
+      { "@type": "Language", name: "French" },
+      { "@type": "Language", name: "Arabic" },
+    ]);
+    expect(person?.["makesOffer"]).toBeUndefined();
+  });
+
+  test("former employers are organisations the author is an alumnus of, after the schools", () => {
+    const [, person] = graphOf(
+      structuredData({
+        title: "Work",
+        description: "Roles.",
+        url: "https://elghareeb.space/work/",
+        person: {
+          jobTitle: "Staff Software Engineer",
+          worksFor: { name: "Resilio", url: "https://resilio.tech" },
+          alumniOf: ["Mansoura University"],
+          formerEmployers: [{ name: "Back Market", url: "https://www.backmarket.com" }],
+        },
+      })
+    );
+    expect(person?.["alumniOf"]).toEqual([
+      { "@type": "EducationalOrganization", name: "Mansoura University" },
+      { "@type": "Organization", name: "Back Market", url: "https://www.backmarket.com" },
+    ]);
+  });
+
+  test("the services page makes offers in Switzerland and answers its questions as a FAQPage", () => {
+    const [, person, page] = graphOf(
+      structuredData({
+        title: "Freelance",
+        description: "Hire me.",
+        url: "https://elghareeb.space/work-with-me/",
+        offers: [{ name: "Digital identity", description: "Wallets." }],
+        faq: [{ question: "Do you take freelance work?", answer: "Yes." }],
+      })
+    );
+    expect(person?.["makesOffer"]).toMatchObject([
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: "Digital identity",
+          provider: { "@id": "https://elghareeb.space/#person" },
+          areaServed: [{ "@type": "Country", name: "Switzerland" }, { name: "Europe" }],
+        },
+      },
+    ]);
+    expect(page).toMatchObject({
+      "@type": "FAQPage",
+      mainEntity: [
+        {
+          "@type": "Question",
+          name: "Do you take freelance work?",
+          acceptedAnswer: { "@type": "Answer", text: "Yes." },
+        },
+      ],
+    });
+  });
+});

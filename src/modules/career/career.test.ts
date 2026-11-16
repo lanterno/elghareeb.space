@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
 
 import { experiences, fields, organizations, validateCareerContent } from "./content";
-import { currentRole, isHappening, upcomingConferences } from "./queries";
+import { authorDetails, currentRole, isHappening, upcomingConferences } from "./queries";
 
 import type { Conference, Experience } from "./model";
 
@@ -65,5 +65,22 @@ describe("conferences", () => {
     expect(isHappening(c, "2026-10-25")).toBeTrue();
     expect(isHappening(c, "2026-10-29")).toBeTrue();
     expect(isHappening(c, "2026-10-30")).toBeFalse();
+  });
+});
+
+describe("authorDetails", () => {
+  test("names the current employer, and the employers before it by their full names", () => {
+    const author = authorDetails();
+    expect(author.worksFor.name).toBe("Resilio");
+    expect(author.formerEmployers).toEqual([
+      { name: "Center for Digital Trust (C4DT), EPFL", url: "https://c4dt.epfl.ch" },
+      { name: organizations.backMarket.name, url: organizations.backMarket.url },
+    ]);
+  });
+
+  test("a fellowship is an award, not an employer", () => {
+    const author = authorDetails();
+    expect(author.formerEmployers?.map((org) => org.name)).not.toContain("Climatebase");
+    expect(author.awards).toEqual(["Climatebase Fellow, cohort 6"]);
   });
 });
