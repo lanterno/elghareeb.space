@@ -71,10 +71,17 @@ bunx wrangler secret put CF_ANALYTICS_TOKEN  # an API token with Account Analyti
 ### Search engines and AI assistants
 
 Every page carries its title, description, canonical link, Open Graph card and one JSON-LD graph
-(`src/platform/seo`). I am the same `Person` on every page, with the fields I work in
-(`site.knowsAbout`); the About page is a `ProfilePage`, a project's page describes its code as
-`SoftwareSourceCode`, and pages below a section carry a breadcrumb. `/llms.txt` sums the site up
-for AI assistants, built from the same records as the pages (`src/app/pages/llms`).
+(`src/platform/seo`). I am the same `Person` on every page: where I live, the languages I work in,
+the fields I work in (`site.knowsAbout`) and that I take freelance work (`site.availability`). The
+About page is a `ProfilePage`; [Work with me](https://elghareeb.space/work-with-me/)
+(`src/modules/services`) lists the services as offers and its questions as a `FAQPage`; a
+project's page describes its code as `SoftwareSourceCode`; pages below a section carry a
+breadcrumb.
+
+For AI assistants and agents, three files are built from the same records as the pages:
+`/llms.txt` sums the site up, `/llms-full.txt` holds every page and post in full as markdown
+(`src/app/pages/llms`), and `/resume.json` is the CV in the JSON Resume format
+(`src/app/pages/resume`). `robots.txt` welcomes search, AI answers and AI training.
 
 - [Architecture](docs/ARCHITECTURE.md): the layers, the module template and the decisions behind them
 - [Writing a post](docs/WRITING.md)
