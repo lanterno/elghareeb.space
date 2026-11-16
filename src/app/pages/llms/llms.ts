@@ -45,7 +45,7 @@ export const onGet: RequestHandler = (event) => {
       summary: descriptionOf(homeHead),
       about: [
         site.bio,
-        `${author.jobTitle} at ${author.worksFor.name} (${author.worksFor.url}).`,
+        `Currently at ${author.worksFor.name} (${author.worksFor.url}).`,
         `Works on: ${site.knowsAbout.join(", ")}.`,
       ].join(" "),
       pages,

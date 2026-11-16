@@ -80,11 +80,11 @@ function personNode(image: string, person: PersonDetails | undefined): object {
         containedInPlace: { "@type": "AdministrativeArea", name: site.home.region },
       },
     },
-    /** "Developer" is how people search; the job title says "engineer" */
+    /** The title the author goes by; "developer" is how people search for it */
     hasOccupation: {
       "@type": "Occupation",
-      name: "Software engineer",
-      alternateName: "Software developer",
+      name: "Staff Software Engineer",
+      alternateName: ["Software engineer", "Software developer"],
       occupationLocation: [site.home.locality, ...site.home.nearby].map((name) => ({
         "@type": "City",
         name,

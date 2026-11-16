@@ -24,7 +24,7 @@ export const site = {
   },
   locale: "en_US",
   /** One sentence on the author, for the structured data and /llms.txt */
-  bio: "Software engineer in Chavannes-près-Renens, next to Renens and Lausanne, Switzerland, drawn to problems where the software has to be right: digital identity, climate and IoT.",
+  bio: "Staff Software Engineer in Chavannes-près-Renens, next to Renens and Lausanne, Switzerland, drawn to problems where the software has to be right: digital identity, climate and IoT.",
   /** The fields the author works in, as search engines and AI assistants should know them */
   knowsAbout: [
     "Digital identity",
