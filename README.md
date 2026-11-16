@@ -68,6 +68,14 @@ bunx wrangler secret put STATS_PASSWORD      # whatever you'll type into the bro
 bunx wrangler secret put CF_ANALYTICS_TOKEN  # an API token with Account Analytics: Read
 ```
 
+### Search engines and AI assistants
+
+Every page carries its title, description, canonical link, Open Graph card and one JSON-LD graph
+(`src/platform/seo`). I am the same `Person` on every page, with the fields I work in
+(`site.knowsAbout`); the About page is a `ProfilePage`, a project's page describes its code as
+`SoftwareSourceCode`, and pages below a section carry a breadcrumb. `/llms.txt` sums the site up
+for AI assistants, built from the same records as the pages (`src/app/pages/llms`).
+
 - [Architecture](docs/ARCHITECTURE.md): the layers, the module template and the decisions behind them
 - [Writing a post](docs/WRITING.md)
 - [Roadmap](docs/ROADMAP.md): what is still open
