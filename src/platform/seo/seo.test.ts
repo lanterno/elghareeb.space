@@ -58,12 +58,12 @@ describe("structuredData", () => {
         title: "How this site is built | Ahmed Elghareeb",
         description: "With an agent.",
         url: "https://elghareeb.space/blog/how/",
-        article: { published: "2026-10-29" },
+        article: { headline: "How this site is built", published: "2026-10-29" },
       })
     );
     expect(post).toMatchObject({
       "@type": "BlogPosting",
-      headline: "How this site is built | Ahmed Elghareeb",
+      headline: "How this site is built",
       datePublished: "2026-10-29",
       dateModified: "2026-10-29",
       author: { "@id": "https://elghareeb.space/#person" },
@@ -88,5 +88,22 @@ describe("pageHead", () => {
     expect(script?.props).toEqual({ type: "application/ld+json" });
     expect(JSON.parse(script?.script ?? "")).toMatchObject({ "@context": "https://schema.org" });
     expect(head.links).toEqual([{ rel: "canonical", href: "https://elghareeb.space/about/" }]);
+  });
+});
+
+describe("pageHead's structured data", () => {
+  const graph = (head: ReturnType<typeof pageHead>): Record<string, unknown>[] =>
+    graphOf(JSON.parse(head.scripts?.[0]?.script ?? "") as object);
+
+  test("a post's headline is its own title, without the site name", () => {
+    const [, , post] = graph(
+      pageHead({
+        title: "Written by AI",
+        description: "A post.",
+        path: "/blog/written/",
+        article: { published: "2026-10-29" },
+      })
+    );
+    expect(post?.["headline"]).toBe("Written by AI");
   });
 });
