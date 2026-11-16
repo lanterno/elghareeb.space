@@ -11,7 +11,7 @@ export {
   skillGroups,
 } from "./content";
 export { head as workHead, default as WorkPage } from "./pages/WorkPage";
-export { currentRole, yearsOfExperience } from "./queries";
+export { authorDetails, currentRole, yearsOfExperience } from "./queries";
 export { AffiliationRows } from "./ui/AffiliationRows";
 export { ConferenceBalloons } from "./ui/ConferenceBalloons";
 export { OrgMark } from "./ui/OrgMark";

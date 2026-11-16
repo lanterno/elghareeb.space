@@ -9,6 +9,18 @@ export const site = {
   titleSuffix: " | Ahmed Elghareeb",
   location: "Renens, Switzerland",
   locale: "en_US",
+  /** One sentence on the author, for the structured data and /llms.txt */
+  bio: "Software engineer in Renens, Switzerland, drawn to problems where the software has to be right: digital identity, climate and IoT.",
+  /** The fields the author works in, as search engines and AI assistants should know them */
+  knowsAbout: [
+    "Digital identity",
+    "Verifiable credentials",
+    "Selective disclosure",
+    "Climate accountability software",
+    "Sustainable IT",
+    "Internet of Things",
+    "Software architecture",
+  ],
   /** The link-preview card, 1200 × 630, in public/ */
   ogImage: {
     path: "/og.jpg",

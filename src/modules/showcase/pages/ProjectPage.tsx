@@ -159,5 +159,6 @@ export const head: DocumentHead = ({ params }) => {
     title: project.name,
     description: project.description,
     path: projectPath(project),
+    software: { codeRepository: project.link, keywords: project.story.stack },
   });
 };

@@ -1,7 +1,7 @@
 import { component$ } from "@builder.io/qwik";
 
 import ImgPortrait from "~/media/hero.jpg?aspect=4:5&jsx";
-import { certifications, education, skillGroups } from "~/modules/career";
+import { authorDetails, certifications, education, skillGroups } from "~/modules/career";
 import { yearSpan } from "~/platform/kernel";
 import { pageHead } from "~/platform/seo";
 import { Chip, ClosingScene, LiveDot, PageHeader, SectionHeading } from "~/platform/ui";
@@ -133,4 +133,6 @@ export const head: DocumentHead = pageHead({
   description:
     "Software engineer in Renens, Switzerland, drawn to problems where the software has to be right. Climatebase Fellow, MITx MicroMasters in statistics and data science.",
   path: "/about/",
+  person: authorDetails(),
+  profile: true,
 });

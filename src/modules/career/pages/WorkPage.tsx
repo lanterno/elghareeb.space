@@ -3,6 +3,7 @@ import { component$ } from "@builder.io/qwik";
 import { pageHead } from "~/platform/seo";
 import { ClosingScene, PageHeader } from "~/platform/ui";
 
+import { authorDetails } from "../queries";
 import { Chapters } from "../ui/Chapters";
 import { FieldTabs } from "../ui/FieldTabs";
 
@@ -29,4 +30,5 @@ export const head: DocumentHead = pageHead({
   description:
     "Digital identity at EPFL, climate accountability at Resilio, cloud systems at Back Market: where I’ve worked, and what I built there.",
   path: "/work/",
+  person: authorDetails(),
 });

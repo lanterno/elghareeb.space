@@ -1,5 +1,10 @@
 import { site } from "./site";
-import { structuredDataScript } from "./structured-data";
+import {
+  type Crumb,
+  type PersonDetails,
+  type SoftwareDescription,
+  structuredDataScript,
+} from "./structured-data";
 
 import type { DocumentHeadValue } from "@builder.io/qwik-city";
 
@@ -14,7 +19,28 @@ interface PageHeadOptions {
   /** A blog post rather than a page */
   article?: { published: string; updated?: string };
   /** What the author does, for the structured data of the pages that say so */
-  person?: { jobTitle: string; worksFor: { name: string; url: string } };
+  person?: PersonDetails;
+  /** The page is about the author (the About page) */
+  profile?: boolean;
+  /** The open-source project the page is about */
+  software?: Omit<SoftwareDescription, "name">;
+}
+
+/**
+ * The trail from the home page to a page below a section ("/projects/x/" → Home › Projects › x),
+ * named by the navigation. Top-level pages have none: search results show their URL as it is.
+ */
+export function breadcrumbFor(path: string, title: string): Crumb[] | undefined {
+  const [section, ...rest] = path.split("/").filter((segment) => segment !== "");
+  if (section === undefined || rest.length === 0) return undefined;
+  const sectionPath = `/${section}/`;
+  const sectionItem = site.nav.find((item) => item.href === sectionPath);
+  if (sectionItem === undefined) return undefined;
+  return [
+    { name: site.nav[0].label, url: new URL("/", site.url).href },
+    { name: sectionItem.label, url: new URL(sectionPath, site.url).href },
+    { name: title, url: new URL(path, site.url).href },
+  ];
 }
 
 /**
@@ -28,10 +54,13 @@ export function pageHead({
   bare,
   article,
   person,
+  profile,
+  software,
 }: PageHeadOptions): DocumentHeadValue {
   const url = new URL(path, site.url).href;
   const image = new URL(site.ogImage.path, site.url).href;
   const fullTitle = bare === true ? title : `${title}${site.titleSuffix}`;
+  const breadcrumb = breadcrumbFor(path, title);
 
   const articleMeta =
     article === undefined
@@ -48,6 +77,7 @@ export function pageHead({
     title: fullTitle,
     meta: [
       { name: "description", content: description },
+      { name: "author", content: site.author },
       { property: "og:title", content: fullTitle },
       { property: "og:description", content: description },
       { property: "og:type", content: article === undefined ? "website" : "article" },
@@ -72,6 +102,9 @@ export function pageHead({
           url,
           ...(article === undefined ? {} : { article: { headline: title, ...article } }),
           ...(person === undefined ? {} : { person }),
+          ...(profile === undefined ? {} : { profile }),
+          ...(software === undefined ? {} : { software: { name: title, ...software } }),
+          ...(breadcrumb === undefined ? {} : { breadcrumb }),
         }),
       },
     ],

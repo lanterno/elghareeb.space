@@ -1,8 +1,37 @@
 /**
- * The schema.org description of a page, for search engines' rich results: the site, its author
- * and the page itself, a `BlogPosting` when it is a post. One JSON-LD graph per page.
+ * The schema.org description of a page, for search engines' rich results and for the AI
+ * assistants that answer from the page: the site, its author and the page itself, a
+ * `BlogPosting` when it is a post, a `ProfilePage` when it is about the author. The author is the
+ * same `Person` on every page, so whichever page a crawler reads names the author, the work and
+ * the fields. One JSON-LD graph per page.
  */
 import { site } from "./site";
+
+/** One step of the trail from the home page to a page below a section */
+export interface Crumb {
+  name: string;
+  /** Absolute URL */
+  url: string;
+}
+
+/** What the author does and where the author studied, for the pages that say so */
+export interface PersonDetails {
+  jobTitle: string;
+  worksFor: { name: string; url: string };
+  /** Schools, by name */
+  alumniOf?: readonly string[];
+  /** Fellowships and recognitions, as their names */
+  awards?: readonly string[];
+}
+
+/** An open-source project a page is about */
+export interface SoftwareDescription {
+  name: string;
+  /** Where its code lives */
+  codeRepository: string;
+  /** What it is built with */
+  keywords: readonly string[];
+}
 
 export interface PageDescription {
   /** The page's full title */
@@ -12,46 +41,110 @@ export interface PageDescription {
   url: string;
   /** A post's own title, without the site name */
   article?: { headline: string; published: string; updated?: string };
-  /** What the author does, when the page says so */
-  person?: { jobTitle: string; worksFor: { name: string; url: string } };
+  person?: PersonDetails;
+  /** The page is about the author: a `ProfilePage` rather than a `WebPage` */
+  profile?: boolean;
+  software?: SoftwareDescription;
+  /** From the home page down to this page; left out for top-level pages */
+  breadcrumb?: readonly Crumb[];
 }
 
 const websiteId = `${site.url}/#website`;
 const personId = `${site.url}/#person`;
 
-export function structuredData({
-  title,
-  description,
-  url,
-  article,
-  person,
-}: PageDescription): object {
-  const image = new URL(site.ogImage.path, site.url).href;
-  const page =
-    article === undefined
-      ? {
-          "@type": "WebPage",
-          "@id": url,
-          url,
-          name: title,
-          description,
-          isPartOf: { "@id": websiteId },
-          about: { "@id": personId },
-        }
+function personNode(image: string, person: PersonDetails | undefined): object {
+  return {
+    "@type": "Person",
+    "@id": personId,
+    name: site.author,
+    url: site.url,
+    image,
+    description: site.bio,
+    knowsAbout: site.knowsAbout,
+    sameAs: [site.social.github.url, site.social.linkedin.url],
+    address: { "@type": "PostalAddress", addressLocality: "Renens", addressCountry: "CH" },
+    ...(person === undefined
+      ? {}
       : {
-          "@type": "BlogPosting",
-          "@id": url,
-          mainEntityOfPage: url,
-          headline: article.headline,
-          description,
-          image,
-          datePublished: article.published,
-          dateModified: article.updated ?? article.published,
-          author: { "@id": personId },
-          publisher: { "@id": personId },
-          isPartOf: { "@id": websiteId },
-          inLanguage: "en",
-        };
+          jobTitle: person.jobTitle,
+          worksFor: { "@type": "Organization", ...person.worksFor },
+          ...(person.alumniOf === undefined
+            ? {}
+            : {
+                alumniOf: person.alumniOf.map((name) => ({
+                  "@type": "EducationalOrganization",
+                  name,
+                })),
+              }),
+          ...(person.awards === undefined ? {} : { award: person.awards }),
+        }),
+  };
+}
+
+function pageNode(
+  { title, description, url, article, profile, software, breadcrumb }: PageDescription,
+  image: string
+): object {
+  const trail = breadcrumb === undefined ? {} : { breadcrumb: { "@id": `${url}#breadcrumb` } };
+  if (article !== undefined) {
+    return {
+      "@type": "BlogPosting",
+      "@id": url,
+      mainEntityOfPage: url,
+      headline: article.headline,
+      description,
+      image,
+      datePublished: article.published,
+      dateModified: article.updated ?? article.published,
+      author: { "@id": personId },
+      publisher: { "@id": personId },
+      isPartOf: { "@id": websiteId },
+      inLanguage: "en",
+      ...trail,
+    };
+  }
+  return {
+    "@type": profile === true ? "ProfilePage" : "WebPage",
+    "@id": url,
+    url,
+    name: title,
+    description,
+    isPartOf: { "@id": websiteId },
+    ...(profile === true ? { mainEntity: { "@id": personId } } : {}),
+    about: { "@id": software === undefined ? personId : `${url}#software` },
+    inLanguage: "en",
+    ...trail,
+  };
+}
+
+function softwareNode(url: string, description: string, software: SoftwareDescription): object {
+  return {
+    "@type": "SoftwareSourceCode",
+    "@id": `${url}#software`,
+    name: software.name,
+    description,
+    codeRepository: software.codeRepository,
+    keywords: software.keywords,
+    contributor: { "@id": personId },
+    subjectOf: { "@id": url },
+  };
+}
+
+function breadcrumbNode(url: string, crumbs: readonly Crumb[]): object {
+  return {
+    "@type": "BreadcrumbList",
+    "@id": `${url}#breadcrumb`,
+    itemListElement: crumbs.map((crumb, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: crumb.name,
+      item: crumb.url,
+    })),
+  };
+}
+
+export function structuredData(page: PageDescription): object {
+  const image = new URL(site.ogImage.path, site.url).href;
   return {
     "@context": "https://schema.org",
     "@graph": [
@@ -60,25 +153,16 @@ export function structuredData({
         "@id": websiteId,
         url: site.url,
         name: site.author,
+        description: site.bio,
         publisher: { "@id": personId },
         inLanguage: "en",
       },
-      {
-        "@type": "Person",
-        "@id": personId,
-        name: site.author,
-        url: site.url,
-        image,
-        sameAs: [site.social.github.url, site.social.linkedin.url],
-        address: { "@type": "PostalAddress", addressLocality: "Renens", addressCountry: "CH" },
-        ...(person === undefined
-          ? {}
-          : {
-              jobTitle: person.jobTitle,
-              worksFor: { "@type": "Organization", ...person.worksFor },
-            }),
-      },
-      page,
+      personNode(image, page.person),
+      pageNode(page, image),
+      ...(page.software === undefined
+        ? []
+        : [softwareNode(page.url, page.description, page.software)]),
+      ...(page.breadcrumb === undefined ? [] : [breadcrumbNode(page.url, page.breadcrumb)]),
     ],
   };
 }
