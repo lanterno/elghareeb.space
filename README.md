@@ -6,7 +6,7 @@ I build software people can trust. At [Resilio](https://resilio.tech) I build cl
 
 ## About
 
-I'm a software engineer in Renens, Switzerland, drawn to problems where the software has to be right: digital identity, climate and IoT.
+I'm a Staff Software Engineer in Chavannes-près-Renens, Switzerland, drawn to problems where the software has to be right: digital identity, climate and IoT. I take freelance and contract work in those fields: [work with me](https://elghareeb.space/work-with-me/).
 
 At Resilio I lead the platform's architecture. At C4DT I worked on the technology behind Switzerland's E-ID: digital wallets, verifiable credentials and selective disclosure. Beyond code, I care about climate tech and sustainable IT. As a Climatebase Fellow I worked with ClimateRoboticsNetworks and started a working group on Sustainable IT at EPFL.
 
@@ -82,6 +82,10 @@ For AI assistants and agents, three files are built from the same records as the
 `/llms.txt` sums the site up, `/llms-full.txt` holds every page and post in full as markdown
 (`src/app/pages/llms`), and `/resume.json` is the CV in the JSON Resume format
 (`src/app/pages/resume`). `robots.txt` welcomes search, AI answers and AI training.
+
+After each deploy, the workflow sends every URL in the sitemap to IndexNow, which Bing, Yandex and
+the other engines that use it read to recrawl at once. The key is the file of the same name in
+`public/`; it is public by design.
 
 - [Architecture](docs/ARCHITECTURE.md): the layers, the module template and the decisions behind them
 - [Writing a post](docs/WRITING.md)
