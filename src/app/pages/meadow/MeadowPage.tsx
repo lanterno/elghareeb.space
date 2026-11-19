@@ -216,50 +216,25 @@ export default component$(() => {
 
   return (
     <>
-      {/* The journey: the scene stays on screen while a day goes by */}
+      {/* The journey: the scene stays on screen while a day goes by, with nothing laid over it */}
       <section
         ref={journey}
-        aria-labelledby="meadow-title"
+        aria-label="The meadow, from afternoon to night"
         class="relative -mt-[76px] h-[640svh] md:-mt-[84px]"
       >
         <div ref={host} class="mw-host sticky top-0 h-svh w-full overflow-hidden bg-[#7fa857]">
-          <div aria-hidden="true" class="mw-shade pointer-events-none absolute inset-0 z-[1]" />
-
-          <div
-            class="mw-card mw-title absolute z-[2] flex flex-col gap-4"
-            data-chapter="0"
-            data-on=""
-          >
-            <p class="text-[15px] font-bold text-leaf-ink">A living painting</p>
-            <h1
-              id="meadow-title"
-              class="text-[clamp(48px,7vw,92px)] leading-[0.95] tracking-[-0.025em]"
-            >
-              The Meadow
-            </h1>
-            <p class="max-w-[30em] text-[17px] leading-relaxed text-ink-sky">
-              A house on four iron legs stands in an alpine meadow above the lake. Everything in it
-              moves, and all of it comes back around every sixty seconds.
-            </p>
-            <p class="mw-cue inline-flex items-center gap-2 text-sm font-bold text-ink-muted">
-              <span aria-hidden="true" class="mw-cue-dot" />
-              Scroll to watch the day go by
-            </p>
-          </div>
-
-          {chapters.map((c, i) => (
-            <div
-              key={c.hour}
-              class="mw-card mw-chapter absolute z-[2] flex flex-col gap-3"
-              data-chapter={String(i + 1)}
-            >
-              <p class="text-[15px] font-bold text-leaf-ink">{c.hour}</p>
-              <h2 class="text-[clamp(28px,3.2vw,40px)] leading-[1.05] tracking-[-0.02em] text-balance">
-                {c.title}
-              </h2>
-              <p class="text-[16px] leading-relaxed text-ink-sky">{c.body}</p>
-            </div>
-          ))}
+          <span aria-hidden="true" class="mw-cue absolute z-[2]" data-chapter="0" data-on="">
+            <svg viewBox="0 0 24 24" width="30" height="30">
+              <path
+                d="M6 9l6 6 6-6"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </span>
 
           <ol
             aria-label="Time of day"
@@ -272,6 +247,35 @@ export default component$(() => {
             ))}
           </ol>
         </div>
+      </section>
+
+      {/* What you just watched, told once the day is over */}
+      <section aria-labelledby="meadow-title" class="wrap flex flex-col gap-12 pt-24 md:pt-[110px]">
+        <div class="flex flex-col gap-5">
+          <p class="text-[15px] font-bold text-leaf-ink">A living painting</p>
+          <h1
+            id="meadow-title"
+            class="text-[clamp(48px,7vw,96px)] leading-[0.98] tracking-[-0.025em]"
+          >
+            The Meadow
+          </h1>
+          <p class="max-w-[34em] text-lg leading-relaxed text-ink-sky md:text-xl">
+            A house on four iron legs stands in an alpine meadow above the lake. Everything in it
+            moves, and all of it comes back around every sixty seconds.
+          </p>
+        </div>
+        <ol class="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+          {chapters.map((c) => (
+            <li key={c.hour} class="flex flex-col gap-3">
+              <p class="inline-flex items-center gap-2 text-[15px] font-bold text-leaf-ink">
+                <span aria-hidden="true" class="h-2.5 w-2.5 rounded-full bg-sun" />
+                {c.hour}
+              </p>
+              <h2 class="text-[26px] leading-[1.1] tracking-[-0.01em] text-balance">{c.title}</h2>
+              <p class="text-[16px] leading-relaxed text-ink-sky">{c.body}</p>
+            </li>
+          ))}
+        </ol>
       </section>
 
       {/* The residents */}

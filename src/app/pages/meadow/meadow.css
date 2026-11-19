@@ -9,52 +9,17 @@
   isolation: isolate;
 }
 
-.mw-shade {
-  background: linear-gradient(to top, rgb(20 30 40 / 0.3), rgb(20 30 40 / 0) 42%);
-}
-
-.mw-card {
-  left: max(16px, env(safe-area-inset-left, 0px));
-  right: max(16px, env(safe-area-inset-right, 0px));
-  bottom: calc(max(16px, env(safe-area-inset-bottom, 0px)) + 8px);
-  padding: 22px 24px;
-  border-radius: var(--radius-card);
-  background: color-mix(in srgb, var(--color-panel) 93%, transparent);
-  box-shadow: var(--shadow-lifted);
+.mw-cue {
+  left: 50%;
+  bottom: calc(max(16px, env(safe-area-inset-bottom, 0px)) + 14px);
+  translate: -50% 0;
+  color: #fffdf7;
+  filter: drop-shadow(0 1px 3px rgb(20 30 40 / 0.55));
   opacity: 0;
-  transform: translateY(18px);
-  visibility: hidden;
-  transition:
-    opacity 0.45s ease,
-    transform 0.45s ease,
-    visibility 0s linear 0.45s;
+  transition: opacity 0.4s ease;
 }
-.mw-card[data-on] {
-  opacity: 1;
-  transform: none;
-  visibility: visible;
-  transition:
-    opacity 0.45s ease,
-    transform 0.45s ease;
-}
-@media (width >= 48rem) {
-  .mw-card {
-    left: 32px;
-    right: auto;
-    bottom: 40px;
-    max-width: 460px;
-    padding: 28px 30px;
-  }
-  .mw-title {
-    max-width: 580px;
-  }
-}
-
-.mw-cue-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--color-sun);
+.mw-cue[data-on] {
+  opacity: 0.95;
 }
 
 .mw-hours {
@@ -253,7 +218,7 @@
 
 /* --------------------------------------------------------------------- motion, for those who want it */
 @media (prefers-reduced-motion: no-preference) {
-  .mw-cue-dot {
+  .mw-cue svg {
     animation: mw-cue 1.6s ease-in-out infinite;
   }
   .mw-w-ship .mw-float {
