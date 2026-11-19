@@ -44,9 +44,9 @@ export const Navbar = component$(() => {
   });
 
   return (
-    <nav aria-label="Main" class="relative mx-auto max-w-[760px] [anchor-name:--site-nav]">
+    <nav aria-label="Main" class="relative mx-auto max-w-[800px] [anchor-name:--site-nav]">
       <div class="flex items-center justify-between gap-3 rounded-full bg-panel/94 py-2 pl-3 pr-2 shadow-raised">
-        <Link href="/" class="flex items-center gap-2.5 rounded-full text-ink">
+        <Link href="/" class="flex items-center gap-2.5 whitespace-nowrap rounded-full text-ink">
           <LogoMark />
           <span class="text-[15px] font-bold">
             Ahmed<span class="hidden sm:inline md:hidden lg:inline"> Elghareeb</span>

@@ -220,7 +220,7 @@ export default component$(() => {
       <section
         ref={journey}
         aria-labelledby="meadow-title"
-        class="relative -mt-[76px] h-[640svh] md:-mt-[80px]"
+        class="relative -mt-[76px] h-[640svh] md:-mt-[84px]"
       >
         <div ref={host} class="mw-host sticky top-0 h-svh w-full overflow-hidden bg-[#7fa857]">
           <div aria-hidden="true" class="mw-shade pointer-events-none absolute inset-0 z-[1]" />
