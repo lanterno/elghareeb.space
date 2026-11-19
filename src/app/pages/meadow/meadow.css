@@ -1,0 +1,409 @@
+/*
+  The meadow page. The scene itself is drawn by public/meadow/meadow.js; this is the frame around
+  it (the cards that tell the day, the hour rail) and the residents' little windows. Everything
+  that moves on its own stays behind prefers-reduced-motion.
+*/
+
+/* --------------------------------------------------------------------- the journey */
+.mw-host {
+  isolation: isolate;
+}
+
+.mw-shade {
+  background: linear-gradient(to top, rgb(20 30 40 / 0.3), rgb(20 30 40 / 0) 42%);
+}
+
+.mw-card {
+  left: max(16px, env(safe-area-inset-left, 0px));
+  right: max(16px, env(safe-area-inset-right, 0px));
+  bottom: calc(max(16px, env(safe-area-inset-bottom, 0px)) + 8px);
+  padding: 22px 24px;
+  border-radius: var(--radius-card);
+  background: color-mix(in srgb, var(--color-panel) 93%, transparent);
+  box-shadow: var(--shadow-lifted);
+  opacity: 0;
+  transform: translateY(18px);
+  visibility: hidden;
+  transition:
+    opacity 0.45s ease,
+    transform 0.45s ease,
+    visibility 0s linear 0.45s;
+}
+.mw-card[data-on] {
+  opacity: 1;
+  transform: none;
+  visibility: visible;
+  transition:
+    opacity 0.45s ease,
+    transform 0.45s ease;
+}
+@media (width >= 48rem) {
+  .mw-card {
+    left: 32px;
+    right: auto;
+    bottom: 40px;
+    max-width: 460px;
+    padding: 28px 30px;
+  }
+  .mw-title {
+    max-width: 580px;
+  }
+}
+
+.mw-cue-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-sun);
+}
+
+.mw-hours {
+  right: 32px;
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.mw-hours li {
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-panel) 80%, transparent);
+  color: var(--color-ink-muted);
+  font-size: 13px;
+  font-weight: 700;
+  text-align: right;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+.mw-hours li[data-on] {
+  background: var(--color-sun);
+  color: var(--color-on-sun);
+}
+
+/* --------------------------------------------------------------------- the residents' windows */
+.mw-window {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 200px;
+  overflow: hidden;
+  background: linear-gradient(#8cc1e2, #e4f0f1 72%, #a5c66e 72%, #7fa857);
+}
+.mw-window img {
+  display: block;
+  max-width: none;
+}
+.mw-window.mw-w-fox {
+  background: linear-gradient(#1f2a52, #4a4378 72%, #2c4a44 72%, #1f3a31);
+}
+
+.mw-float {
+  position: relative;
+}
+
+/* the rocket ship, hovering on its flame */
+.mw-ship-body {
+  position: relative;
+  width: 84px;
+  height: auto;
+}
+.mw-flame {
+  position: absolute;
+  left: 50%;
+  top: calc(100% - 12px);
+  width: 34px;
+  height: auto;
+  translate: -50% 0;
+  transform-origin: 50% 0;
+}
+
+/* the dragon: a painted curve and its head */
+.mw-dragon-fly {
+  width: 230px;
+  height: 100px;
+}
+.mw-dragon-body {
+  width: 230px;
+  height: 94px;
+  overflow: visible;
+}
+.mw-dragon-head {
+  position: absolute;
+  right: -24px;
+  top: 6px;
+  width: 78px;
+  height: auto;
+  rotate: -8deg;
+}
+
+/* the giant, eight frames to a stride */
+.mw-mecha-walk {
+  width: 73px;
+  height: 165px;
+  background: url(/meadow/mecha.webp) 0 0 / 584px 165px no-repeat;
+}
+
+/* the fox spirit and its fires */
+.mw-fox {
+  position: relative;
+  width: 60px;
+  height: 92px;
+  margin-top: 40px;
+}
+.mw-fox-body {
+  position: absolute;
+  left: 10px;
+  bottom: 0;
+  width: 50px;
+  height: auto;
+}
+.mw-tail {
+  position: absolute;
+  left: 8px;
+  bottom: 4px;
+  width: 32px;
+  height: auto;
+  transform-origin: 50% 100%;
+}
+.mw-tail-1 {
+  rotate: -60deg;
+}
+.mw-tail-2 {
+  rotate: -36deg;
+}
+.mw-tail-3 {
+  rotate: -12deg;
+}
+.mw-orbit {
+  position: absolute;
+  left: 32px;
+  top: -6px;
+  width: 0;
+  height: 0;
+}
+.mw-orbit img {
+  position: absolute;
+  width: 22px;
+  height: auto;
+  margin: -15px 0 0 -11px;
+  filter: drop-shadow(0 0 6px rgb(127 216 255 / 0.9));
+}
+.mw-orbit img:nth-child(1) {
+  translate: -52px 0;
+}
+.mw-orbit img:nth-child(2) {
+  translate: 44px -18px;
+}
+.mw-orbit img:nth-child(3) {
+  translate: 8px -40px;
+}
+
+/* the rider */
+.mw-rider {
+  width: 76px;
+  height: auto;
+}
+
+/* the train, crossing the window */
+.mw-train {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  margin-top: 80px;
+}
+.mw-train img:nth-child(1),
+.mw-train img:nth-child(2) {
+  width: 92px;
+  height: auto;
+}
+.mw-train img:nth-child(3) {
+  width: 44px;
+  height: auto;
+}
+.mw-train img:nth-child(4) {
+  width: 100px;
+  height: auto;
+}
+
+.mw-airship {
+  width: 190px;
+  height: auto;
+}
+
+/* the flock, walking on the spot */
+.mw-flock {
+  display: flex;
+  align-items: flex-end;
+  gap: 18px;
+  margin-top: 90px;
+}
+.mw-sheep {
+  width: 79px;
+  height: 50px;
+  background: url(/meadow/sheepf.webp) -79px 0 / 316px 50px no-repeat;
+}
+.mw-lamb {
+  width: 55px;
+  height: 35px;
+  background-size: 220px 35px;
+  background-position: -55px 0;
+}
+
+/* --------------------------------------------------------------------- motion, for those who want it */
+@media (prefers-reduced-motion: no-preference) {
+  .mw-cue-dot {
+    animation: mw-cue 1.6s ease-in-out infinite;
+  }
+  .mw-w-ship .mw-float {
+    animation: mw-hover 3s ease-in-out infinite;
+  }
+  .mw-flame {
+    animation: mw-flicker 0.18s ease-in-out infinite alternate;
+  }
+  .mw-dragon-fly {
+    animation: mw-glide 6s ease-in-out infinite;
+  }
+  .mw-dragon-head {
+    animation: mw-nod 3s ease-in-out infinite;
+  }
+  .mw-mecha-walk {
+    animation: mw-stride 1.5s steps(8) infinite;
+  }
+  .mw-tail {
+    animation: mw-sway 3s ease-in-out infinite;
+  }
+  .mw-tail-2 {
+    animation-delay: -1s;
+  }
+  .mw-tail-3 {
+    animation-delay: -2s;
+  }
+  .mw-orbit {
+    animation: mw-turn 6s linear infinite;
+  }
+  .mw-orbit img {
+    animation: mw-unturn 6s linear infinite;
+  }
+  .mw-rider {
+    animation: mw-swoop 4s ease-in-out infinite;
+  }
+  .mw-train {
+    animation: mw-cross 7s linear infinite;
+  }
+  .mw-airship {
+    animation: mw-drift 8s ease-in-out infinite;
+  }
+  .mw-flock {
+    animation: mw-amble 10s ease-in-out infinite;
+  }
+  .mw-sheep {
+    animation: mw-steps 0.5s steps(1) infinite;
+  }
+  .mw-lamb {
+    animation:
+      mw-steps-lamb 0.36s steps(1) infinite,
+      mw-hop 0.36s ease-in-out infinite;
+  }
+}
+
+@keyframes mw-cue {
+  50% {
+    transform: translateY(5px);
+  }
+}
+@keyframes mw-hover {
+  50% {
+    transform: translateY(-10px);
+  }
+}
+@keyframes mw-flicker {
+  to {
+    scale: 0.92 1.12;
+  }
+}
+@keyframes mw-glide {
+  50% {
+    transform: translate(-10px, 8px) rotate(-2deg);
+  }
+}
+@keyframes mw-nod {
+  50% {
+    rotate: -2deg;
+  }
+}
+@keyframes mw-stride {
+  to {
+    background-position-x: -584px;
+  }
+}
+@keyframes mw-sway {
+  50% {
+    transform: rotate(14deg);
+  }
+}
+@keyframes mw-turn {
+  to {
+    rotate: 360deg;
+  }
+}
+@keyframes mw-unturn {
+  to {
+    rotate: -360deg;
+  }
+}
+@keyframes mw-swoop {
+  0%,
+  100% {
+    transform: translate(-60px, 30px) rotate(-12deg);
+  }
+  40% {
+    transform: translate(10px, -20px) rotate(8deg);
+  }
+  55% {
+    transform: translate(30px, -26px) rotate(-352deg);
+  }
+  70% {
+    transform: translate(50px, -18px) rotate(-360deg);
+  }
+}
+@keyframes mw-cross {
+  from {
+    transform: translateX(-120%);
+  }
+  to {
+    transform: translateX(120%);
+  }
+}
+@keyframes mw-drift {
+  50% {
+    transform: translate(18px, -8px) rotate(1.5deg);
+  }
+}
+@keyframes mw-amble {
+  50% {
+    transform: translateX(40px);
+  }
+}
+@keyframes mw-steps {
+  0% {
+    background-position-x: -79px;
+  }
+  50% {
+    background-position-x: -158px;
+  }
+}
+@keyframes mw-steps-lamb {
+  0% {
+    background-position-x: -55px;
+  }
+  50% {
+    background-position-x: -110px;
+  }
+}
+@keyframes mw-hop {
+  50% {
+    translate: 0 -6px;
+  }
+}
