@@ -69,6 +69,7 @@ export const site = {
     { label: "Projects", href: "/projects/" },
     { label: "About", href: "/about/" },
     { label: "Blog", href: "/blog/" },
+    { label: "Meadow", href: "/meadow/" },
   ],
   social: {
     github: { login: "lanterno", url: "https://github.com/lanterno" },

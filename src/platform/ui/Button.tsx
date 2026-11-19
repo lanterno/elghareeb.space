@@ -17,7 +17,7 @@ const variants: Record<ButtonVariant, string> = {
   "panel-compact":
     "min-h-[52px] gap-2.5 bg-panel/94 px-6 text-[15px] text-ink transition-colors hover:bg-panel",
   ink: "min-h-[52px] gap-2.5 bg-ink px-6 text-[15px] text-panel",
-  "ink-compact": "min-h-10 bg-ink px-[18px] text-sm text-panel",
+  "ink-compact": "min-h-10 whitespace-nowrap bg-ink px-[18px] text-sm text-panel",
   dusk: "min-h-[58px] gap-2.5 bg-dusk-sun px-[30px] text-base text-on-sun shadow-dusk-sun transition-transform hover:-translate-y-0.5",
   wash: "min-h-11 gap-2 bg-wash/16 px-5 text-sm transition-colors hover:bg-wash/28",
 };
