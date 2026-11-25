@@ -15,7 +15,20 @@ interface MeadowScene {
   pause(): void;
   camera(view: { zoom: number; fx: number; fy: number }): void;
   hour(h: number): void;
+  weather(sky: Sky | null): void;
 }
+
+/** What `GET /api/sky` answers (worker/sky.ts): the weather over Chavannes right now */
+interface Sky {
+  scene: string;
+  intensity: number;
+  label: string;
+  place: string;
+  temp: number;
+  wind: number;
+}
+
+const skyScenes = ["clear", "cloudy", "rain", "storm", "snow", "fog"];
 
 declare global {
   interface Window {
@@ -154,6 +167,7 @@ export default component$(() => {
   useStyles$(styles);
   const journey = useSignal<HTMLElement>();
   const host = useSignal<HTMLElement>();
+  const skyLine = useSignal<HTMLElement>();
 
   // The scene draws itself in the browser, so it starts once the page is on screen
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -183,10 +197,40 @@ export default component$(() => {
       scene.hour(between(hourStops, p, 1));
     };
 
+    // The real sky over the painting. `?wx=snow` draws another one, for looking at a scene
+    // without waiting for the weather; a failed reading leaves the painting's own afternoon.
+    const readSky = async (): Promise<void> => {
+      const asked = new URLSearchParams(location.search).get("wx");
+      if (asked !== null && skyScenes.includes(asked)) {
+        scene?.weather({
+          scene: asked,
+          intensity: 0.85,
+          label: asked,
+          place: "",
+          temp: 0,
+          wind: 1,
+        });
+        return;
+      }
+      try {
+        const response = await fetch("/api/sky");
+        if (response.status !== 200) return;
+        const read = (await response.json()) as Sky;
+        scene?.weather(read);
+        // Set by hand, like the chapters: a re-render would take the scene out of its host
+        if (skyLine.value !== undefined) {
+          skyLine.value.textContent = `: ${read.label} right now, ${String(read.temp)} °C.`;
+        }
+      } catch {
+        // No reading: the painting stays as it was drawn
+      }
+    };
+
     const start = (): void => {
       if (window.Meadow === undefined) return;
       scene = window.Meadow.mount(stage);
       follow();
+      void readSky();
       if (!still && visible) scene.play();
     };
 
@@ -262,6 +306,11 @@ export default component$(() => {
           <p class="max-w-[34em] text-lg leading-relaxed text-ink-sky md:text-xl">
             A house on four iron legs stands in an alpine meadow above the lake. Everything in it
             moves, and all of it comes back around every sixty seconds.
+          </p>
+          <p class="max-w-[34em] text-[16px] leading-relaxed text-ink-sky">
+            The weather over it is the real one over Chavannes-près-Renens, where I live
+            <span ref={skyLine}>.</span> When it rains there, the kite comes down and the villagers
+            stay in.
           </p>
         </div>
         <ol class="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">

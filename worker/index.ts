@@ -1,11 +1,12 @@
 /**
  * The Worker in front of the static site. Every request is served from the built assets, with
- * the dates a page marked as live recounted for today (`live.ts`), except two: `POST /api/event`
- * stores one interaction in Analytics Engine (`event.ts` says what), and `GET /stats` shows them
- * to the owner (`stats.ts`).
+ * the dates a page marked as live recounted for today (`live.ts`), except three: `POST /api/event`
+ * stores one interaction in Analytics Engine (`event.ts` says what), `GET /stats` shows them
+ * to the owner (`stats.ts`), and `GET /api/sky` is the weather the meadow page draws (`sky.ts`).
  */
 import { parseEvent } from "./event";
 import { recounted } from "./live";
+import { skyResponse } from "./sky";
 import { type StatsEnv, statsResponse } from "./stats";
 
 interface Env extends StatsEnv {
@@ -24,6 +25,13 @@ export default {
   async fetch(request: EdgeRequest, env: Env): Promise<Response> {
     const { pathname } = new URL(request.url);
     if (pathname === "/stats") return statsResponse(request, env);
+    if (pathname === "/api/sky") {
+      const cache = (caches as unknown as { default: Cache }).default;
+      return skyResponse({
+        cache: { match: (key) => cache.match(key), put: (key, value) => cache.put(key, value) },
+        fetch: (url) => fetch(url),
+      });
+    }
     if (pathname !== "/api/event") return recounted(await env.ASSETS.fetch(request));
     if (request.method !== "POST") {
       return new Response(null, { status: 405, headers: { allow: "POST" } });

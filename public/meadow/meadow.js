@@ -1,9 +1,10 @@
 /* The meadow: a living painting. Drawn in code, looping every sixty seconds; see /meadow/. */
-(() => { const s = document.createElement('style'); s.textContent = ".mw-stage{position:absolute;left:0;top:0;width:1956px;height:1100px;transform-origin:0 0;overflow:hidden}\n.mw-stage>img{position:absolute;display:block}\n.mw-stage .sp{position:absolute;left:0;top:0;background-size:100% 100%;background-repeat:no-repeat;will-change:transform}\n.mw-stage .puff{position:absolute;left:0;top:0;width:84px;height:84px;background:url(/meadow/puff.webp) center/100% 100% no-repeat;will-change:transform,opacity;opacity:0}\n.mw-stage .glow{position:absolute;left:0;top:0;border-radius:50%;mix-blend-mode:screen;will-change:transform,opacity}\n.mw-stage .soft{position:absolute;left:0;top:0;border-radius:50%;will-change:transform,opacity;pointer-events:none}\n.mw-stage .ray{position:absolute;left:-60px;top:-60px;width:2600px;height:150px;transform-origin:0 50%;mix-blend-mode:screen;background:linear-gradient(90deg,rgba(255,244,205,.34),rgba(255,244,205,.12) 45%,rgba(255,244,205,0) 80%);will-change:transform,opacity}\n.mw-stage .rod{position:absolute;left:0;top:0;width:24px;height:2.6px;margin:-1.3px 0 0 -12px;background:#c9c2b4;border:.7px solid #2b1d16;border-radius:1.5px;box-sizing:border-box;will-change:transform}\n.mw-stage .mw-ground{position:absolute;left:0;top:560px;width:1956px;height:540px;overflow:hidden;-webkit-mask-image:linear-gradient(transparent,#000 90px);mask-image:linear-gradient(transparent,#000 90px);pointer-events:none}\n.mw-stage .m{position:absolute;pointer-events:none}\n/* the page's own decorations, on durations that divide sixty seconds so a recording loops */\n.mw-stage .lampglow{width:2.4%;aspect-ratio:1;translate:-50% -50%;border-radius:50%;background:radial-gradient(circle,rgba(255,214,120,.75),rgba(255,190,90,0) 68%);mix-blend-mode:screen;animation:glow var(--t,3s) ease-in-out var(--d,0s) infinite}\n@keyframes glow{0%,100%{opacity:.35}35%{opacity:.9}55%{opacity:.55}80%{opacity:.8}}\n.mw-stage .glint{width:1.4%;height:.25%;border-radius:2px;background:#fffbe8;opacity:0;animation:glint var(--t,4s) ease-in-out var(--d,0s) infinite}\n@keyframes glint{0%,100%{opacity:0;transform:scaleX(.3)}50%{opacity:.85;transform:scaleX(1)}}\n.mw-stage .flock{top:var(--y,12%);left:-8%;width:7%;animation:fly var(--t,60s) linear var(--d,0s) infinite}\n@keyframes fly{0%{transform:translate(0,0)}50%{transform:translate(780%,-30%)}100%{transform:translate(1580%,10%)}}\n.mw-stage .flock svg{width:100%;overflow:visible}\n.mw-stage .flock .w{transform-box:fill-box;transform-origin:50% 100%;animation:flap .5s ease-in-out infinite alternate}\n@keyframes flap{to{transform:scaleY(-.6)}}\n.mw-stage .orbit{aspect-ratio:1;translate:-50% -50%;animation:spin 10s linear var(--d,0s) infinite}\n@keyframes spin{to{rotate:360deg}}\n.mw-stage .orbit svg{position:absolute;top:0;left:50%;width:22%;translate:-50% -50%;overflow:visible;animation:bob 1.2s ease-in-out infinite alternate}\n@keyframes bob{to{transform:translateY(-25%) rotate(-8deg)}}\n.mw-stage .seed{width:.32%;aspect-ratio:1;border-radius:50%;background:#fffbe8;box-shadow:0 0 4px rgba(255,255,240,.9);opacity:.85;animation:drift var(--t,30s) linear var(--d,0s) infinite}\n@keyframes drift{0%{transform:translate(0,0)}25%{transform:translate(900%,-500%)}50%{transform:translate(1800%,200%)}75%{transform:translate(2700%,-700%)}100%{transform:translate(3600%,-200%);opacity:0}}\n.mw-stage .wisp{top:4%;left:-25%;width:22%;height:6%;border-radius:50%;background:radial-gradient(ellipse,rgba(255,252,240,.55),rgba(255,252,240,0) 70%);filter:blur(2px);animation:wisp 60s linear infinite}\n@keyframes wisp{0%{transform:translateX(0);opacity:0}10%{opacity:1}55%{opacity:1}70%{transform:translateX(300%);opacity:0}100%{transform:translateX(300%);opacity:0}}"; document.head.append(s); })();
+const MW_BASE = new URL('.', document.currentScript.src).href;   // the sprites sit beside this file
+(() => { const s = document.createElement('style'); s.textContent = ".mw-stage{position:absolute;left:0;top:0;width:1956px;height:1100px;transform-origin:0 0;overflow:hidden}\n.mw-stage>img{position:absolute;display:block}\n.mw-stage .sp{position:absolute;left:0;top:0;background-size:100% 100%;background-repeat:no-repeat;will-change:transform}\n.mw-stage .puff{position:absolute;left:0;top:0;width:84px;height:84px;background:url(MW_BASE/puff.webp) center/100% 100% no-repeat;will-change:transform,opacity;opacity:0}\n.mw-stage .glow{position:absolute;left:0;top:0;border-radius:50%;mix-blend-mode:screen;will-change:transform,opacity}\n.mw-stage .soft{position:absolute;left:0;top:0;border-radius:50%;will-change:transform,opacity;pointer-events:none}\n.mw-stage .ray{position:absolute;left:-60px;top:-60px;width:2600px;height:150px;transform-origin:0 50%;mix-blend-mode:screen;background:linear-gradient(90deg,rgba(255,244,205,.34),rgba(255,244,205,.12) 45%,rgba(255,244,205,0) 80%);will-change:transform,opacity}\n.mw-stage .rod{position:absolute;left:0;top:0;width:24px;height:2.6px;margin:-1.3px 0 0 -12px;background:#c9c2b4;border:.7px solid #2b1d16;border-radius:1.5px;box-sizing:border-box;will-change:transform}\n.mw-stage .mw-ground{position:absolute;left:0;top:560px;width:1956px;height:540px;overflow:hidden;-webkit-mask-image:linear-gradient(transparent,#000 90px);mask-image:linear-gradient(transparent,#000 90px);pointer-events:none}\n.mw-stage .m{position:absolute;pointer-events:none}\n/* the page's own decorations, on durations that divide sixty seconds so a recording loops */\n.mw-stage .lampglow{width:2.4%;aspect-ratio:1;translate:-50% -50%;border-radius:50%;background:radial-gradient(circle,rgba(255,214,120,.75),rgba(255,190,90,0) 68%);mix-blend-mode:screen;animation:glow var(--t,3s) ease-in-out var(--d,0s) infinite}\n@keyframes glow{0%,100%{opacity:.35}35%{opacity:.9}55%{opacity:.55}80%{opacity:.8}}\n.mw-stage .glint{width:1.4%;height:.25%;border-radius:2px;background:#fffbe8;opacity:0;animation:glint var(--t,4s) ease-in-out var(--d,0s) infinite}\n@keyframes glint{0%,100%{opacity:0;transform:scaleX(.3)}50%{opacity:.85;transform:scaleX(1)}}\n.mw-stage .flock{top:var(--y,12%);left:-8%;width:7%;animation:fly var(--t,60s) linear var(--d,0s) infinite}\n@keyframes fly{0%{transform:translate(0,0)}50%{transform:translate(780%,-30%)}100%{transform:translate(1580%,10%)}}\n.mw-stage .flock svg{width:100%;overflow:visible}\n.mw-stage .flock .w{transform-box:fill-box;transform-origin:50% 100%;animation:flap .5s ease-in-out infinite alternate}\n@keyframes flap{to{transform:scaleY(-.6)}}\n.mw-stage .orbit{aspect-ratio:1;translate:-50% -50%;animation:spin 10s linear var(--d,0s) infinite}\n@keyframes spin{to{rotate:360deg}}\n.mw-stage .orbit svg{position:absolute;top:0;left:50%;width:22%;translate:-50% -50%;overflow:visible;animation:bob 1.2s ease-in-out infinite alternate}\n@keyframes bob{to{transform:translateY(-25%) rotate(-8deg)}}\n.mw-stage .seed{width:.32%;aspect-ratio:1;border-radius:50%;background:#fffbe8;box-shadow:0 0 4px rgba(255,255,240,.9);opacity:.85;animation:drift var(--t,30s) linear var(--d,0s) infinite}\n@keyframes drift{0%{transform:translate(0,0)}25%{transform:translate(900%,-500%)}50%{transform:translate(1800%,200%)}75%{transform:translate(2700%,-700%)}100%{transform:translate(3600%,-200%);opacity:0}}\n.mw-stage .wisp{top:4%;left:-25%;width:22%;height:6%;border-radius:50%;background:radial-gradient(ellipse,rgba(255,252,240,.55),rgba(255,252,240,0) 70%);filter:blur(2px);animation:wisp 60s linear infinite}\n@keyframes wisp{0%{transform:translateX(0);opacity:0}10%{opacity:1}55%{opacity:1}70%{transform:translateX(300%);opacity:0}100%{transform:translateX(300%);opacity:0}}".replace('MW_BASE/', MW_BASE); document.head.append(s); })();
 (() => {
 'use strict';
 const META = {"sprites": {"wheel8": {"w": 18, "h": 18, "ax": 9, "ay": 9}, "wheel5": {"w": 12, "h": 12, "ax": 6, "ay": 6}, "loco": {"w": 92, "h": 58, "ax": 46, "ay": 56}, "tender": {"w": 40, "h": 42, "ax": 20, "ay": 40}, "car_red": {"w": 84, "h": 48, "ax": 42, "ay": 46}, "car_teal": {"w": 84, "h": 48, "ax": 42, "ay": 46}, "car_gold": {"w": 84, "h": 48, "ax": 42, "ay": 46}, "pad": {"w": 222, "h": 110, "ax": 160, "ay": 16}, "boat": {"w": 20, "h": 28, "ax": 10, "ay": 22}, "ship": {"w": 100, "h": 158, "ax": 50, "ay": 152}, "door": {"w": 22, "h": 30, "ax": 3, "ay": 16}, "flame2": {"w": 40, "h": 70, "ax": 20, "ay": 2}, "airship": {"w": 166, "h": 82, "ax": 76, "ay": 34}, "prop": {"w": 6, "h": 20, "ax": 3, "ay": 10}, "cloud1": {"w": 300, "h": 150, "ax": 150, "ay": 110}, "cloud2": {"w": 220, "h": 115, "ax": 110, "ay": 85}, "cloud3": {"w": 170, "h": 90, "ax": 85, "ay": 66}, "wash0": {"w": 18, "h": 22, "ax": 9, "ay": 4}, "wash1": {"w": 18, "h": 22, "ax": 9, "ay": 4}, "wash2": {"w": 18, "h": 22, "ax": 9, "ay": 4}, "wash3": {"w": 18, "h": 22, "ax": 9, "ay": 4}, "wash4": {"w": 18, "h": 22, "ax": 9, "ay": 4}, "wash5": {"w": 18, "h": 22, "ax": 9, "ay": 4}, "wash6": {"w": 18, "h": 22, "ax": 9, "ay": 4}, "bunt0": {"w": 12, "h": 13, "ax": 6, "ay": 2}, "bunt1": {"w": 12, "h": 13, "ax": 6, "ay": 2}, "bunt2": {"w": 12, "h": 13, "ax": 6, "ay": 2}, "bunt3": {"w": 12, "h": 13, "ax": 6, "ay": 2}, "pennant": {"w": 66, "h": 22, "ax": 3, "ay": 6}, "sheep0": {"w": 58, "h": 32, "ax": 28, "ay": 26}, "sheep1": {"w": 58, "h": 32, "ax": 28, "ay": 26}, "sheep2": {"w": 58, "h": 32, "ax": 28, "ay": 26}, "sheep3": {"w": 58, "h": 32, "ax": 28, "ay": 26}, "sheep4": {"w": 58, "h": 32, "ax": 28, "ay": 26}, "sheep5": {"w": 58, "h": 32, "ax": 28, "ay": 26}, "sheep6": {"w": 58, "h": 32, "ax": 28, "ay": 26}, "sheep7": {"w": 58, "h": 32, "ax": 28, "ay": 26}, "sheep8": {"w": 58, "h": 32, "ax": 28, "ay": 26}, "girl1": {"w": 16, "h": 22, "ax": 8, "ay": 20}, "girl2": {"w": 16, "h": 22, "ax": 8, "ay": 20}, "man1": {"w": 16, "h": 22, "ax": 8, "ay": 20}, "man2": {"w": 16, "h": 22, "ax": 8, "ay": 20}, "kid": {"w": 16, "h": 22, "ax": 8, "ay": 20}, "kite": {"w": 16, "h": 23, "ax": 8, "ay": 11}, "bfly_w": {"w": 18, "h": 14, "ax": 9, "ay": 7}, "bfly_y": {"w": 18, "h": 14, "ax": 9, "ay": 7}, "gull": {"w": 20, "h": 10, "ax": 10, "ay": 6}, "grassA": {"w": 68, "h": 84, "ax": 34, "ay": 80}, "grassB": {"w": 68, "h": 66, "ax": 34, "ay": 62}, "grassC": {"w": 68, "h": 102, "ax": 34, "ay": 98}, "puff": {"w": 84, "h": 84, "ax": 42, "ay": 42}, "sails": {"w": 180, "h": 180, "ax": 90, "ay": 90}, "mecha": {"w": 52, "h": 118, "ax": 26, "ay": 116, "frames": 8}, "sheepf": {"w": 33, "h": 21, "ax": 15, "ay": 19, "frames": 4}, "dhead": {"w": 60, "h": 38, "ax": 22, "ay": 28}, "dclaw": {"w": 12, "h": 12, "ax": 2, "ay": 2}, "surfer": {"w": 38, "h": 46, "ax": 18, "ay": 40}, "fox": {"w": 28, "h": 46, "ax": 14, "ay": 44}, "foxtail": {"w": 18, "h": 42, "ax": 9, "ay": 40}, "foxfire": {"w": 16, "h": 22, "ax": 8, "ay": 14}, "star4": {"w": 64, "h": 64, "ax": 32, "ay": 32}}, "layers": {"front": {"x": 44.315625, "y": 792.5875, "w": 1890.290625, "h": 307.6625}, "castle": {"x": 943.3625, "y": 18.3375, "w": 760.496875, "h": 827.225}, "g_knee1": {"cx": 1051.859375, "cy": 720.0015625, "w": 44.825, "h": 45.334375}, "g_knee2": {"cx": 1308.075, "cy": 720.0015625, "w": 44.825, "h": 45.334375}, "g_knee3": {"cx": 1257.9015625, "cy": 710.06875, "w": 45.334375, "h": 44.825}, "g_knee4": {"cx": 1484.0640625, "cy": 703.95625, "w": 45.334375, "h": 44.825}, "g_boil1": {"cx": 1508.0046875, "cy": 480.0859375, "w": 70.803125, "h": 70.803125}, "g_boil2": {"cx": 1555.8859375, "cy": 436.025, "w": 43.296875, "h": 42.7875}, "windows": {"x": 745.215625, "y": 258.253125, "w": 645.378125, "h": 742.159375}}, "extra": {"laundry": [{"x": 1180.5, "y": 334.5, "w": 8.190101916187873, "h": 14.493093892424003, "skew": -0.635463530751574, "c": "#c4533a", "dark": false}, {"x": 1196.75, "y": 334.875, "w": 9.153212655563634, "h": 11.273142676010833, "skew": 0.6749103637231473, "c": "#7ea463", "dark": false}, {"x": 1213.0, "y": 334.0, "w": 8.317944535279697, "h": 14.015215555885522, "skew": 0.2463852008094367, "c": "#d9a54a", "dark": false}, {"x": 1229.25, "y": 331.875, "w": 7.525885168249097, "h": 10.293148585020273, "skew": 0.6538109357545563, "c": "#f3e7cf", "dark": false}, {"x": 1261.75, "y": 323.875, "w": 8.360327003516844, "h": 11.844490748826475, "skew": -0.4885679294239066, "c": "#5e7f8c", "dark": false}, {"x": 1511.0, "y": 323.0, "w": 9.469765183913175, "h": 13.637286344019751, "skew": -0.21049371362170877, "c": "#f3e7cf", "dark": true}, {"x": 1529.5, "y": 328.5, "w": 10.958885706063995, "h": 11.652374723700579, "skew": 0.6139572241811424, "c": "#5e7f8c", "dark": true}], "bunt": [{"x": 1108.301775147929, "y": 127.04142011834321, "c": 1}, {"x": 1126.8994082840236, "y": 132.78106508875737, "c": 2}, {"x": 1145.792899408284, "y": 137.21893491124257, "c": 3}, {"x": 1164.9822485207098, "y": 140.3550295857988, "c": 0}, {"x": 1184.467455621302, "y": 142.18934911242604, "c": 1}, {"x": 1204.2485207100592, "y": 142.72189349112426, "c": 2}, {"x": 1224.3254437869823, "y": 141.9526627218935, "c": 3}, {"x": 1244.698224852071, "y": 139.88165680473372, "c": 0}, {"x": 1265.3668639053253, "y": 136.50887573964496, "c": 1}, {"x": 1286.3313609467455, "y": 131.8343195266272, "c": 2}, {"x": 1307.5917159763314, "y": 125.85798816568047, "c": 3}, {"x": 1329.147928994083, "y": 118.57988165680473, "c": 0}], "flag": [1090, 22], "sheep": [{"x": 620, "y": 860, "s": 1.1}, {"x": 642, "y": 868, "s": 1.1133333333333333}, {"x": 670, "y": 856, "s": 1.0933333333333333}, {"x": 1560, "y": 880, "s": 1.1333333333333333}, {"x": 1584, "y": 872, "s": 1.12}, {"x": 1080, "y": 1000, "s": 1.3333333333333333}, {"x": 1110, "y": 1008, "s": 1.3466666666666667}, {"x": 1800, "y": 960, "s": 1.2666666666666666}, {"x": 330, "y": 900, "s": 1.1666666666666667}], "paths": {"maktaba": [[1288, 838], [1063, 867], [929, 798], [720, 774]], "classophile": [[1288, 838], [1042, 863], [687, 781], [400, 794]], "trader": [[1288, 838], [1366, 861], [1589, 804], [1735, 808]], "milepost": [[1288, 838], [1122, 865], [995, 918], [900, 938]], "rizq": [[1288, 838], [1061, 909], [559, 998], [260, 1020]], "mailmind": [[1288, 838], [1117, 892], [722, 1048], [590, 1048]], "beats": [[1288, 838], [1192, 910], [1268, 1019], [1210, 1042]], "bus": [[1288, 838], [1454, 913], [1502, 1070], [1545, 1048]]}}, "night": {"stars": [[937.0, 52.7, 1.33, 0.68], [583.7, 103.6, 1.49, 3.51], [732.0, 30.0, 1.26, 5.59], [1718.3, 33.8, 1.45, 2.36], [938.3, 48.3, 1.3, 1.75], [1801.6, 67.9, 1.45, 1.01], [1085.1, 65.4, 1.1, 0.75], [682.4, 114.8, 1.08, 0.56], [942.7, 113.1, 0.86, 3.43], [865.4, 128.7, 1.31, 0.53], [651.1, 65.1, 1.53, 1.46], [1955.6, 47.4, 1.14, 5.29], [792.8, 87.5, 1.3, 1.85], [1009.9, 52.8, 1.04, 5.24], [528.8, 126.1, 1.26, 0.97], [1409.8, 4.0, 1.41, 2.61], [1745.8, 66.1, 1.01, 4.28], [1000.8, 111.0, 1.03, 5.53], [1933.8, 78.0, 0.87, 1.19], [639.2, 44.9, 0.74, 4.77], [1067.3, 75.7, 0.79, 5.96], [1722.6, 76.4, 0.65, 2.4], [645.4, 152.3, 1.03, 5.65], [576.0, 107.0, 0.72, 1.46], [578.8, 113.6, 1.4, 5.75], [1728.2, 40.7, 0.81, 4.32], [590.7, 39.2, 0.69, 4.76], [724.6, 63.5, 1.47, 4.73], [1021.6, 27.7, 0.67, 3.57], [725.9, 87.6, 0.97, 1.6], [1631.6, 48.8, 0.81, 4.28], [778.3, 112.6, 1.57, 5.36], [1858.7, 17.0, 0.98, 0.24], [732.9, 265.0, 1.28, 3.4], [1536.1, 12.9, 0.79, 4.73], [681.5, 64.1, 0.6, 1.58], [1820.6, 16.3, 1.15, 5.46], [975.8, 86.9, 1.48, 5.2], [1917.5, 22.5, 1.0, 5.23], [1038.0, 83.4, 1.41, 2.19], [512.5, 21.9, 1.6, 1.11], [1889.6, 170.5, 1.53, 5.38], [601.2, 71.5, 0.71, 4.83], [976.2, 28.4, 0.88, 1.71], [913.4, 52.9, 1.18, 0.25], [918.4, 54.0, 1.08, 1.09], [837.7, 178.6, 0.72, 2.99], [586.2, 26.9, 1.01, 4.0], [1542.8, 4.6, 0.82, 1.7], [1111.1, 24.4, 0.89, 0.96], [630.7, 33.6, 0.75, 4.97], [1773.0, 60.9, 1.6, 5.16], [644.3, 16.9, 0.75, 2.62], [647.5, 100.8, 0.69, 3.01], [1891.4, 105.4, 0.72, 5.01], [1886.3, 157.6, 1.12, 0.44], [723.7, 305.1, 0.7, 0.82], [989.6, 24.6, 0.7, 3.86], [529.6, 49.1, 1.21, 1.78], [1850.5, 23.5, 0.96, 4.6], [654.1, 32.2, 0.92, 5.26], [1558.9, 18.2, 0.76, 5.74], [1713.4, 78.7, 1.31, 0.04], [892.6, 83.6, 1.25, 1.14], [1884.9, 131.8, 0.89, 3.47], [585.4, 55.2, 1.1, 2.29], [1632.4, 33.5, 0.66, 4.24], [1940.2, 114.1, 1.02, 2.85], [825.2, 101.5, 1.07, 2.48], [1857.2, 14.2, 1.45, 5.1], [802.6, 72.8, 0.95, 0.62], [706.4, 5.1, 1.6, 0.82], [663.1, 99.3, 1.06, 2.03], [1735.6, 61.8, 1.6, 2.36], [1922.3, 110.5, 0.68, 5.0], [1722.2, 71.8, 0.92, 3.38], [1828.3, 28.1, 1.2, 2.92], [730.2, 41.5, 1.29, 0.29], [660.3, 9.1, 0.91, 1.5], [1900.6, 158.6, 1.56, 3.74], [1757.5, 52.9, 0.73, 1.88], [1080.6, 71.7, 1.47, 5.29], [1734.5, 5.5, 1.53, 3.55], [1951.1, 93.9, 1.09, 4.1], [1691.1, 53.6, 1.32, 2.67], [868.8, 118.1, 1.5, 5.65], [703.5, 18.9, 1.04, 1.3], [637.5, 90.8, 1.18, 0.51], [1906.1, 197.5, 1.44, 1.67], [1878.4, 13.5, 0.85, 2.15]], "moon": [1690, 30]}};
-const BASE = '/meadow/';
+const BASE = MW_BASE;
 const SPR = META.sprites, LAY = META.layers, EX = META.extra;
 const LOOP = 60;                       // everything repeats on this; a recording of one loop is seamless
 const CAPTURE = /[?&]capture/.test(location.search);
@@ -373,6 +374,35 @@ const SHADOWS = [0, 30].map(ph => ({ ph, e: glow(900, 'rgba(24,46,34,.2)', 'soft
 SHADOWS.forEach(s => (s.e.style.height = '300px', s.e.style.marginTop = '-150px'));
 const GUST = glow(700, 'rgba(255,250,214,.16)', 'soft'); GUST.style.height = '200px'; GUST.style.marginTop = '-100px';
 into(stage);
+// ---------------------------------------------------------------- the real weather (Meadow.weather): layers ported from the home dashboard
+const WXCSS = `.mw-wx{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.mw-wx>*{position:absolute;inset:0}
+.mw-wx .skymask{-webkit-mask:url(${BASE}wx-sky.webp) 0 0/100% 100% no-repeat;mask:url(${BASE}wx-sky.webp) 0 0/100% 100% no-repeat}
+.mw-wx .sky{mix-blend-mode:multiply;background:var(--mw-sky,transparent);transition:background 2s}
+.mw-wx .scene{mix-blend-mode:multiply;background:var(--mw-scene,transparent);transition:background 2s}
+.mw-wx .desat{mix-blend-mode:saturation;background:#808080;opacity:var(--mw-desat,0);transition:opacity 2s}
+.mw-wx .haze{background:linear-gradient(180deg,rgba(235,238,242,var(--mw-haze-top,0)) 0%,rgba(235,238,242,var(--mw-haze,0)) 45%,rgba(235,238,242,calc(var(--mw-haze,0) * .6)) 100%)}
+.mw-wx .frost{mix-blend-mode:screen;background:linear-gradient(180deg,transparent 0 50%,rgba(255,255,255,.08) 54%,rgba(240,246,255,calc(var(--mw-frost,0) * .7)) 70%,rgba(240,246,255,var(--mw-frost,0)) 100%)}
+.mw-wx .deck i{position:absolute;border-radius:50%;background:radial-gradient(ellipse at 50% 55%,var(--mw-cloud,#8b94a1) 0%,var(--mw-cloud,#8b94a1) 38%,transparent 70%);filter:blur(6px);opacity:var(--mw-deck,0);transition:opacity 2s;animation:mw-deck var(--t,180s) linear var(--d,0s) infinite}
+@keyframes mw-deck{from{transform:translateX(-30%)}to{transform:translateX(130%)}}
+.mw-wx .wins{opacity:var(--mw-win,0);transition:opacity 2s}
+.mw-wx .wins img{position:absolute}
+.mw-wx .rain{opacity:var(--mw-rain,0);transition:opacity 2s}
+.mw-wx .rain b{position:absolute;left:-15%;top:-40%;width:130%;height:180%;rotate:var(--mw-slant,10deg);animation:mw-fall .55s linear infinite;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='220'%3E%3Cg stroke='%23dfe8f2' stroke-linecap='round' stroke-width='1.3' opacity='.75'%3E%3Cpath d='M12 8v26M58 70v22M96 20v30M130 120v24M30 140v28M78 170v20M110 196v18M8 96v20M64 120v16'/%3E%3C/g%3E%3C/svg%3E")}
+.mw-wx .rain b+b{background-size:90px 150px;opacity:.6;animation-duration:.8s}
+@keyframes mw-fall{from{transform:translateY(-220px)}to{transform:translateY(0)}}
+.mw-wx .snow i{position:absolute;top:-4%;left:var(--x);width:var(--s);aspect-ratio:1;border-radius:50%;background:#fff;box-shadow:0 0 3px rgba(255,255,255,.9);animation:mw-flake var(--t,14s) linear var(--d,0s) infinite}
+@keyframes mw-flake{0%{transform:translate(0,0)}25%{transform:translate(var(--sw,20px),297px)}50%{transform:translate(calc(var(--sw,20px) * -1),594px)}75%{transform:translate(var(--sw,20px),891px)}100%{transform:translate(0,1188px)}}
+.mw-wx .fog{opacity:var(--mw-fog,0);transition:opacity 2s}
+.mw-wx .fog i{position:absolute;left:-40%;width:180%;height:var(--h,9%);top:var(--y);border-radius:50%;background:radial-gradient(ellipse at 50% 50%,rgba(240,242,245,.95),rgba(240,242,245,.55) 45%,transparent 72%);filter:blur(8px);animation:mw-band var(--t,90s) ease-in-out var(--d,0s) infinite alternate}
+@keyframes mw-band{from{transform:translateX(-8%)}to{transform:translateX(8%)}}
+.mw-wx .flash{background:#eef3ff;mix-blend-mode:screen;opacity:0;animation:mw-flash var(--mw-flash,0s) linear infinite}
+@keyframes mw-flash{0%,90.5%,91.5%,93%,100%{opacity:0}90.8%{opacity:.55}92.2%{opacity:.35}}
+.mw-stage.mw-wet .flock,.mw-stage.mw-wet .seed,.mw-stage.mw-wet .orbit,.mw-stage.mw-dark .flock,.mw-stage.mw-dark .seed,.mw-stage.mw-dull .glint,.mw-stage.mw-dull .wisp{display:none}
+@media (prefers-reduced-motion:reduce){.mw-wx *{animation:none!important;transition:none!important}.mw-wx .snow i{top:var(--y)}.mw-wx .flash{display:none}}`;
+{ const s = document.createElement('style'); s.textContent = WXCSS; document.head.append(s); }
+const wxLayer = html => { const e = document.createElement('div'); e.className = 'mw-wx'; e.innerHTML = html; stage.append(e); return e; };
+const wxLow = wxLayer('<div class="sky skymask"></div><div class="deck skymask"></div><div class="scene"></div><div class="desat"></div><div class="haze"></div><div class="frost"></div>');
 const tint = document.createElement('div');
 tint.style.cssText = 'position:absolute;inset:0;mix-blend-mode:multiply;pointer-events:none;opacity:0';
 stage.append(tint);
@@ -388,11 +418,58 @@ moon.style.cssText = 'position:absolute;left:0;top:0;width:46px;height:46px;marg
 lights.append(moon);
 img(BASE + 'windows.webp', LAY.windows);
 const winGlow = img(BASE + 'windows-glow.webp', { x: 0, y: 0, w: 1956, h: 1100 }); winGlow.style.mixBlendMode = 'screen';
+into(stage);
+const nightlife = document.createElement('div');
+nightlife.style.cssText = 'position:absolute;inset:0;pointer-events:none;opacity:0';
+stage.append(nightlife);
+into(nightlife);
 const FLIES = Array.from({ length: 26 }, (_, i) => ({ i, e: glow(i % 3 ? 9 : 12, 'rgba(230,255,140,1)') }));
 const headlamp = glow(70, 'rgba(255,236,170,.9)');
 into(stage);
 // these already give off light; keep them above the night
 [...FIRES.flatMap(f => [f.g, f.e]), flame, flameGlow, beacon, porthole, doorGlow, ...padLamps, boardGlow, ...TRAIL].forEach(e => stage.append(e));
+const wxHigh = wxLayer(`<div class="wins"><img src="${BASE}windows.webp" alt="" style="left:${LAY.windows.x}px;top:${LAY.windows.y}px;width:${LAY.windows.w}px;height:${LAY.windows.h}px"><img src="${BASE}windows-glow.webp" alt="" style="left:0;top:0;width:1956px;height:1100px;mix-blend-mode:screen"></div><div class="rain"><b></b><b></b></div><div class="snow"></div><div class="fog"></div><div class="flash"></div>`);
+// what each kind of weather does to the painting; the hour (above) stays the host's to set
+const WX_SCENE = {
+  clear: {},
+  cloudy: { '--mw-sky': '#a9b0ba', '--mw-scene': '#dfe1e4', '--mw-desat': .35, '--mw-deck': .75, '--mw-cloud': '#9aa3af' },
+  rain: { '--mw-sky': '#8d96a3', '--mw-scene': '#c9ced6', '--mw-desat': .45, '--mw-deck': .9, '--mw-cloud': '#7e8794' },
+  storm: { '--mw-sky': '#555e6c', '--mw-scene': '#8e97a6', '--mw-desat': .55, '--mw-deck': 1, '--mw-cloud': '#5f6774', '--mw-win': .9, '--mw-flash': '9s' },
+  snow: { '--mw-sky': '#c4cad2', '--mw-scene': '#e6e9ee', '--mw-desat': .4, '--mw-deck': .7, '--mw-cloud': '#b4bcc7', '--mw-haze-top': .12, '--mw-haze': .08, '--mw-frost': .26 },
+  fog: { '--mw-sky': '#c7ccd2', '--mw-desat': .4, '--mw-haze-top': .5, '--mw-haze': .18, '--mw-fog': .9 },
+};
+const WX_VARS = ['--mw-sky', '--mw-scene', '--mw-desat', '--mw-deck', '--mw-cloud', '--mw-win', '--mw-flash', '--mw-haze-top', '--mw-haze', '--mw-frost', '--mw-fog', '--mw-rain', '--mw-slant'];
+const MOOD = { wet: false, dark: false, dull: false };   // what the host says about the sky: no sun when dull, nobody out when wet
+let COVER = 0, wxBuilt = '';                              // how much of the night sky the clouds hide
+function setMood(m) {
+  Object.assign(MOOD, m);
+  for (const k of ['wet', 'dark', 'dull']) stage.classList.toggle('mw-' + k, !!MOOD[k]);
+}
+function setWeather(w) {
+  const scene = w && WX_SCENE[w.scene] ? w.scene : 'clear', inten = clamp(w && w.intensity || .8, 0, 1), wind = w && w.wind || 1;
+  const look = { ...WX_SCENE[scene] };
+  if (scene === 'rain' || scene === 'storm') { look['--mw-rain'] = inten; look['--mw-slant'] = (8 + wind * 4).toFixed(0) + 'deg'; }
+  for (const v of WX_VARS) stage.style.removeProperty(v);
+  for (const [k, v] of Object.entries(look)) stage.style.setProperty(k, v);
+  COVER = { clear: 0, cloudy: .65 }[scene] ?? 1;
+  setMood({ wet: ['rain', 'storm', 'snow'].includes(scene), dull: scene !== 'clear' });
+  const key = scene + '|' + inten;
+  if (key === wxBuilt) return;
+  wxBuilt = key;
+  let sd = 11; const r = () => (sd = (sd * 16807) % 2147483647) / 2147483647;
+  const deck = wxLow.querySelector('.deck'), snow = wxHigh.querySelector('.snow'), fog = wxHigh.querySelector('.fog');
+  deck.replaceChildren(); snow.replaceChildren(); fog.replaceChildren();
+  const put = (box, css, vars) => { const e = document.createElement('i'); Object.assign(e.style, css); for (const [k, v] of Object.entries(vars)) e.style.setProperty(k, v); box.append(e); };
+  if (scene !== 'clear') for (let i = 0; i < 9; i++)
+    put(deck, { left: (-20 + i * 14) + '%', top: (-6 + r() * 30) + '%', width: (28 + r() * 22) + '%', height: (16 + r() * 14) + '%' }, { '--t': (160 + r() * 120).toFixed(0) + 's', '--d': (-r() * 260).toFixed(0) + 's' });
+  if (scene === 'snow') for (let i = 0; i < Math.round(170 * inten); i++) {
+    const near = r() < .25;
+    put(snow, near ? {} : { opacity: .75 }, { '--x': r() * 100 + '%', '--y': r() * 100 + '%', '--s': (near ? 6 + r() * 3 : 2.5 + r() * 3).toFixed(1) + 'px',
+      '--t': (near ? 9 + r() * 4 : 14 + r() * 10).toFixed(1) + 's', '--d': (-r() * 24).toFixed(1) + 's', '--sw': (10 + r() * 30).toFixed(0) + 'px' });
+  }
+  if (scene === 'fog') for (const [y, h, t] of [[36, 12, 80], [44, 10, 110], [51, 13, 95], [58, 9, 130], [70, 7, 100], [88, 6, 120]])
+    put(fog, {}, { '--y': y + '%', '--h': h + '%', '--t': t + 's', '--d': (-r() * 60).toFixed(0) + 's' });
+}
 const TINTS = [[0, [255, 255, 255], 0], [.33, [255, 176, 96], .3], [.66, [168, 116, 196], .55], [1, [38, 52, 112], .8]];
 let HOUR = 0;
 function hourTint(h) {
@@ -612,24 +689,35 @@ function frame(t) {
   }
   // the hour: afternoon to night, set by whoever embeds the scene
   {
-    const [c, o] = hourTint(HOUR), night = ease((HOUR - .55) / .4);
+    const [c, o] = hourTint(HOUR), night = ease((HOUR - .55) / .4), sun = MOOD.dull || MOOD.dark ? 0 : 1 - night;
+    const late = Math.max(night, MOOD.dark ? 1 : 0);      // a host that paints its own night still gets the fireflies and the headlamp
+    nightlife.style.opacity = late.toFixed(3);
+    ground.style.opacity = MOOD.dull || MOOD.dark ? '0' : '1';
     tint.style.background = `rgb(${c.join(',')})`; tint.style.opacity = o.toFixed(3);
     lights.style.opacity = night.toFixed(3);
-    SUNRAYS.forEach(r => (r.e.style.opacity = (parseFloat(r.e.style.opacity) * (1 - night)).toFixed(3)));
-    star.style.opacity = (parseFloat(star.style.opacity) * (1 - night)).toFixed(3);
-    FLARES.forEach(f => (f.e.style.opacity = (parseFloat(f.e.style.opacity) * (1 - night)).toFixed(3)));
+    SUNRAYS.forEach(r => (r.e.style.opacity = (parseFloat(r.e.style.opacity) * sun).toFixed(3)));
+    star.style.opacity = (parseFloat(star.style.opacity) * sun).toFixed(3);
+    FLARES.forEach(f => (f.e.style.opacity = (parseFloat(f.e.style.opacity) * sun).toFixed(3)));
     if (night > 0) {
-      for (const s of STARS) at(s, s.sx, s.sy, 1, .45 + .55 * Math.abs(Math.sin(TAU * tau / 3 + s.ph)));
-      const [mx, my] = NIGHT.moon; at(moon, mx, my); at(moonGlow, mx, my, 1, .8);
+      for (const s of STARS) at(s, s.sx, s.sy, 1, (.45 + .55 * Math.abs(Math.sin(TAU * tau / 3 + s.ph))) * (1 - COVER));
+      const [mx, my] = NIGHT.moon; at(moon, mx, my, 1, 1 - COVER); at(moonGlow, mx, my, 1, .8 * (1 - COVER));
       winGlow.style.opacity = (.75 + .2 * wave(tau, 4)).toFixed(3);
+    }
+    if (late > 0) {
       FLIES.forEach(({ i, e }) => {
         const x = 120 + mod(i * 263, 1700) + 40 * wave(tau, 10, i) + 18 * wave(tau, 3, i * 2), y = 700 + mod(i * 97, 330) + 20 * wave(tau, 6, i * 1.7);
-        at(e, x, y, 1, Math.max(0, wave(tau, [2, 3, 4, 5][i % 4], i)) ** 2);
+        at(e, x, y, 1, MOOD.wet ? 0 : Math.max(0, wave(tau, [2, 3, 4, 5][i % 4], i)) ** 2);
       });
       const trn = trainAt(tau);
       if (trn) { const [x, y, a] = carPose(trn, 6); at(headlamp, x + trn.dir * 34 * Math.cos(a), y - 39, 1, .9); } else headlamp.style.opacity = '0';
     }
-    FIRES.forEach(f => (f.g.style.transform += ` scale(${(1 + night).toFixed(2)})`));
+    FIRES.forEach(f => (f.g.style.transform += ` scale(${(1 + late).toFixed(2)})`));
+    // butterflies, gulls and the kite keep to fair daylight; the villagers stay in from the rain
+    const fair = !MOOD.wet && !MOOD.dark;
+    for (const b of BFLIES) show(b.e, fair);
+    for (const g of GULLS) show(g.e, fair);
+    [kid, kite, strings].forEach(e => show(e, fair));
+    if (MOOD.wet) for (const w of WALKERS) { show(w.a, false); show(w.b, false); }
   }
   // the clock
   const now = CAPTURE ? new Date(2026, 0, 1, 10, 8) : new Date();
@@ -655,6 +743,10 @@ window.Meadow = {
   pause() { running = false; cancelAnimationFrame(raf); },
   camera(c) { CAM = c; fit(); },
   hour(h) { HOUR = clamp(h, 0, 1); if (!running) frame(last); },
+  // the real sky: { scene: clear|cloudy|rain|storm|snow|fog, intensity: 0..1, wind: 1..3.5 }, or null for the painting as it is
+  weather(w) { setWeather(w); if (!running) frame(last); },
+  // for a host that draws its own weather and night over the scene: { wet, dark, dull }
+  mood(m) { setMood(m); if (!running) frame(last); },
   seek(t) { for (const a of stage.getAnimations({ subtree: true })) { a.pause(); a.currentTime = t * 1000; } last = t; frame(t); },
 };
 
