@@ -75,6 +75,15 @@ export const site = {
     github: { login: "lanterno", url: "https://github.com/lanterno" },
     linkedin: { username: "ahmedelghareeb", url: "https://linkedin.com/in/ahmedelghareeb" },
   },
+  /**
+   * The eco-score Greenoco gave the site, from A (the lightest) to G, shown in the footer. `url`
+   * is where a visitor reads what the letter means; the site's own certificate page belongs here.
+   */
+  ecoScore: {
+    grade: "A",
+    by: "Greenoco",
+    url: "https://greenoco.io/en/website-eco-score-badge-responsible-digital/",
+  },
 } as const;
 
 export type NavItem = (typeof site.nav)[number];

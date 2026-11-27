@@ -37,6 +37,20 @@ export const Footer = (): JSXOutput => (
             </ExternalLink>
           </li>
         ))}
+        <li>
+          <ExternalLink href={site.ecoScore.url} class={pill}>
+            {/* The letter tile from Greenoco's kit, with dark ink so the letter stays readable */}
+            <span
+              aria-hidden="true"
+              class="grid h-5 w-5 place-items-center rounded-md bg-eco font-display text-xs font-extrabold leading-none text-on-sun"
+            >
+              {site.ecoScore.grade}
+            </span>
+            <span>
+              Eco-score <span class="sr-only">{site.ecoScore.grade} </span>by {site.ecoScore.by}
+            </span>
+          </ExternalLink>
+        </li>
       </ul>
     </div>
   </footer>

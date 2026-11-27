@@ -33,6 +33,8 @@
   --color-well: light-dark(#2b3a44, #121a30);
   /* The logo mark's frames, the colour of the glasses. Only the mark uses it, on a well */
   --color-lime: #d8f03c;
+  /* Greenoco's green for an eco-score of A. Only the footer's eco-score tile uses it */
+  --color-eco: #00ce7c;
   /* What catches the light in the scenery: white by day, lit windows at dusk */
   --color-glow: light-dark(#fffdf7, #f5c45a);
 
