@@ -12,6 +12,9 @@ const links = [
   { label: "LinkedIn", href: site.social.linkedin.url, Icon: LinkedInIcon },
 ];
 
+const pill =
+  "inline-flex min-h-10 items-center gap-2 rounded-full px-3 text-dusk-ink hover:bg-panel/10";
+
 /** The ground under the closing scene's hills, reaching both edges like the scene above it. */
 export const Footer = (): JSXOutput => (
   <footer class="bg-dusk-hill-near text-dusk-muted">
@@ -22,19 +25,13 @@ export const Footer = (): JSXOutput => (
       </p>
       <ul class="flex flex-wrap gap-2">
         <li>
-          <Link
-            href={servicesPath}
-            class="inline-flex min-h-10 items-center rounded-full px-3 text-dusk-ink hover:bg-panel/10"
-          >
+          <Link href={servicesPath} class={pill}>
             Work with me
           </Link>
         </li>
         {links.map(({ label, href, Icon }) => (
           <li key={label}>
-            <ExternalLink
-              href={href}
-              class="inline-flex min-h-10 items-center gap-2 rounded-full px-3 text-dusk-ink hover:bg-panel/10"
-            >
+            <ExternalLink href={href} class={pill}>
               <Icon />
               {label}
             </ExternalLink>
